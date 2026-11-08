@@ -27,7 +27,6 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.Alignment
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -73,7 +72,6 @@ import com.movtery.zalithlauncher.setting.unit.floatRange
 import com.movtery.zalithlauncher.ui.AndroidStringText
 import com.movtery.zalithlauncher.ui.androidText
 import com.movtery.zalithlauncher.ui.components.BackgroundCard
-import com.movtery.zalithlauncher.ui.components.DualMenuSubscreen
 import com.movtery.zalithlauncher.ui.components.IntInputField
 import com.movtery.zalithlauncher.ui.components.MenuListLayout
 import com.movtery.zalithlauncher.ui.components.MenuSliderLayout
@@ -125,7 +123,7 @@ fun GameMenuSubscreen(
     onEditLayout: () -> Unit,
     onShowToast: (AndroidStringText, Int) -> Unit
 ) {
-    var selectedSection by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val selectedSection = remember { mutableIntStateOf(0) }
     val settingsPager = rememberPagerState(pageCount = { controlTabs.size })
 
     LaunchedEffect(controlMenuTabIndex) {
@@ -162,15 +160,15 @@ fun GameMenuSubscreen(
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
                     SecondaryScrollableTabRow(
-                        selectedTabIndex = selectedSection,
+                        selectedTabIndex = selectedSection.intValue,
                         edgePadding = 8.dp,
                         minTabWidth = 72.dp,
                         containerColor = cardTitleColor()
                     ) {
                         listOf("MENU", "LAYERS", "SETTINGS").forEachIndexed { index, label ->
                             Tab(
-                                selected = selectedSection == index,
-                                onClick = { selectedSection = index },
+                                selected = selectedSection.intValue == index,
+                                onClick = { selectedSection.intValue = index },
                                 text = { Text(label, style = MaterialTheme.typography.labelLarge) }
                             )
                         }
