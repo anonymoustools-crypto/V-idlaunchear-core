@@ -85,6 +85,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -323,7 +324,7 @@ fun AccountItem(
         modifier = modifier.graphicsLayer(scaleY = scale.value, scaleX = scale.value),
         color = color,
         contentColor = contentColor,
-        shape = MaterialTheme.shapes.large,
+        shape = RectangleShape,
         onClick = {
             if (selected || !enabled) return@Surface
             onSelected(account)
@@ -333,7 +334,7 @@ fun AccountItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(shape = MaterialTheme.shapes.large)
+                .clip(shape = RectangleShape)
                 .padding(all = 8.dp)
         ) {
             RadioButton(
@@ -362,8 +363,20 @@ fun AccountItem(
                     style = MaterialTheme.typography.labelMedium
                 )
             }
-            Row {
-                //刷新
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                //直接进入皮肤与披风设置
+                IconButton(
+                    onClick = openChangeSkinDialog,
+                    enabled = account.isSkinChangeAllowed()
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(R.drawable.ic_checkroom),
+                        contentDescription = stringResource(R.string.account_wardrobe)
+                    )
+                }
+
+                //刷新账号
                 IconButton(
                     onClick = onRefreshClick,
                     enabled = account.accountType != AccountType.LOCAL.tag
@@ -388,22 +401,8 @@ fun AccountItem(
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false },
-                        shape = MaterialTheme.shapes.large,
+                        shape = RectangleShape,
                     ) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.account_wardrobe)) },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_checkroom),
-                                    contentDescription = null
-                                )
-                            },
-                            enabled = account.isSkinChangeAllowed(),
-                            onClick = {
-                                menuExpanded = false
-                                openChangeSkinDialog()
-                            }
-                        )
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.account_local_uuid_copy)) },
                             leadingIcon = {
