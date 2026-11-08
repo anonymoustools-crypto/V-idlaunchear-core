@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -926,7 +927,7 @@ private fun GameInfoBox(
         modifier = modifier
     ) {
         BackgroundCard(
-            modifier = modifier,
+            modifier = modifier.widthIn(max = 220.dp),
             influencedByBackground = false,
             shape = MaterialTheme.shapes.extraLarge
         ) {
@@ -934,9 +935,9 @@ private fun GameInfoBox(
                 Row(
                     modifier = Modifier
                         .weight(1f, fill = false)
-                        .padding(vertical = 16.dp)
-                        .padding(start = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        .padding(vertical = 8.dp)
+                        .padding(start = 10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     LoadingIndicator(
                         modifier = Modifier.align(Alignment.CenterVertically)
@@ -969,7 +970,7 @@ private fun GameInfoBox(
                     onClick = onClose
                 ) {
                     Icon(
-                        modifier = Modifier.size(18.dp),
+                        modifier = Modifier.size(16.dp),
                         painter = painterResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.generic_close)
                     )
