@@ -118,106 +118,41 @@ private fun GameBallContent(
     }
     val showFps = fps != null
 
-    Column(
+    Row(
         modifier = Modifier
-            .padding(horizontal = 9.dp, vertical = 7.dp)
-            .widthIn(max = 156.dp)
+            .padding(horizontal = 5.dp, vertical = 4.dp)
             .animateContentSize(),
-        verticalArrangement = Arrangement.spacedBy(5.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(7.dp)
+        Box(
+            modifier = Modifier
+                .size(21.dp)
+                .clip(RoundedCornerShape(7.dp))
+                .background(VoidAccent.copy(alpha = 0.16f)),
+            contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(25.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(VoidAccent.copy(alpha = 0.16f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Crossfade(opened) { state ->
-                    Icon(
-                        modifier = Modifier.size(17.dp),
-                        painter = painterResource(
-                            if (state) R.drawable.ic_menu_open else R.drawable.ic_menu
-                        ),
-                        contentDescription = null,
-                        tint = VoidAccent
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(1.dp)
-            ) {
-                Text(
-                    text = "VØID STATUS",
-                    color = Color(0xFFF5EEFF),
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(5.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFF69E6A6))
-                    )
-                    Text(
-                        text = "GAME RUNNING",
-                        color = VoidMuted,
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-            }
-
-            if (showFps) {
-                Text(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(7.dp))
-                        .background(VoidAccent.copy(alpha = 0.18f))
-                        .padding(horizontal = 7.dp, vertical = 4.dp),
-                    text = "${fps} FPS",
-                    color = VoidAccent,
-                    style = MaterialTheme.typography.labelMedium
+            Crossfade(opened) { state ->
+                Icon(
+                    modifier = Modifier.size(14.dp),
+                    painter = painterResource(
+                        if (state) R.drawable.ic_menu_open else R.drawable.ic_menu
+                    ),
+                    contentDescription = null,
+                    tint = VoidAccent
                 )
             }
         }
 
-        CustomAnimatedVisibility(visible = showFps && stutterDropDetected) {
+        if (showFps) {
             Text(
-                text = "FPS DROP DETECTED",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
-
-        CustomAnimatedVisibility(
-            visible = showFps && fpsDisplayMode == FpsDisplayMode.CHART
-        ) {
-            FpsChart(
-                modifier = Modifier,
-                history = history,
-                fpsMax = fpsMaxValue,
-                fpsMin = fpsMinValue
-            )
-        }
-
-        CustomAnimatedVisibility(visible = showMemory) {
-            MemoryPreview(
                 modifier = Modifier
-                    .defaultMinSize(minWidth = 132.dp)
-                    .fillMaxWidth(),
-                mainColor = VoidAccent.copy(alpha = 0.8f),
-                backgroundColor = Color(0xFF332443),
-                textStyle = MaterialTheme.typography.labelSmall,
-                usedText = { usedMemory, totalMemory ->
-                    "RAM  ${usedMemory.toInt()}MB / ${totalMemory.toInt()}MB"
-                }
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(VoidAccent.copy(alpha = 0.18f))
+                    .padding(horizontal = 5.dp, vertical = 3.dp),
+                text = "${fps}",
+                color = VoidAccent,
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }
