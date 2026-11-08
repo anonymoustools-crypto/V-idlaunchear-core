@@ -313,16 +313,6 @@ private fun ActionsLayout(
             yaw = Math.toRadians(35.0).toFloat()
         )
 
-        //添加账号
-        ScalingActionButton(
-            modifier = Modifier
-                .fillMaxWidth(),
-            onClick = {
-                actions.onIntent(AccountManageIntent.UpdateLoginMenuOp(LoginMenuOperation.Login))
-            }
-        ) {
-            MarqueeText(text = stringResource(R.string.account_add_new_account))
-        }
     }
 }
 
@@ -686,62 +676,89 @@ private fun AccountsLayout(
         modifier = modifier.animated(ctx),
         shape = MaterialTheme.shapes.extraLarge
     ) {
-        if (accounts.isNotEmpty()) {
-            val scrollState = rememberLazyListState()
-            LazyColumn(
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .nonInteractiveScrollbar(
-                        state = scrollState.scrollIndicatorState!!,
-                        orientation = Orientation.Vertical,
-                    )
-                    .clip(MaterialTheme.shapes.extraLarge),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                state = scrollState,
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
             ) {
-                items(accounts, key = { it.uniqueUUID }) { account ->
-                    AccountItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp),
-                        currentAccount = currentAccount,
-                        account = account,
-                        onSelected = { AccountsManager.setCurrentAccount(it) },
-                        openChangeSkinDialog = {
-                            if (!account.isAuthServerAccount()) {
+                Text(
+                    text = "ACCOUNT LIST",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                ScalingActionButton(
+                    onClick = {
+                        actions.onIntent(
+                            AccountManageIntent.UpdateLoginMenuOp(LoginMenuOperation.Login)
+                        )
+                    }
+                ) {
+                    MarqueeText(text = stringResource(R.string.account_add_new_account))
+                }
+            }
+
+            if (accounts.isNotEmpty()) {
+                val scrollState = rememberLazyListState()
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .nonInteractiveScrollbar(
+                            state = scrollState.scrollIndicatorState!!,
+                            orientation = Orientation.Vertical,
+                        ),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                    state = scrollState,
+                ) {
+                    items(accounts, key = { it.uniqueUUID }) { account ->
+                        AccountItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp),
+                            currentAccount = currentAccount,
+                            account = account,
+                            onSelected = { AccountsManager.setCurrentAccount(it) },
+                            openChangeSkinDialog = {
+                                if (!account.isAuthServerAccount()) {
+                                    actions.onIntent(
+                                        AccountManageIntent.UpdateAccountSkinOp(
+                                            AccountSkinOperation.ChangeSkin(account)
+                                        )
+                                    )
+                                }
+                            },
+                            onRefreshClick = {
                                 actions.onIntent(
-                                    AccountManageIntent.UpdateAccountSkinOp(
-                                        AccountSkinOperation.ChangeSkin(account)
+                                    AccountManageIntent.RefreshAccount(account)
+                                )
+                            },
+                            onCopyUUID = {
+                                copyText(COPY_LABEL_ACCOUNT_UUID, account.profileId, context, true)
+                            },
+                            onDeleteClick = {
+                                actions.onIntent(
+                                    AccountManageIntent.UpdateAccountOp(
+                                        AccountOperation.Delete(account)
                                     )
                                 )
                             }
-                        },
-                        onRefreshClick = {
-                            actions.onIntent(
-                                AccountManageIntent.RefreshAccount(
-                                    account
-                                )
-                            )
-                        },
-                        onCopyUUID = {
-                            copyText(COPY_LABEL_ACCOUNT_UUID, account.profileId, context, true)
-                        },
-                        onDeleteClick = {
-                            actions.onIntent(
-                                AccountManageIntent.UpdateAccountOp(
-                                    AccountOperation.Delete(account)
-                                )
-                            )
-                        }
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    ScalingLabel(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = stringResource(R.string.account_no_account)
                     )
                 }
-            }
-        } else {
-            Box(modifier = Modifier.fillMaxSize()) {
-                ScalingLabel(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = stringResource(R.string.account_no_account)
-                )
             }
         }
     }
