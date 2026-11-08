@@ -126,9 +126,9 @@ android {
         // the same certificate across separate GitHub Actions runners.
         create("debugBuild") {
             storeFile = file("zalith_launcher_debug.jks")
-            storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt", defaultStorePassword)
+            storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt", defaultStorePassword.ifBlank { "android" })
             keyAlias = "movtery_zalith_debug"
-            keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt", defaultKeyPassword)
+            keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt", defaultKeyPassword.ifBlank { "android" })
         }
     }
 
