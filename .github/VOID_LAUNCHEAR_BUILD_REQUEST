@@ -44,3 +44,5 @@ Requested by user to build the current main source as an ARM64-capable Debug APK
 
 VøidLaunchear 0.1.2 compile-fix verification rebuild request: 2026-11-08
 Confirmed RectangleShape imports exist in SettingsScreen.kt and ControlEditorElements.kt; rerun full Debug matrix to verify current source.
+
+Retry build after correcting RectangleShape package imports.
