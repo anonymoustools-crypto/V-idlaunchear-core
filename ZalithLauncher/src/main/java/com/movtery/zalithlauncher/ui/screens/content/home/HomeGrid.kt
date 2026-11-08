@@ -371,7 +371,6 @@ fun HomeGrid(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Box(Modifier.size(8.dp).background(Color(0xFFB879FF), CircleShape))
                         Text(
                             text = "VØID CONTROL DECK",
                             color = Color(0xFFE1C6FF),
