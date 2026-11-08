@@ -113,22 +113,32 @@ class GameLauncher(
             }
         }
 
-        val manifest = GSON.fromJson(File(version.getVersionPath(), "${version.getVersionName()}.json").readText(), GameManifest::class.java)
-        val clientJar = manifest.inheritsFrom?.let { inheritsFrom ->
-            //FIXME: 依赖的是一个原版ID的版本，但这个版本可能是用户自行安装的，只是版本名称与ID一致，不保证客户端真的是对应版本
-            version.getInheritedClientJar(inheritsFrom)
-        } ?: version.getClientJar()
-
-        gameManifest = version.launchManifest?.let { json ->
+        // GameLaunchFlow prepares the inherited launch manifest before handing off here.
+        // Prefer that prepared manifest so we avoid reading and parsing the base version JSON
+        // a second time on every launch. Fall back to the on-disk manifest for direct launches.
+        val preparedManifest = version.launchManifest?.let { json ->
             runCatching {
                 GSON.fromJson(json, GameManifest::class.java)
             }.onFailure {
                 Logger.warning(TAG, "Failed to parse the carried launch manifest", it)
             }.getOrNull()
-        } ?: VersionInfoParser(version)
-            .setManifest(manifest)
-            .setInheriting()
-            .build()
+        }
+
+        gameManifest = preparedManifest ?: run {
+            val manifest = GSON.fromJson(
+                File(version.getVersionPath(), "${version.getVersionName()}.json").readText(),
+                GameManifest::class.java
+            )
+            VersionInfoParser(version)
+                .setManifest(manifest)
+                .setInheriting()
+                .build()
+        }
+
+        val clientJar = gameManifest.inheritsFrom?.let { inheritsFrom ->
+            //FIXME: 依赖的是一个原版ID的版本，但这个版本可能是用户自行安装的，只是版本名称与ID一致，不保证客户端真的是对应版本
+            version.getInheritedClientJar(inheritsFrom)
+        } ?: version.getClientJar()
 
         //jna
         jnaDir = gameManifest.libraries?.find { library ->
