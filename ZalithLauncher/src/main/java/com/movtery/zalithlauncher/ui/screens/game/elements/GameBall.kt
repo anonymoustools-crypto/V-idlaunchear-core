@@ -58,8 +58,6 @@ import com.movtery.zalithlauncher.utils.device.VoidFpsMonitor
 import com.movtery.zalithlauncher.ui.components.FloatingBall
 import com.movtery.zalithlauncher.ui.screens.content.elements.MemoryPreview
 
-private val VoidAccent = Color(0xFFB56CFF)
-private val VoidMuted = Color(0xFFB9A9CC)
 
 @Composable
 fun DraggableGameBall(
@@ -83,9 +81,9 @@ fun DraggableGameBall(
         onSavePos = onSavePos,
         onClick = onClick,
         alpha = alpha,
-        color = Color(0xF0120D1D),
-        contentColor = Color(0xFFF5EEFF),
-        shape = RoundedCornerShape(14.dp)
+        color = Color(0xCC202020),
+        contentColor = Color.White,
+        shape = RoundedCornerShape(12.dp)
     ) {
         GameBallContent(
             gameFps = gameFps,
@@ -120,16 +118,16 @@ private fun GameBallContent(
 
     Row(
         modifier = Modifier
-            .padding(horizontal = 5.dp, vertical = 4.dp)
+            .padding(horizontal = 4.dp, vertical = 4.dp)
             .animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(21.dp)
+                .size(24.dp)
                 .clip(RoundedCornerShape(7.dp))
-                .background(VoidAccent.copy(alpha = 0.16f)),
+                .background(Color.White.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center
         ) {
             Crossfade(opened) { state ->
@@ -139,7 +137,7 @@ private fun GameBallContent(
                         if (state) R.drawable.ic_menu_open else R.drawable.ic_menu
                     ),
                     contentDescription = null,
-                    tint = VoidAccent
+                    tint = Color.White
                 )
             }
         }
@@ -148,10 +146,10 @@ private fun GameBallContent(
             Text(
                 modifier = Modifier
                     .clip(RoundedCornerShape(6.dp))
-                    .background(VoidAccent.copy(alpha = 0.18f))
-                    .padding(horizontal = 5.dp, vertical = 3.dp),
+                    .background(Color.White.copy(alpha = 0.12f))
+                    .padding(horizontal = 6.dp, vertical = 4.dp),
                 text = "${fps}",
-                color = VoidAccent,
+                color = Color.White,
                 style = MaterialTheme.typography.labelSmall
             )
         }
