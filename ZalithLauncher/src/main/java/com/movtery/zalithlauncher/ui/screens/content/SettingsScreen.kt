@@ -135,7 +135,14 @@ private fun TabMenu(
 
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.16f),
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.10f)
+                    )
+                )
+            )
             .animated(ctx, from = AnimatedDirection.Top)
             .padding(horizontal = 12.dp, vertical = 9.dp)
     ) {
