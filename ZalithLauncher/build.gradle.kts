@@ -119,7 +119,7 @@ android {
         create("releaseBuild") {
             storeFile = file("zalith_launcher.jks")
             storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt")
-            keyAlias = "movtery_zalith"
+            keyAlias = "voidlaunchear"
             keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt")
         }
         // Use the repository's persistent debug key so CI APK updates keep
