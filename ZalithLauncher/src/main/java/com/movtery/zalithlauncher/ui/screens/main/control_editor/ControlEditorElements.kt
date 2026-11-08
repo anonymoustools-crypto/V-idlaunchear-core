@@ -21,6 +21,8 @@ package com.movtery.zalithlauncher.ui.screens.main.control_editor
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
@@ -28,6 +30,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,6 +39,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RectangleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +49,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -68,7 +73,6 @@ import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.bridge.CURSOR_DISABLED
 import com.movtery.zalithlauncher.bridge.CURSOR_ENABLED
 import com.movtery.zalithlauncher.setting.AllSettings
-import com.movtery.zalithlauncher.ui.components.DualMenuSubscreen
 import com.movtery.zalithlauncher.ui.components.FloatingBall
 import com.movtery.zalithlauncher.ui.components.MarqueeText
 import com.movtery.zalithlauncher.ui.components.MenuListLayout
@@ -137,15 +141,20 @@ fun MenuBox(
         onPositionChanged = onPositionChanged,
         onClick = onClick
     ) {
-        Box(
+        Surface(
             modifier = Modifier
-                .padding(all = 2.dp)
-                .size(28.dp),
-            contentAlignment = Alignment.Center
+                .padding(2.dp)
+                .size(42.dp)
+                .border(1.dp, MaterialTheme.colorScheme.primary, RectangleShape),
+            shape = RectangleShape,
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
+            contentColor = MaterialTheme.colorScheme.primary,
+            shadowElevation = 8.dp
         ) {
-            Crossfade(opened) { state ->
-                Icon(
-                    modifier = Modifier.size(24.dp),
+            Box(contentAlignment = Alignment.Center) {
+                Crossfade(opened) { state ->
+                    Icon(
+                    modifier = Modifier.size(26.dp),
                     painter = painterResource(
                         if (state) {
                             R.drawable.ic_menu_open
@@ -153,8 +162,9 @@ fun MenuBox(
                             R.drawable.ic_menu
                         }
                     ),
-                    contentDescription = null
-                )
+                    contentDescription = "Controller editor menu"
+                    )
+                }
             }
         }
     }
@@ -189,80 +199,245 @@ fun EditorMenu(
     saveAndExit: () -> Unit,
     onExit: () -> Unit
 ) {
-    DualMenuSubscreen(
-        state = state,
-        closeScreen = closeScreen,
-        leftMenuTitle = {
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = stringResource(R.string.control_editor_menu_title),
-                style = MaterialTheme.typography.titleMedium
-            )
-        },
-        leftMenuContent = {
-            EditorMenuContent(
-                modifier = Modifier.weight(1f),
-                closeScreen = closeScreen,
-                addNewButton = addNewButton,
-                addNewText = addNewText,
-                addNewJoystick = addNewJoystick,
-                openStyleList = openStyleList,
-                openJoystickStyleList = openJoystickStyleList,
-                openStyleCabinet = openStyleCabinet,
-                isPreviewMode = isPreviewMode,
-                onPreviewChanged = onPreviewChanged,
-                previewScenario = previewScenario,
-                onPreviewScenarioChanged = onPreviewScenarioChanged,
-                previewHideLayerWhen = previewHideLayerWhen,
-                onPreviewHideLayerChanged = onPreviewHideLayerChanged,
-                onSave = onSave,
-                saveAndExit = saveAndExit,
-                onExit = onExit
-            )
-        },
-        rightMenuTitle = {
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = stringResource(R.string.control_editor_layers_title),
-                style = MaterialTheme.typography.titleMedium
-            )
-            //切换控件层聚焦
-            IconButton(
-                modifier = Modifier.align(Alignment.CenterEnd),
-                onClick = {
-                    onLayerFocusChanged(isLayerFocus.not())
-                },
-                enabled = isPreviewMode.not() && selectedLayer != null
-            ) {
-                Crossfade(
-                    targetState = isLayerFocus
-                ) { isFocus ->
-                    Icon(
-                        painter = painterResource(
-                            if (isFocus) {
-                                R.drawable.ic_center_focus_strong_filled
-                            } else {
-                                R.drawable.ic_center_focus_strong_outlined
-                            }
-                        ),
-                        contentDescription = null
+    var selectedPage by remember { mutableIntStateOf(0) }
+    val panelColor = cardColor(false)
+    val panelContentColor = onCardColor()
+
+    if (state == MenuState.SHOW) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.58f))
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = closeScreen
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth(0.78f)
+                    .fillMaxHeight(0.88f)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {}
                     )
+                    .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.75f), RectangleShape),
+                shape = RectangleShape,
+                color = panelColor,
+                contentColor = panelContentColor,
+                shadowElevation = 18.dp
+            ) {
+                androidx.compose.foundation.layout.Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().height(54.dp).padding(horizontal = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = "VØID  /  CONTROLS",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        IconButton(onClick = closeScreen) {
+                            Icon(painter = painterResource(R.drawable.ic_menu_open), contentDescription = "Close menu")
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        listOf("MENU", "LAYERS", "SETTINGS").forEachIndexed { index, label ->
+                            Surface(
+                                modifier = Modifier.weight(1f).height(42.dp)
+                                    .border(
+                                        1.dp,
+                                        if (selectedPage == index) MaterialTheme.colorScheme.primary
+                                        else MaterialTheme.colorScheme.outline.copy(alpha = 0.45f),
+                                        RectangleShape
+                                    )
+                                    .clickable { selectedPage = index },
+                                shape = RectangleShape,
+                                color = if (selectedPage == index) MaterialTheme.colorScheme.primary.copy(alpha = 0.18f) else panelColor,
+                                contentColor = panelContentColor
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        text = label,
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = if (selectedPage == index) MaterialTheme.colorScheme.primary else panelContentColor
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    when (selectedPage) {
+                        0 -> EditorMenuContent(
+                            modifier = Modifier.weight(1f),
+                            closeScreen = closeScreen,
+                            addNewButton = addNewButton,
+                            addNewText = addNewText,
+                            addNewJoystick = addNewJoystick,
+                            openStyleList = openStyleList,
+                            openJoystickStyleList = openJoystickStyleList,
+                            openStyleCabinet = openStyleCabinet,
+                            isPreviewMode = isPreviewMode,
+                            onPreviewChanged = onPreviewChanged,
+                            previewScenario = previewScenario,
+                            onPreviewScenarioChanged = onPreviewScenarioChanged,
+                            previewHideLayerWhen = previewHideLayerWhen,
+                            onPreviewHideLayerChanged = onPreviewHideLayerChanged,
+                            onSave = onSave,
+                            saveAndExit = saveAndExit,
+                            onExit = onExit
+                        )
+                        1 -> {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(1f),
+                                    text = stringResource(R.string.control_editor_layers_title),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                                IconButton(
+                                    onClick = { onLayerFocusChanged(!isLayerFocus) },
+                                    enabled = !isPreviewMode && selectedLayer != null
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            if (isLayerFocus) R.drawable.ic_center_focus_strong_filled
+                                            else R.drawable.ic_center_focus_strong_outlined
+                                        ),
+                                        contentDescription = "Focus selected layer"
+                                    )
+                                }
+                            }
+                            ControlLayerMenu(
+                                layers = layers,
+                                onReorder = onReorder,
+                                selectedLayer = selectedLayer,
+                                onLayerSelected = onLayerSelected,
+                                createLayer = createLayer,
+                                onAttribute = onAttribute,
+                                onHideSwitch = onHideSwitch,
+                                enabled = !isPreviewMode
+                            )
+                        }
+                        else -> EditorSettingsContent(
+                            modifier = Modifier.weight(1f),
+                            isPreviewMode = isPreviewMode,
+                            onPreviewChanged = onPreviewChanged,
+                            previewScenario = previewScenario,
+                            onPreviewScenarioChanged = onPreviewScenarioChanged,
+                            previewHideLayerWhen = previewHideLayerWhen,
+                            onPreviewHideLayerChanged = onPreviewHideLayerChanged
+                        )
+                    }
                 }
             }
-        },
-        rightMenuContent = {
-            ControlLayerMenu(
-                layers = layers,
-                onReorder = onReorder,
-                selectedLayer = selectedLayer,
-                onLayerSelected = onLayerSelected,
-                createLayer = createLayer,
-                onAttribute = onAttribute,
-                onHideSwitch = onHideSwitch,
-                enabled = isPreviewMode.not()
+        }
+    }
+}
+
+
+@Composable
+private fun EditorSettingsContent(
+    modifier: Modifier = Modifier,
+    isPreviewMode: Boolean,
+    onPreviewChanged: (Boolean) -> Unit,
+    previewScenario: PreviewScenario,
+    onPreviewScenarioChanged: (PreviewScenario) -> Unit,
+    previewHideLayerWhen: HideLayerWhen,
+    onPreviewHideLayerChanged: (HideLayerWhen) -> Unit
+) {
+    val color = cardColor(false)
+    val contentColor = onCardColor()
+    val listState = rememberLazyListState()
+    LazyColumn(
+        modifier = modifier.lazyScrollWithBar(listState),
+        state = listState,
+        contentPadding = PaddingValues(10.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        item {
+            MenuSwitchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.control_editor_menu_widget_snap),
+                switch = AllSettings.editorEnableWidgetSnap.state,
+                onSwitch = { AllSettings.editorEnableWidgetSnap.save(it) },
+                color = color, contentColor = contentColor
             )
         }
-    )
+        item {
+            MenuSwitchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.control_editor_menu_widget_snap_all_layers),
+                switch = AllSettings.editorSnapInAllLayers.state,
+                onSwitch = { AllSettings.editorSnapInAllLayers.save(it) },
+                color = color, contentColor = contentColor
+            )
+        }
+        item {
+            MenuListLayout(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.control_editor_menu_widget_snap_mode),
+                items = SnapMode.entries,
+                currentItem = AllSettings.editorWidgetSnapMode.state,
+                onItemChange = { AllSettings.editorWidgetSnapMode.save(it) },
+                getItemText = { mode ->
+                    stringResource(
+                        if (mode == SnapMode.FullScreen) R.string.control_editor_menu_widget_snap_mode_fullscreen
+                        else R.string.control_editor_menu_widget_snap_mode_local
+                    )
+                },
+                color = color, contentColor = contentColor
+            )
+        }
+        item {
+            MenuSwitchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.control_editor_menu_preview_mode),
+                switch = isPreviewMode,
+                onSwitch = onPreviewChanged,
+                color = color, contentColor = contentColor
+            )
+        }
+        item {
+            MenuListLayout(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.control_editor_menu_preview_mode_scenario),
+                items = PreviewScenario.entries,
+                currentItem = previewScenario,
+                onItemChange = onPreviewScenarioChanged,
+                getItemText = { stringResource(it.textRes) },
+                color = color, contentColor = contentColor,
+                enabled = isPreviewMode
+            )
+        }
+        item {
+            MenuSwitchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.control_editor_menu_preview_is_mouse),
+                switch = previewHideLayerWhen == HideLayerWhen.WhenMouse,
+                onSwitch = { onPreviewHideLayerChanged(if (it) HideLayerWhen.WhenMouse else HideLayerWhen.None) },
+                color = color, contentColor = contentColor, enabled = isPreviewMode
+            )
+        }
+        item {
+            MenuSwitchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.control_editor_menu_preview_is_gamepad),
+                switch = previewHideLayerWhen == HideLayerWhen.WhenGamepad,
+                onSwitch = { onPreviewHideLayerChanged(if (it) HideLayerWhen.WhenGamepad else HideLayerWhen.None) },
+                color = color, contentColor = contentColor, enabled = isPreviewMode
+            )
+        }
+    }
 }
 
 @Composable
