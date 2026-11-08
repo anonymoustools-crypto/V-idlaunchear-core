@@ -45,7 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.RectangleShape
 import androidx.navigation3.runtime.entryProvider
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.ui.base.BaseScreen
@@ -146,7 +146,7 @@ private fun TabMenu(
         ) {
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(13.dp))
+                    .clip(RectangleShape)
                     .background(
                         Brush.horizontalGradient(
                             listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer)
@@ -195,7 +195,7 @@ private fun TabMenu(
                 Surface(
                     modifier = Modifier.height(48.dp),
                     onClick = { navigateTo(item.key) },
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RectangleShape,
                     color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                     tonalElevation = if (selected) 4.dp else 0.dp,
@@ -210,7 +210,7 @@ private fun TabMenu(
                             modifier = Modifier
                                 .width(31.dp)
                                 .height(31.dp)
-                                .clip(RoundedCornerShape(10.dp))
+                                .clip(RectangleShape)
                                 .background(
                                     if (selected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.18f)
                                     else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f)
