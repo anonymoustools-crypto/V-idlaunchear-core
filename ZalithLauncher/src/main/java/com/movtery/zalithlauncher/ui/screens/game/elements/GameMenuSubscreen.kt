@@ -24,6 +24,11 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -120,89 +125,125 @@ fun GameMenuSubscreen(
     onEditLayout: () -> Unit,
     onShowToast: (AndroidStringText, Int) -> Unit
 ) {
-    DualMenuSubscreen(
-        state = state,
-        closeScreen = closeScreen,
-        leftMenuContent = {
-            val pagerState = rememberPagerState(pageCount = { controlTabs.size })
+    var selectedSection by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val settingsPager = rememberPagerState(pageCount = { controlTabs.size })
 
-            LaunchedEffect(controlMenuTabIndex) {
-                pagerState.animateScrollToPage(controlMenuTabIndex)
-            }
+    LaunchedEffect(controlMenuTabIndex) {
+        settingsPager.animateScrollToPage(controlMenuTabIndex)
+    }
 
-            Column {
-                //顶贴标签栏
-                SecondaryScrollableTabRow(
-                    selectedTabIndex = controlMenuTabIndex,
-                    edgePadding = 0.dp,
-                    minTabWidth = 58.dp,
-                    containerColor = cardTitleColor(),
-                ) {
-                    controlTabs.forEachIndexed { index, iconTab ->
-                        Tab(
-                            selected = index == controlMenuTabIndex,
-                            onClick = {
-                                onControlMenuTabChange(index)
-                            },
-                            icon = {
-                                Icon(
-                                    modifier = Modifier.size(iconTab.iconSize),
-                                    painter = painterResource(iconTab.iconRes),
-                                    contentDescription = null
-                                )
-                            }
-                        )
-                    }
-                }
-
-                HorizontalPager(
-                    state = pagerState,
-                    userScrollEnabled = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f, fill = false)
-                ) { page ->
-                    when (page) {
-                        0 -> {
-                            ControlOverview(
-                                modifier = Modifier.fillMaxSize(),
-                                closeScreen = closeScreen,
-                                onInputMethod = onInputMethod,
-                                onSendKeycode = onSendKeycode,
-                                onReplacementControl = onReplacementControl,
-                                onEditLayout = onEditLayout
+    AnimatedVisibility(
+        visible = state == MenuState.SHOW,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        androidx.compose.foundation.layout.Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.28f))
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                    onClick = closeScreen
+                ),
+            contentAlignment = androidx.compose.ui.Alignment.Center
+        ) {
+            BackgroundCard(
+                modifier = Modifier
+                    .fillMaxWidth(0.62f)
+                    .fillMaxHeight(0.78f)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                        onClick = {}
+                    ),
+                influencedByBackground = false,
+                shape = MaterialTheme.shapes.large
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    SecondaryScrollableTabRow(
+                        selectedTabIndex = selectedSection,
+                        edgePadding = 8.dp,
+                        minTabWidth = 72.dp,
+                        containerColor = cardTitleColor()
+                    ) {
+                        listOf("MENU", "LAYERS", "SETTINGS").forEachIndexed { index, label ->
+                            Tab(
+                                selected = selectedSection == index,
+                                onClick = { selectedSection = index },
+                                text = { Text(label, style = MaterialTheme.typography.labelLarge) }
                             )
                         }
-                        1 -> ControlMouse(modifier = Modifier.fillMaxSize())
-                        2 -> ControlGamepad(
-                            modifier = Modifier.fillMaxSize(),
-                            gamepadViewModel = gamepadViewModel
+                    }
+
+                    when (selectedSection) {
+                        0 -> GameActionContent(
+                            modifier = Modifier.weight(1f),
+                            onForceClose = onForceClose,
+                            onSwitchLog = onSwitchLog,
+                            enableTerracotta = enableTerracotta,
+                            onOpenTerracottaMenu = onOpenTerracottaMenu,
+                            onRefreshWindowSize = onRefreshWindowSize,
+                            onShowToast = onShowToast
                         )
-                        3 -> ControlGesture(modifier = Modifier.fillMaxSize())
-                        4 -> ControlGyroscope(modifier = Modifier.fillMaxSize())
+                        1 -> ControlOverview(
+                            modifier = Modifier.weight(1f),
+                            closeScreen = closeScreen,
+                            onInputMethod = onInputMethod,
+                            onSendKeycode = onSendKeycode,
+                            onReplacementControl = onReplacementControl,
+                            onEditLayout = onEditLayout
+                        )
+                        else -> Column(modifier = Modifier.weight(1f)) {
+                            SecondaryScrollableTabRow(
+                                selectedTabIndex = controlMenuTabIndex,
+                                edgePadding = 4.dp,
+                                minTabWidth = 48.dp,
+                                containerColor = cardTitleColor()
+                            ) {
+                                controlTabs.forEachIndexed { index, iconTab ->
+                                    Tab(
+                                        selected = index == controlMenuTabIndex,
+                                        onClick = { onControlMenuTabChange(index) },
+                                        icon = {
+                                            Icon(
+                                                modifier = Modifier.size(iconTab.iconSize),
+                                                painter = painterResource(iconTab.iconRes),
+                                                contentDescription = null
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            HorizontalPager(
+                                state = settingsPager,
+                                userScrollEnabled = false,
+                                modifier = Modifier.fillMaxSize()
+                            ) { page ->
+                                when (page) {
+                                    0 -> ControlOverview(
+                                        modifier = Modifier.fillMaxSize(),
+                                        closeScreen = closeScreen,
+                                        onInputMethod = onInputMethod,
+                                        onSendKeycode = onSendKeycode,
+                                        onReplacementControl = onReplacementControl,
+                                        onEditLayout = onEditLayout
+                                    )
+                                    1 -> ControlMouse(modifier = Modifier.fillMaxSize())
+                                    2 -> ControlGamepad(
+                                        modifier = Modifier.fillMaxSize(),
+                                        gamepadViewModel = gamepadViewModel
+                                    )
+                                    3 -> ControlGesture(modifier = Modifier.fillMaxSize())
+                                    4 -> ControlGyroscope(modifier = Modifier.fillMaxSize())
+                                }
+                            }
+                        }
                     }
                 }
             }
-        },
-        rightMenuTitle = {
-            Text(
-                modifier = Modifier.padding(all = 8.dp),
-                text = stringResource(R.string.game_menu_title),
-                style = MaterialTheme.typography.titleMedium
-            )
-        },
-        rightMenuContent = {
-            GameActionContent(
-                modifier = Modifier.weight(1f),
-                onForceClose = onForceClose,
-                onSwitchLog = onSwitchLog,
-                enableTerracotta = enableTerracotta,
-                onOpenTerracottaMenu = onOpenTerracottaMenu,
-                onRefreshWindowSize = onRefreshWindowSize,
-                onShowToast = onShowToast
-            )
         }
-    )
+    }
 }
 
 @Composable
