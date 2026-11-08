@@ -46,3 +46,4 @@ VøidLaunchear 0.1.2 compile-fix verification rebuild request: 2026-11-08
 Confirmed RectangleShape imports exist in SettingsScreen.kt and ControlEditorElements.kt; rerun full Debug matrix to verify current source.
 
 Retry build after correcting RectangleShape package imports.
+Retry after debug signing fallback fix: c40dd4e3c35ad9c4517dd3b2bd33e61944099f2a
