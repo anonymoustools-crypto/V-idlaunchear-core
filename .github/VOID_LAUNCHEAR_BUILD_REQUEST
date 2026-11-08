@@ -1,5 +1,1 @@
-Owner-requested VøidLaunchear Debug APK build.
-Source commit: f57f3a1fc01c75e72acc364a9133e08c50a323df
-Requested: 2026-11-08
-Variant: Debug
-Architecture: ARM64 and workflow matrix targets
+Build VøidLaunchear 1.0.2 Debug APK.
