@@ -236,6 +236,7 @@ fun LauncherScreen(
                     onOpenVersionSettings = navigateToVersions
                 )
                 }
+                }
 
                 // ActionMenu 对接到了 End，留出空位
                 if (dockedSide == ActionMenuSide.END) {
