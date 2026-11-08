@@ -124,11 +124,14 @@ android {
         }
         // Use the repository's persistent debug key so CI APK updates keep
         // the same certificate across separate GitHub Actions runners.
+        // Never guess a signing password: require the configured secret explicitly.
         create("debugBuild") {
             storeFile = file("zalith_launcher_debug.jks")
-            storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt", defaultStorePassword.ifBlank { "android" })
+            storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt", defaultStorePassword)
+                .also { require(it.isNotBlank()) { "Missing STORE_PASSWORD. Add it as a GitHub Actions repository secret." } }
             keyAlias = "movtery_zalith_debug"
-            keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt", defaultKeyPassword.ifBlank { "android" })
+            keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt", defaultKeyPassword)
+                .also { require(it.isNotBlank()) { "Missing KEY_PASSWORD. Add it as a GitHub Actions repository secret." } }
         }
     }
 
