@@ -47,3 +47,6 @@ Confirmed RectangleShape imports exist in SettingsScreen.kt and ControlEditorEle
 
 Retry build after correcting RectangleShape package imports.
 Retry after debug signing fallback fix: c40dd4e3c35ad9c4517dd3b2bd33e61944099f2a
+
+VøidLaunchear 0.1.2 Debug build request: 2026-11-08 16:xx Asia/Manila
+Requested by user after successful debug keystore validation. Build current main source; preserve existing releases.
