@@ -175,7 +175,7 @@ fun LauncherScreen(
             dragState.topContentOffsetPx = with(LocalDensity.current) { brandHeaderHeight.toPx() }
             dragState.menuSpanPx = parentWidthPx * (ActionMenuWeight / (ActionMenuWeight + ContentWeight))
 
-            var isBackgroundOnly by remember { mutableStateOf(false) }
+            var isHomeDeckHidden by remember { mutableStateOf(false) }
 
             //拖拽期间以预览侧为准
             val effectiveSide = dragState.previewSide ?: dockedSide
@@ -201,7 +201,6 @@ fun LauncherScreen(
                 }
             }
 
-            if (!isBackgroundOnly) {
             // 内容区域
             Row(
                 modifier = Modifier
@@ -220,6 +219,7 @@ fun LauncherScreen(
                         }
                     }
                 ) {
+                if (!isHomeDeckHidden) {
                 ContentMenu(
                     modifier = Modifier
                         .guideNode(
@@ -314,7 +314,7 @@ fun LauncherScreen(
                     }
                     IconButton(
                         modifier = Modifier.size(38.dp),
-                        onClick = { isBackgroundOnly = true }
+                        onClick = { isHomeDeckHidden = true }
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_visibility_off_outlined),
@@ -355,16 +355,14 @@ fun LauncherScreen(
                 }
             }
 
-            }
-
-            if (isBackgroundOnly) {
+            if (isHomeDeckHidden) {
                 Row(
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(16.dp)
+                        .align(Alignment.BottomStart)
+                        .padding(start = 16.dp, bottom = 16.dp)
                         .clip(MaterialTheme.shapes.large)
                         .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.82f))
-                        .clickable { isBackgroundOnly = false }
+                        .clickable { isHomeDeckHidden = false }
                         .padding(horizontal = 14.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
