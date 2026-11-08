@@ -1,52 +1,5 @@
-Download Lab fallback search build request
-Search fix commit: daa9446dd703f96ad3bdb330102ae6d102c19a3c
-Requested: 2026-11-05T22:27:19.999Z
-
-Release job fix: 2026-11-05T22:40:59.530Z
-
-VøidLaunchear 1.0.8 build request: 2026-11-06
-Changes: Download Lab empty-results state and announcement feed metadata.
-
-VøidLaunchear 1.0.9 build request: 2026-11-06
-Changes: version bump and latest main branding/icon updates.
-
-VøidLaunchear 1.0.9 rebuild request: 2026-11-06
-Changes: Fix Compose animateDpAsState import and missing Modifier import after build #31 compilation failure.
-
-
-VøidLaunchear 1.0.10 test build request: 2026-11-06
-Changes: Download hub navigation fix; remove walking Steve from launcher home; add 1.0.10 update announcement feed and version metadata.
-
-1.0.10 rebuild after fixing missing Material Icons dependency: 2026-11-06
-
-In-app updater flow: DownloadManager APK transfer, progress/error display, and explicit Android package-installer handoff. Rebuild requested 2026-11-06.
-
-VøidLaunchear 1.0.10 rebuild request: 2026-11-06
-Fix: replace unresolved Icons reference in DownloadScreen back button with Compose Text arrow.
-
-
-VøidLaunchear 1.0.11 rebuild request: 2026-11-07
-Fix: replace unavailable java.nio.file.Files.writeString call with java.io.File.writeText to prevent Minecraft version manifest download crash on Android. About credits now display the project creator while retaining required third-party copyright and license notices.
-
-VøidLaunchear 1.0.12 Debug build request: 2026-11-07
-Includes source through version bump commit 4af803a610d3ccf44cf6f8bc4d17a58380044a04; monthly sponsor startup popup disabled. Official icon artwork asset pack is prepared separately and is not yet integrated in this repository.
-Smart Lag Fix integration verification build 2026-11-07
-
-Smart Lag Fix apply-control verification build 2026-11-07
-Includes confirmed apply action, backup-first settings update, and existing in-game live FPS widget integration.
-
-VøidLaunchear 1.0.12 fresh APK test build request: 2026-11-07 19:56 Asia/Manila
-Requested by user to start a new full Debug APK build for installation and device testing.
-
-VøidLaunchear 0.1.2 Debug APK update request: 2026-11-08
-Requested by user to build the current main source as an ARM64-capable Debug APK. Keep existing releases and source files; do not delete old releases during this build.
-
-
-VøidLaunchear 0.1.2 compile-fix verification rebuild request: 2026-11-08
-Confirmed RectangleShape imports exist in SettingsScreen.kt and ControlEditorElements.kt; rerun full Debug matrix to verify current source.
-
-Retry build after correcting RectangleShape package imports.
-Retry after debug signing fallback fix: c40dd4e3c35ad9c4517dd3b2bd33e61944099f2a
-
-VøidLaunchear 0.1.2 Debug build request: 2026-11-08 16:xx Asia/Manila
-Requested by user after successful debug keystore validation. Build current main source; preserve existing releases.
+Owner-requested VøidLaunchear Debug APK build.
+Source commit: f57f3a1fc01c75e72acc364a9133e08c50a323df
+Requested: 2026-11-08
+Variant: Debug
+Architecture: ARM64 and workflow matrix targets
