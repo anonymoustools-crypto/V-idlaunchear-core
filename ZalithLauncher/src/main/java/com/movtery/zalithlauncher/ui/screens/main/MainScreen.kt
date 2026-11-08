@@ -678,6 +678,11 @@ private fun TaskMenu(
     val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
     val show = isExpanded && tasks.isNotEmpty()
 
+    // Do not leave an invisible full-height overlay in the main screen.
+    // When the task panel is hidden, remove it from composition entirely so
+    // the user can navigate and interact with the launcher while downloads run.
+    if (!show) return
+
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     AnimatedVisibility(
         modifier = modifier,
