@@ -37,3 +37,6 @@ Includes confirmed apply action, backup-first settings update, and existing in-g
 
 VøidLaunchear 1.0.12 fresh APK test build request: 2026-11-07 19:56 Asia/Manila
 Requested by user to start a new full Debug APK build for installation and device testing.
+
+VøidLaunchear 0.1.2 Debug APK update request: 2026-11-08
+Requested by user to build the current main source as an ARM64-capable Debug APK. Keep existing releases and source files; do not delete old releases during this build.
