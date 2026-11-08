@@ -144,7 +144,7 @@ private fun TabMenu(
                 )
             )
             .animated(ctx, from = AnimatedDirection.Top)
-            .padding(horizontal = 12.dp, vertical = 9.dp)
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -159,7 +159,7 @@ private fun TabMenu(
                             listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer)
                         )
                     )
-                    .padding(horizontal = 12.dp, vertical = 7.dp)
+                    .padding(horizontal = 9.dp, vertical = 5.dp)
             ) {
                 Text(
                     text = "Ø  VØID",
@@ -188,19 +188,19 @@ private fun TabMenu(
             )
         }
 
-        Spacer(modifier = Modifier.height(9.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(scrollState),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             settingItems.forEach { item ->
                 val selected = settingsScreenKey == item.key
                 Surface(
-                    modifier = Modifier.height(48.dp),
+                    modifier = Modifier.height(39.dp),
                     onClick = { navigateTo(item.key) },
                     shape = RectangleShape,
                     color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
@@ -209,14 +209,14 @@ private fun TabMenu(
                     shadowElevation = if (selected) 3.dp else 0.dp
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 13.dp, vertical = 7.dp),
+                        modifier = Modifier.padding(horizontal = 9.dp, vertical = 5.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Box(
                             modifier = Modifier
-                                .width(31.dp)
-                                .height(31.dp)
+                                .width(25.dp)
+                                .height(25.dp)
                                 .clip(RectangleShape)
                                 .background(
                                     if (selected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.18f)
