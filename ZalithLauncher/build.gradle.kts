@@ -120,6 +120,14 @@ android {
             keyAlias = "movtery_zalith"
             keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt")
         }
+        // Use the repository's persistent debug key so CI APK updates keep
+        // the same certificate across separate GitHub Actions runners.
+        create("debugBuild") {
+            storeFile = file("zalith_launcher_debug.jks")
+            storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt", defaultStorePassword)
+            keyAlias = "movtery_zalith_debug"
+            keyPassword = getKeyFromLocal("KEY_PASSWORD", ".key_password.txt", defaultKeyPassword)
+        }
     }
 
     defaultConfig {
@@ -146,6 +154,7 @@ android {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            signingConfig = signingConfigs.getByName("debugBuild")
         }
     }
 
