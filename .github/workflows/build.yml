@@ -1,7 +1,6 @@
 name: Build APK
 
 on:
-  # A one-off marker commit starts the owner-requested distribution build.
   push:
     branches: [main]
     paths:
@@ -26,6 +25,8 @@ on:
         required: false
       STORE_PASSWORD:
         required: false
+      RELEASE_KEYSTORE_BASE64:
+        required: false
       OAUTH_CLIENT_ID:
         required: false
       CURSEFORGE_API_KEY:
@@ -37,13 +38,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: ["all", "arm", "arm64", "x86", "x86_64"]
+        arch: ["arm64", "arm"]
       fail-fast: false
 
     env:
       BUILD_VARIANT: ${{ inputs.variant || 'Debug' }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+      RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
       OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
 
@@ -67,7 +69,7 @@ jobs:
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+          targets: aarch64-linux-android,armv7-linux-androideabi
 
       - name: Cache Rust build
         uses: actions/cache@v4
@@ -98,6 +100,19 @@ jobs:
           test -f "$ndk/source.properties"
           echo "ANDROID_NDK_HOME=$ndk" >> "$GITHUB_ENV"
 
+      - name: Restore private release signing key
+        if: env.BUILD_VARIANT == 'Release'
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$RELEASE_KEYSTORE_BASE64" ]; then
+            echo "Missing RELEASE_KEYSTORE_BASE64 GitHub Actions secret."
+            exit 1
+          fi
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > ZalithLauncher/zalith_launcher.jks
+          chmod 600 ZalithLauncher/zalith_launcher.jks
+          test -s ZalithLauncher/zalith_launcher.jks
+
       - name: Build APK for ${{ matrix.arch }}
         run: |
           chmod +x gradlew
@@ -108,6 +123,11 @@ jobs:
           output_dir="ZalithLauncher/build/outputs/apk/${BUILD_VARIANT,,}"
           version="$(awk -F= '$1 == "launcher_version_name" { print $2; exit }' ZalithLauncher/gradle.properties)"
           test -n "$version"
+          case "${{ matrix.arch }}" in
+            arm) arch_label="armv7" ;;
+            arm64) arch_label="arm64" ;;
+            *) echo "Unsupported distribution architecture"; exit 1 ;;
+          esac
           shopt -s nullglob
           apks=("$output_dir"/*.apk)
           if [ ${#apks[@]} -eq 0 ]; then
@@ -115,7 +135,11 @@ jobs:
             exit 1
           fi
           for apk in "${apks[@]}"; do
-            target="$output_dir/Vøidlaunchear-${version}-${{ matrix.arch }}-${BUILD_VARIANT}.apk"
+            if [ "$BUILD_VARIANT" = "Release" ]; then
+              target="$output_dir/VøidLaunchear-${version}-${arch_label}.apk"
+            else
+              target="$output_dir/VøidLaunchear-${version}-${arch_label}-Debug.apk"
+            fi
             mv "$apk" "$target"
             echo "Prepared $target"
           done
@@ -125,11 +149,11 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: VøidLaunchear APK (${{ matrix.arch }})
-          path: ZalithLauncher/build/outputs/apk/release/Vøidlaunchear-*.apk
+          path: ZalithLauncher/build/outputs/apk/release/VøidLaunchear-*.apk
           if-no-files-found: error
 
       - name: Upload Release Mapping for ${{ matrix.arch }}
-        if: inputs.variant == 'Release'
+        if: env.BUILD_VARIANT == 'Release'
         continue-on-error: true
         uses: actions/upload-artifact@v7
         with:
@@ -141,12 +165,12 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: VøidLaunchear APK (${{ matrix.arch }})
-          path: ZalithLauncher/build/outputs/apk/debug/Vøidlaunchear-*.apk
+          path: ZalithLauncher/build/outputs/apk/debug/VøidLaunchear-*.apk
           if-no-files-found: error
 
-  publish-public-apk:
-    name: Publish public ARM64 APK
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  publish-public-apks:
+    name: Publish direct APK downloads
+    if: (github.event_name == 'workflow_dispatch' && inputs.variant == 'Release') || (github.event_name == 'workflow_call' && inputs.variant == 'Release')
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -156,22 +180,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Download ARM64 APK
+      - name: Download ARM APK variants
         uses: actions/download-artifact@v4
         with:
-          name: VøidLaunchear APK (arm64)
+          pattern: VøidLaunchear APK (*)
+          merge-multiple: true
           path: release-assets
 
-      - name: Verify APK asset
+      - name: Verify direct APK assets
         run: |
-          apk="$(find release-assets -maxdepth 2 -type f -name '*.apk' -print -quit)"
-          if [ -z "$apk" ]; then
-            echo "ARM64 APK artifact is missing"
+          shopt -s nullglob
+          apks=(release-assets/*.apk)
+          if [ "${#apks[@]}" -ne 2 ]; then
+            echo "Expected exactly two APK files (ARM64 and ARMv7); found ${#apks[@]}."
+            find release-assets -maxdepth 2 -type f -print
             exit 1
           fi
-          file "$apk"
-          test "$(stat -c%s "$apk")" -gt 100000000
-          echo "APK ready for public release: $apk"
+          printf '%s\n' "${apks[@]}"
+          for apk in "${apks[@]}"; do
+            file "$apk"
+            test "$(stat -c%s "$apk")" -gt 100000000
+          done
 
       - name: Read app version
         id: version
@@ -179,15 +208,20 @@ jobs:
           version="$(awk -F= '$1 == "launcher_version_name" { print $2; exit }' ZalithLauncher/gradle.properties)"
           test -n "$version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          name: VøidLaunchear ${{ steps.version.outputs.version }} — ARM64
+          name: VøidLaunchear ${{ steps.version.outputs.version }}
           body: |
-            Public ARM64 Debug APK for VøidLaunchear ${{ steps.version.outputs.version }}.
+            Direct APK downloads for VøidLaunchear ${{ steps.version.outputs.version }}.
 
-            This is a successful CI build. It has not yet been verified on a physical Android device.
+            - ARM64: VøidLaunchear-${{ steps.version.outputs.version }}-arm64.apk
+            - ARMv7 (32-bit): VøidLaunchear-${{ steps.version.outputs.version }}-armv7.apk
+
+            Each file is a standalone APK. No ZIP extraction is required.
+            Physical-device compatibility testing is still required.
           files: release-assets/*.apk
           fail_on_unmatched_files: true
           make_latest: true
