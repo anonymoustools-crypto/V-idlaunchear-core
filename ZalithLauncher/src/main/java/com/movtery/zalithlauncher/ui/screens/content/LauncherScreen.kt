@@ -175,7 +175,7 @@ fun LauncherScreen(
             dragState.topContentOffsetPx = with(LocalDensity.current) { brandHeaderHeight.toPx() }
             dragState.menuSpanPx = parentWidthPx * (ActionMenuWeight / (ActionMenuWeight + ContentWeight))
 
-            var isBackgroundOnly by remember { mutableStateOf(false) }
+            var isLeftColumnHidden by remember { mutableStateOf(false) }
 
             //拖拽期间以预览侧为准
             val effectiveSide = dragState.previewSide ?: dockedSide
@@ -201,7 +201,7 @@ fun LauncherScreen(
                 }
             }
 
-            if (!isBackgroundOnly) {
+            if (!isLeftColumnHidden) {
             // 内容区域
             Row(
                 modifier = Modifier
@@ -314,7 +314,7 @@ fun LauncherScreen(
                     }
                     IconButton(
                         modifier = Modifier.size(38.dp),
-                        onClick = { isBackgroundOnly = true }
+                        onClick = { isLeftColumnHidden = true }
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_visibility_off_outlined),
@@ -323,6 +323,8 @@ fun LauncherScreen(
                         )
                     }
                 }
+            }
+
             }
 
             val isActionMenuTaller = maxHeight >= 600.dp
@@ -355,16 +357,14 @@ fun LauncherScreen(
                 }
             }
 
-            }
-
-            if (isBackgroundOnly) {
+            if (isLeftColumnHidden) {
                 Row(
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
+                        .align(if (dockedSide == ActionMenuSide.START) Alignment.BottomEnd else Alignment.BottomStart)
                         .padding(16.dp)
                         .clip(MaterialTheme.shapes.large)
                         .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.82f))
-                        .clickable { isBackgroundOnly = false }
+                        .clickable { isLeftColumnHidden = false }
                         .padding(horizontal = 14.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
