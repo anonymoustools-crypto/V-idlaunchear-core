@@ -32,11 +32,13 @@ val defaultCurseForgeApiKey = project.findProperty("curseforge_api_key") as? Str
 val projectArch: String = System.getProperty("arch", "all")
 
 fun getKeyFromLocal(envKey: String, fileName: String? = null, default: String? = null): String {
-    val key = System.getenv(envKey)
+    // GitHub Actions defines optional secrets as empty strings when unset.
+    // Treat blank values as absent so the persistent debug keystore fallback works.
+    val key = System.getenv(envKey)?.takeIf { it.isNotBlank() }
     return key ?: fileName?.let {
         val file = File(rootDir, fileName)
-        if (file.canRead() && file.isFile) file.readText() else null
-    } ?: default ?: run {
+        if (file.canRead() && file.isFile) file.readText().trim().takeIf { value -> value.isNotBlank() } else null
+    } ?: default?.takeIf { it.isNotBlank() } ?: run {
         logger.warn("BUILD: $envKey not set; related features may throw exceptions.")
         ""
     }
