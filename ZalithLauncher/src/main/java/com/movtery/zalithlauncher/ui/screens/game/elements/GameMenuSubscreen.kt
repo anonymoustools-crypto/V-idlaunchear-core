@@ -174,7 +174,7 @@ fun GameMenuSubscreen(
                         }
                     }
 
-                    when (selectedSection) {
+                    when (selectedSection.intValue) {
                         0 -> GameActionContent(
                             modifier = Modifier.weight(1f),
                             onForceClose = onForceClose,
