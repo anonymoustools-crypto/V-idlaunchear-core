@@ -35,7 +35,7 @@ class ModProfileStore(
         }.orEmpty().mapNotNull { file ->
             runCatching {
                 Properties().apply {
-                    FileInputStream(file).use(::load)
+                    FileInputStream(file).use { input -> load(input) }
                 }.getProperty("name")?.takeIf(String::isNotBlank)
             }.getOrNull()
         }.distinct().sortedBy(String::lowercase)
