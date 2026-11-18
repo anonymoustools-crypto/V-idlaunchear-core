@@ -169,7 +169,7 @@ fun MainScreen(
         TaskSystem.tasksFlow.collect { tasks ->
             val noTasks = tasks.isEmpty()
             eventViewModel.sendKeepScreen(!noTasks)
-            taskRunning = noTasks
+            taskRunning = !noTasks
         }
     }
 
