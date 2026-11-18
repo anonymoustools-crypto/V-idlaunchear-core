@@ -73,7 +73,7 @@ class ModProfileStore(
         if (!file.isFile) return null
 
         val properties = runCatching {
-            Properties().apply { FileInputStream(file).use(::load) }
+            Properties().apply { FileInputStream(file).use { input -> load(input) } }
         }.getOrNull() ?: return null
 
         val enabled = properties.getProperty("enabled", "")
