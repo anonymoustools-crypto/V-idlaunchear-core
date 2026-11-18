@@ -107,7 +107,7 @@ fun PetModelView(
         petController.setCape(cape)
     }
     var lastRagdollTrigger by remember { mutableIntStateOf(0) }
-    LaunchedEffect(petController, animation, animationSpeed, autonomousIdle, yaw, ragdollTrigger) {
+    LaunchedEffect(petController, animation, animationSpeed, autonomousIdle, yaw) {
         if (autonomousIdle) {
             // Alternate idle and walking while turning relative to the caller's base yaw.
             // setModelYaw prevents small random turns from accumulating into an endless spin.
@@ -130,10 +130,12 @@ fun PetModelView(
             } else {
                 petController.stopAnimation()
             }
-            if (ragdollTrigger != lastRagdollTrigger) {
-                lastRagdollTrigger = ragdollTrigger
-                petController.playRagdoll()
-            }
+        }
+    }
+    LaunchedEffect(petController, ragdollTrigger) {
+        if (ragdollTrigger != lastRagdollTrigger) {
+            lastRagdollTrigger = ragdollTrigger
+            petController.playRagdoll()
         }
     }
     LaunchedEffect(petController, yaw) {
