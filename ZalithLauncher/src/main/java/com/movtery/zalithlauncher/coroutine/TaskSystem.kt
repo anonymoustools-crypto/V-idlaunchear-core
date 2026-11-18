@@ -65,7 +65,6 @@ object TaskSystem {
             } catch (th: Throwable) {
                 if (th is CancellationException || th.isInterruptedIOException()) return@launch
                 task.updateStage(TaskStage.FAILED)
-                _failedTasksFlow.update { current -> if (task in current) current else current + task }
                 task.onError(th)
             } finally {
                 task.onFinally()
@@ -109,10 +108,15 @@ object TaskSystem {
 
     private fun onTaskEnded(task: Task) {
         removeTask(task)
+        allJobs.remove(task.id)
+        if (task.stage.value == TaskStage.FAILED) {
+            _failedTasksFlow.update { current ->
+                if (current.any { it.id == task.id }) current else current + task
+            }
+        }
         runCatching {
             allListeners[task.id]?.invoke()
         }
-        allJobs.remove(task.id)
         removeTaskEndedListener(task.id)
     }
 
