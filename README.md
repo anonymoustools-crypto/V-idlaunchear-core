@@ -31,6 +31,24 @@ The project is actively developed. Features, device support, and compatibility c
 
 Some items are still being improved. This list does not guarantee that every feature works on every device or for every Minecraft release.
 
+## Upstream license and modified-version notice
+
+This is an **Unofficial Modified Version** based on Zalith Launcher 2. It is independently
+named **VøidLaunchear** and is not the official Zalith Launcher 2 project.
+
+The upstream project is Copyright (C) 2025-2026 MovTery and contributors. Its copyright
+notices in source files and in-app attribution must remain intact. The complete GNU GPL
+version 3 license is provided in the root `LICENSE` file. Additional upstream conditions
+under GPLv3 Section 7 are summarized in `NOTICE`:
+
+- Modified versions must not use “ZalithLauncher”, “ZL”, or a confusingly similar name.
+- Modified versions must display “Unofficial Modified Version” on startup or the main UI.
+- Upstream copyright notices displayed by the program must not be removed.
+
+This project also includes third-party components with their own license terms. See the
+in-app license screen and component-specific notices. This summary does not replace any
+license or copyright notice.
+
 ## Compatibility
 
 - **Operating system:** Android.
