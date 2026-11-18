@@ -218,6 +218,15 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            Text(
+                text = "UNOFFICIAL MODIFIED VERSION • Based on Zalith Launcher 2 • Copyright © 2025–2026 MovTery and contributors",
+                style = MaterialTheme.typography.labelSmall,
+                color = onBackgroundColor(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
+            )
+
             TopBar(
                 modifier = Modifier
                     .fillMaxWidth()
