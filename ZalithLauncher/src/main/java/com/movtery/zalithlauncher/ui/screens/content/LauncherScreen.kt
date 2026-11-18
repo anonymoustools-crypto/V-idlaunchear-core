@@ -446,7 +446,7 @@ private fun AccountAvatarCenter(
     var ragdollTrigger by remember(account) { mutableIntStateOf(0) }
     var isCompanionDragging by remember(account) { mutableStateOf(false) }
 
-    LaunchedEffect(account, dragLimitPx) {
+    LaunchedEffect(account, dragLimitPx, isCompanionDragging) {
         while (true) {
             kotlinx.coroutines.delay(kotlin.random.Random.nextLong(4200L, 6800L))
             if (!isCompanionDragging) {
