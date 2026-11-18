@@ -481,11 +481,12 @@ private fun AccountAvatarCenter(
                                 onDragStart = { isCompanionDragging = true },
                                 onDragEnd = {
                                     isCompanionDragging = false
-                                    ragdollTrigger += 1
+                                    if (companionOffset.y < -dragLimitPx * 0.15f) {
+                                        ragdollTrigger += 1
+                                    }
                                 },
                                 onDragCancel = {
                                     isCompanionDragging = false
-                                    ragdollTrigger += 1
                                 }
                             ) { change, dragAmount ->
                                 change.consume()
