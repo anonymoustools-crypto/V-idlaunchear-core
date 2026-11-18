@@ -1,0 +1,25 @@
+VøidLaunchear — THIRD-PARTY NOTICES
+
+This project is an unofficial modified version based on Zalith Launcher 2 and other
+open-source components. It is not the official Zalith Launcher 2 project.
+
+Upstream project:
+- Zalith Launcher 2
+- Copyright (C) 2025-2026 MovTery and contributors
+- Upstream repository: https://github.com/ZalithLauncher/ZalithLauncher2
+- License: GNU General Public License, version 3 or (at your option) any later version.
+- The upstream copyright and license notices in source files are retained.
+
+Project identity:
+- Modified project name: VøidLaunchear
+- Project direction, customization, and coordination: Gilbert Jamindang
+
+Additional GPLv3 Section 7 terms specified by the upstream project:
+1. Modified versions must use a reasonably different name and must not use “ZalithLauncher”,
+   “ZL”, or a confusingly similar name as the modified program's name.
+2. Modified versions must clearly identify themselves as “Unofficial Modified Versions”
+   on the startup screen or main interface.
+3. Copyright notices displayed by the upstream program must not be removed.
+
+This notice is a summary, not a replacement for LICENSE, upstream notices, source headers,
+or the complete license terms. Each third-party component remains subject to its own license.
