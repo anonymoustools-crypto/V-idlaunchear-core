@@ -21,6 +21,8 @@ package com.movtery.zalithlauncher.ui.theme
 import android.os.Build
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -34,6 +36,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
@@ -600,6 +604,10 @@ private fun customDark(
     )
 }
 
+private val winterButtonShapes = Shapes(
+    small = RoundedCornerShape(18.dp)
+)
+
 private val winterDarkColorScheme = darkColorScheme(
     primary = Color(0xFFE45B63),
     onPrimary = Color(0xFF3B080D),
@@ -738,6 +746,7 @@ fun ZalithLauncherTheme(
             colorScheme = currentDisplayScheme,
             motionScheme = MotionScheme.expressive(),
             typography = appTypography,
+            shapes = if (isWinterEdition) winterButtonShapes else MaterialTheme.shapes,
             content = content
         )
     }
