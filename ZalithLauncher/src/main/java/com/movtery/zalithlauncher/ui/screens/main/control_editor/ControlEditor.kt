@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -45,6 +46,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movtery.guide.guideNode
 import com.movtery.layer_controller.ControlEditorLayer
 import com.movtery.layer_controller.data.ButtonSize
+import com.movtery.layer_controller.data.ButtonShape
+import com.movtery.layer_controller.data.createNewButtonStyle
 import com.movtery.layer_controller.data.ButtonPosition
 import com.movtery.layer_controller.data.DefaultDirectionEvents
 import com.movtery.layer_controller.data.DefaultLockEvents
@@ -167,6 +170,40 @@ fun BoxWithConstraintsScope.ControlEditor(
         },
         addNewButton = {
             viewModel.addWidget(layers) { layer ->
+                val bedrockStyleId = styles.firstOrNull { it.name == "Bedrock Touch" }?.uuid
+                    ?: createNewButtonStyle("Bedrock Touch").let { baseStyle ->
+                        val light = baseStyle.lightStyle.copy(
+                            alpha = 0.94f,
+                            pressedAlpha = 1f,
+                            backgroundColor = Color(0xD9343434),
+                            pressedBackgroundColor = Color(0xFFB8DDF5),
+                            contentColor = Color.White,
+                            pressedContentColor = Color(0xFF15202B),
+                            borderWidth = 2,
+                            pressedBorderWidth = 2,
+                            borderColor = Color(0xFFE0E0E0),
+                            pressedBorderColor = Color(0xFFFFFFFF),
+                            borderRadius = ButtonShape(8f),
+                            pressedBorderRadius = ButtonShape(8f)
+                        )
+                        val dark = baseStyle.darkStyle.copy(
+                            alpha = 0.94f,
+                            pressedAlpha = 1f,
+                            backgroundColor = Color(0xD9262B31),
+                            pressedBackgroundColor = Color(0xFFB8DDF5),
+                            contentColor = Color.White,
+                            pressedContentColor = Color(0xFF15202B),
+                            borderWidth = 2,
+                            pressedBorderWidth = 2,
+                            borderColor = Color(0xFFB8C4CE),
+                            pressedBorderColor = Color.White,
+                            borderRadius = ButtonShape(8f),
+                            pressedBorderRadius = ButtonShape(8f)
+                        )
+                        baseStyle.copy(lightStyle = light, darkStyle = dark).also {
+                            viewModel.observableLayout.addStyle(it)
+                        }.uuid
+                    }
                 layer.addNormalButton(
                     createWidgetWithUUID { uuid ->
                         NormalData(
@@ -177,6 +214,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                                 referenceLength = screenSize.height,
                                 density = density.density
                             ),
+                            buttonStyle = bedrockStyleId,
                             visibilityType = VisibilityType.ALWAYS,
                             isSwipple = false,
                             isPenetrable = false,
