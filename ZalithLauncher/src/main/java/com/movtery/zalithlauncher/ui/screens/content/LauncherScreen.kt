@@ -444,6 +444,20 @@ private fun AccountAvatarCenter(
     val dragLimitPx = with(LocalDensity.current) { 90.dp.toPx() }
     var companionOffset by remember(account) { mutableStateOf(Offset.Zero) }
     var ragdollTrigger by remember(account) { mutableIntStateOf(0) }
+    var isCompanionDragging by remember(account) { mutableStateOf(false) }
+
+    LaunchedEffect(account, dragLimitPx) {
+        while (true) {
+            kotlinx.coroutines.delay(kotlin.random.Random.nextLong(4200L, 6800L))
+            if (!isCompanionDragging) {
+                val roamLimit = dragLimitPx * 0.58f
+                companionOffset = Offset(
+                    kotlin.random.Random.nextFloat() * roamLimit * 2f - roamLimit,
+                    kotlin.random.Random.nextFloat() * roamLimit * 2f - roamLimit
+                )
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -464,8 +478,15 @@ private fun AccountAvatarCenter(
                         .height(238.dp)
                         .pointerInput(account, dragLimitPx) {
                             detectDragGestures(
-                                onDragEnd = { ragdollTrigger += 1 },
-                                onDragCancel = { ragdollTrigger += 1 }
+                                onDragStart = { isCompanionDragging = true },
+                                onDragEnd = {
+                                    isCompanionDragging = false
+                                    ragdollTrigger += 1
+                                },
+                                onDragCancel = {
+                                    isCompanionDragging = false
+                                    ragdollTrigger += 1
+                                }
                             ) { change, dragAmount ->
                                 change.consume()
                                 companionOffset = Offset(
@@ -510,6 +531,11 @@ private fun AccountAvatarCenter(
                     Text(
                         text = getAccountTypeName(account),
                         style = MaterialTheme.typography.labelSmall
+                    )
+                    Text(
+                        text = "SKIN STUDIO • DRAG TO MOVE",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
