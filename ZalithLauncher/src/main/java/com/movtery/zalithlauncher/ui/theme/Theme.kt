@@ -44,6 +44,7 @@ import com.movtery.zalithlauncher.utils.festival.Festival
 import com.movtery.zalithlauncher.utils.festival.LocalFestivals
 import com.movtery.zalithlauncher.viewmodel.BackgroundViewModel
 import com.movtery.zalithlauncher.viewmodel.LocalBackgroundViewModel
+import java.time.LocalDate
 
 private val embermireLight = lightColorScheme(
     primary = primaryLight.embermire,
@@ -599,6 +600,48 @@ private fun customDark(
     )
 }
 
+private val winterDarkColorScheme = darkColorScheme(
+    primary = Color(0xFFE45B63),
+    onPrimary = Color(0xFF3B080D),
+    primaryContainer = Color(0xFF7B2630),
+    onPrimaryContainer = Color(0xFFFFDADD),
+    secondary = Color(0xFF62B88A),
+    onSecondary = Color(0xFF062B19),
+    secondaryContainer = Color(0xFF174D35),
+    onSecondaryContainer = Color(0xFFB8F2D0),
+    tertiary = Color(0xFFB9E8F5),
+    onTertiary = Color(0xFF15343D),
+    background = Color(0xFF080D13),
+    onBackground = Color(0xFFEAF3F7),
+    surface = Color(0xFF0D151D),
+    onSurface = Color(0xFFEAF3F7),
+    surfaceVariant = Color(0xFF1B2A35),
+    onSurfaceVariant = Color(0xFFC2D2DA),
+    outline = Color(0xFF526875),
+    outlineVariant = Color(0xFF293B47)
+)
+
+private val winterLightColorScheme = lightColorScheme(
+    primary = Color(0xFFB52E3B),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFFFDADD),
+    onPrimaryContainer = Color(0xFF410009),
+    secondary = Color(0xFF28734D),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFB8F2D0),
+    onSecondaryContainer = Color(0xFF002111),
+    tertiary = Color(0xFF326B7C),
+    onTertiary = Color(0xFFFFFFFF),
+    background = Color(0xFFF2F8FB),
+    onBackground = Color(0xFF111D24),
+    surface = Color(0xFFF8FCFE),
+    onSurface = Color(0xFF111D24),
+    surfaceVariant = Color(0xFFDCE8EE),
+    onSurfaceVariant = Color(0xFF394A53),
+    outline = Color(0xFF687D88),
+    outlineVariant = Color(0xFFB8C9D1)
+)
+
 @Composable
 fun ZalithLauncherTheme(
     darkTheme: Boolean = isLauncherInDarkTheme(),
@@ -619,8 +662,18 @@ fun ZalithLauncherTheme(
 
     val context = LocalContext.current
 
-    val targetColorScheme = remember(darkTheme, dynamicColor, colorTheme, customColor, customPaletteStyle) {
-        when {
+    // Seasonal VØID Winter Edition: active from November 19 through January 2.
+    val isWinterEdition = remember {
+        val today = LocalDate.now()
+        (today.monthValue == 11 && today.dayOfMonth >= 19) ||
+            today.monthValue == 12 ||
+            (today.monthValue == 1 && today.dayOfMonth <= 2)
+    }
+
+    val targetColorScheme = remember(darkTheme, dynamicColor, colorTheme, customColor, customPaletteStyle, isWinterEdition) {
+        if (isWinterEdition) {
+            if (darkTheme) winterDarkColorScheme else winterLightColorScheme
+        } else when {
             dynamicColor && colorTheme == ColorThemeType.DYNAMIC && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             }
@@ -654,6 +707,7 @@ fun ZalithLauncherTheme(
                 )
                 else -> embermireLight
             }
+        }
         }
     }
 
