@@ -708,7 +708,6 @@ fun ZalithLauncherTheme(
                 else -> embermireLight
             }
         }
-        }
     }
 
     var currentDarkTheme by remember { mutableStateOf(darkTheme) }
