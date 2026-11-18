@@ -27,6 +27,14 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import java.time.LocalDate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -137,6 +145,22 @@ fun MainScreen(
 ) {
     AnnouncementUpdateDialog()
 
+    val isWinterEdition = remember {
+        val today = LocalDate.now()
+        (today.monthValue == 11 && today.dayOfMonth >= 19) ||
+            today.monthValue == 12 ||
+            (today.monthValue == 1 && today.dayOfMonth <= 2)
+    }
+    val snowProgress by rememberInfiniteTransition(label = "winter-snow")
+        .animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 9000, easing = LinearEasing)
+            ),
+            label = "winter-snow-progress"
+        )
+
     //监控当前是否有任务正在进行
     var taskRunning by remember { mutableStateOf(true) }
     LaunchedEffect(Unit) {
@@ -169,7 +193,24 @@ fun MainScreen(
     } else backgroundColor()
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .drawWithContent {
+                drawContent()
+                if (isWinterEdition) {
+                    repeat(18) { index ->
+                        val x = size.width * ((index * 37 % 100) / 100f)
+                        val startY = size.height * ((index * 61 % 100) / 100f)
+                        val y = (startY + snowProgress * size.height) % size.height
+                        val radius = if (index % 4 == 0) 2.0f else 1.2f
+                        drawCircle(
+                            color = Color.White.copy(alpha = 0.18f),
+                            radius = radius,
+                            center = Offset(x, y)
+                        )
+                    }
+                }
+            },
         color = backgroundColor,
         contentColor = onBackgroundColor()
     ) {
