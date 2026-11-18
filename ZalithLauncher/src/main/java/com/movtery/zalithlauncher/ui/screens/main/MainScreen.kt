@@ -779,10 +779,22 @@ private fun TaskMenu(
                             )
                         }
 
-                        Text(
+                        Column(
                             modifier = Modifier.align(Alignment.Center),
-                            text = stringResource(R.string.main_task_menu)
-                        )
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(1.dp)
+                        ) {
+                            Text(
+                                text = "VØID  /  DOWNLOAD MANAGER",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = "${tasks.size} active  •  downloads continue while browsing",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
 
@@ -827,13 +839,19 @@ private fun TaskItem(
     onCancelClick: () -> Unit = {}
 ) {
     Surface(
-        modifier = modifier,
-        shape = shape,
-        color = color,
-        contentColor = contentColor,
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = Color(0xFF9F3045).copy(alpha = 0.55f),
+                shape = RoundedCornerShape(18.dp)
+            ),
+        shape = RoundedCornerShape(18.dp),
+        color = Color(0xFF102638),
+        contentColor = Color.White,
+        tonalElevation = 2.dp
     ) {
         Row(
-            modifier = Modifier.padding(all = 8.dp),
+            modifier = Modifier.padding(all = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             IconButton(
