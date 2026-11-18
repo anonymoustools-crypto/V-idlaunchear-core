@@ -188,9 +188,9 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF100C1D),
-                            Color(0xFF352052),
-                            Color(0xFF211632)
+                            Color(0xFF071321),
+                            Color(0xFF17334B),
+                            Color(0xFF102638)
                         )
                     )
                 )
@@ -215,7 +215,7 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 ) {
                     Text(
                         text = "VØID  /  CONTENT SYSTEM",
-                        color = Color(0xFFC7A8FF),
+                        color = Color(0xFFB9D9E8),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Black
                     )
@@ -227,7 +227,7 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 }
                 Surface(
                     shape = RoundedCornerShape(18.dp),
-                    color = Color(0xFF8B5CF6),
+                    color = Color(0xFF9F3045),
                     contentColor = Color.White
                 ) {
                     Column(
@@ -288,7 +288,7 @@ private fun TabMenu(
                 Surface(
                     onClick = { backStack.navigateOnce(item.key) },
                     shape = RoundedCornerShape(50),
-                    color = if (selected) Color(0xFF7C35D8) else Color(0xFF241832),
+                    color = if (selected) Color(0xFF9F3045) else Color(0xFF183A35),
                     contentColor = Color.White,
                     tonalElevation = if (selected) 4.dp else 0.dp
                 ) {
@@ -310,7 +310,7 @@ private fun TabMenu(
             Surface(
                 onClick = { backStack.navigateOnce(NormalNavKey.SearchId) },
                 shape = RoundedCornerShape(50),
-                color = Color(0xFF241832),
+                color = Color(0xFF183A35),
                 contentColor = Color.White
             ) {
                 Row(
