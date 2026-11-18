@@ -18,13 +18,13 @@
 
 package com.movtery.zalithlauncher.ui.screens.main.control_editor
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,6 +42,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movtery.guide.guideNode
 import com.movtery.layer_controller.ControlEditorLayer
@@ -338,27 +339,28 @@ private fun ActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val actionShape = RoundedCornerShape(14.dp)
     Surface(
-        modifier = modifier.semantics { role = Role.Button },
-        shape = ButtonDefaults.shape,
-        color = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = modifier
+            .border(1.dp, Color(0xFFDAA9B2), actionShape)
+            .semantics { role = Role.Button },
+        shape = actionShape,
+        color = Color(0xFF8E293D),
+        contentColor = Color.White,
+        shadowElevation = 5.dp,
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier.padding(all = 6.dp),
+            modifier = Modifier.padding(horizontal = 9.dp, vertical = 7.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Icon(
-                modifier = Modifier
-                    .padding(start = 6.dp)
-                    .size(20.dp),
+                modifier = Modifier.size(19.dp),
                 painter = painter,
                 contentDescription = text
             )
             Text(
-                modifier = Modifier.padding(end = 6.dp),
                 text = text,
                 style = MaterialTheme.typography.labelLarge
             )
