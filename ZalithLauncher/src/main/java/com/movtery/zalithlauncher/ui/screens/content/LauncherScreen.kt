@@ -102,6 +102,7 @@ import com.movtery.zalithlauncher.ui.components.AnimatedDirection
 import com.movtery.zalithlauncher.ui.components.BackgroundCard
 import com.movtery.zalithlauncher.ui.components.MarqueeText
 import com.movtery.zalithlauncher.ui.components.PetModelView
+import com.movtery.zalithlauncher.ui.components.VoidCompanionStage
 import com.movtery.zalithlauncher.ui.components.ScalingActionButton
 import com.movtery.zalithlauncher.ui.components.animated
 import com.movtery.zalithlauncher.ui.components.rememberAnimatedContext
@@ -441,24 +442,6 @@ private fun AccountAvatarCenter(
                 ?.inputStream()?.use { it.readBytes() }
         }
     }
-    val dragLimitPx = with(LocalDensity.current) { 90.dp.toPx() }
-    var companionOffset by remember(account) { mutableStateOf(Offset.Zero) }
-    var ragdollTrigger by remember(account) { mutableIntStateOf(0) }
-    var isCompanionDragging by remember(account) { mutableStateOf(false) }
-
-    LaunchedEffect(account, dragLimitPx, isCompanionDragging) {
-        while (true) {
-            kotlinx.coroutines.delay(kotlin.random.Random.nextLong(4200L, 6800L))
-            if (!isCompanionDragging) {
-                val roamLimit = dragLimitPx * 0.58f
-                companionOffset = Offset(
-                    kotlin.random.Random.nextFloat() * roamLimit * 2f - roamLimit,
-                    kotlin.random.Random.nextFloat() * roamLimit * 2f - roamLimit
-                )
-            }
-        }
-    }
-
     Box(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.extraLarge)
@@ -472,44 +455,15 @@ private fun AccountAvatarCenter(
             verticalArrangement = Arrangement.Center
         ) {
             if (account != null) {
-                PetModelView(
+                VoidCompanionStage(
                     modifier = Modifier
                         .width(176.dp)
-                        .height(238.dp)
-                        .pointerInput(account, dragLimitPx) {
-                            detectDragGestures(
-                                onDragStart = { isCompanionDragging = true },
-                                onDragEnd = {
-                                    isCompanionDragging = false
-                                    if (companionOffset.y < -dragLimitPx * 0.15f) {
-                                        ragdollTrigger += 1
-                                    }
-                                },
-                                onDragCancel = {
-                                    isCompanionDragging = false
-                                }
-                            ) { change, dragAmount ->
-                                change.consume()
-                                companionOffset = Offset(
-                                    (companionOffset.x + dragAmount.x).coerceIn(-dragLimitPx, dragLimitPx),
-                                    (companionOffset.y + dragAmount.y).coerceIn(-dragLimitPx, dragLimitPx)
-                                )
-                            }
-                        }
-                        .graphicsLayer {
-                            translationX = companionOffset.x
-                            translationY = companionOffset.y
-                        },
+                        .height(238.dp),
                     skin = skinBytes,
                     cape = capeBytes,
                     arm = armModel,
                     yaw = Math.toRadians(35.0).toFloat(),
-                    animation = PetAnimation.Idle,
-                    animationSpeed = 1.05f,
-                    tapReaction = PetTapReaction.Interact,
-                    dragYaw = false,
-                    autonomousIdle = true,
-                    ragdollTrigger = ragdollTrigger
+                    autoPose = true
                 )
             } else {
                 Icon(
