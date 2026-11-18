@@ -746,7 +746,7 @@ fun ZalithLauncherTheme(
             colorScheme = currentDisplayScheme,
             motionScheme = MotionScheme.expressive(),
             typography = appTypography,
-            shapes = if (isWinterEdition) winterButtonShapes else MaterialTheme.shapes,
+            shapes = if (isWinterEdition) winterButtonShapes else Shapes(),
             content = content
         )
     }
