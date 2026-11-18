@@ -452,12 +452,13 @@ fun LoginMenuDialog(
     ) {
         BoxWithConstraints(
             modifier = Modifier
-                .padding(all = 16.dp)
+                .padding(all = 8.dp)
                 .heightIn(max = rememberDialogMaxHeight())
                 .fillMaxHeight()
-                .fillMaxWidth(0.6f),
+                .fillMaxWidth(0.96f),
             contentAlignment = Alignment.Center
         ) {
+            val compactPortrait = maxWidth < 600.dp && maxHeight > maxWidth
             Surface(
                 modifier = Modifier
                     .padding(all = 6.dp)
@@ -1538,12 +1539,12 @@ fun ChangeSkinDialog(
                     }
                     Row(
                         modifier = Modifier.weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .weight(1f)
+                                .weight(if (compactPortrait) 0.78f else 1f)
                                 .clip(MaterialTheme.shapes.large)
                                 .background(itemColor(false)),
                             contentAlignment = Alignment.Center
@@ -1561,7 +1562,7 @@ fun ChangeSkinDialog(
 
                         Column(
                             modifier = Modifier
-                                .weight(1f)
+                                .weight(if (compactPortrait) 1.22f else 1f)
                                 .fillMaxHeight()
                                 .verticalScroll(rememberScrollState()),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
