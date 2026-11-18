@@ -720,22 +720,52 @@ fun ModsManagerScreen(
                         var profileName by remember(version) { mutableStateOf("Default") }
                         var profileMenuExpanded by remember { mutableStateOf(false) }
 
-                        Column {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp, vertical = 8.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                .padding(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "MOD PROFILES",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        text = "Save and switch enabled mod sets",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Text(
+                                    text = "${profileNames.size} saved",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = profileName,
+                                onValueChange = { profileName = it.take(48) },
+                                singleLine = true,
+                                label = { Text("Profile name") }
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(1f),
-                                    value = profileName,
-                                    onValueChange = { profileName = it.take(48) },
-                                    singleLine = true,
-                                    label = { Text("Mod profile") }
-                                )
                                 Button(
+                                    modifier = Modifier.weight(1f),
                                     onClick = {
                                         val enabledNames = viewModel.allMods
                                             .filter { it.localMod.file.isEnabled() }
@@ -746,14 +776,15 @@ fun ModsManagerScreen(
                                     },
                                     enabled = profileName.isNotBlank()
                                 ) {
-                                    Text("Save")
+                                    Text("Save profile")
                                 }
-                                Box {
+                                Box(modifier = Modifier.weight(1f)) {
                                     Button(
+                                        modifier = Modifier.fillMaxWidth(),
                                         onClick = { profileMenuExpanded = true },
                                         enabled = profileNames.isNotEmpty()
                                     ) {
-                                        Text("Load")
+                                        Text("Load profile")
                                     }
                                     DropdownMenu(
                                         expanded = profileMenuExpanded,
@@ -773,6 +804,7 @@ fun ModsManagerScreen(
                                     }
                                 }
                             }
+                        }
 
                             ModsActionsHeader(
                                 modifier = Modifier.fillMaxWidth(),
