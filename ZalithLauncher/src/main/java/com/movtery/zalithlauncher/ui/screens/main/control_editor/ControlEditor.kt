@@ -195,7 +195,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                         TextData(
                             text = createTranslatable(default = defaultTextName),
                             uuid = uuid,
-                            position = CenterPosition,
+                            position = nextBedrockButtonPosition(layer),
                             buttonSize = createAdaptiveButtonSize(
                                 referenceLength = screenSize.height,
                                 density = density.density,
