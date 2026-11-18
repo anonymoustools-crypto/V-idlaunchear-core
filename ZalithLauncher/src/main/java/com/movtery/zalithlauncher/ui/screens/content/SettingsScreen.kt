@@ -46,7 +46,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.navigation3.runtime.entryProvider
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.ui.base.BaseScreen
@@ -218,7 +217,7 @@ private fun TabMenu(
                             modifier = Modifier
                                 .width(25.dp)
                                 .height(25.dp)
-                                .clip(RectangleShape)
+                                .clip(RoundedCornerShape(9.dp))
                                 .background(
                                     if (selected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.18f)
                                     else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f)
