@@ -296,6 +296,14 @@ fun MainScreen(
                 ) {
                     changeTasksExpandedState()
                 }
+
+                TaskFloatingIndicator(
+                    isVisible = !isTaskMenuExpanded,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(14.dp),
+                    onClick = { changeTasksExpandedState() }
+                )
             }
         }
     }
@@ -718,6 +726,50 @@ private fun NavigationUI(
         )
     } else {
         Box(modifier)
+    }
+}
+
+@Composable
+private fun TaskFloatingIndicator(
+    isVisible: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
+    AnimatedVisibility(
+        visible = isVisible && tasks.isNotEmpty(),
+        modifier = modifier,
+        enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+        exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 })
+    ) {
+        Surface(
+            onClick = onClick,
+            shape = RoundedCornerShape(18.dp),
+            color = Color(0xFF102638),
+            contentColor = Color.White,
+            shadowElevation = 8.dp,
+            modifier = Modifier.border(
+                width = 1.dp,
+                color = Color(0xFF9F3045),
+                shape = RoundedCornerShape(18.dp)
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(text = "↓", style = MaterialTheme.typography.titleMedium, color = Color(0xFFB8DDF5))
+                Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Text(text = "DOWNLOADS", style = MaterialTheme.typography.labelMedium)
+                    Text(
+                        text = "${tasks.size} active • tap to view",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color(0xFFB8C4CE)
+                    )
+                }
+            }
+        }
     }
 }
 
