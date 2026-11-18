@@ -38,7 +38,7 @@ class ModProfileStore(
                     FileInputStream(file).use { input -> load(input) }
                 }.getProperty("name")?.takeIf(String::isNotBlank)
             }.getOrNull()
-        }.distinct().sortedBy(String::lowercase)
+        }.distinct().sortedBy { it.lowercase() }
     }
 
     fun save(profileName: String, enabledFileNames: Collection<String>): Boolean {
