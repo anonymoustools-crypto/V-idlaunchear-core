@@ -28,8 +28,12 @@ The project is actively developed. Features, device support, and compatibility c
 - Launcher appearance customization, including theme colors and background options available in the app.
 - Quick Join improvements, including server compatibility feedback and connection-error reporting where detectable.
 - Performance and low-device optimization work.
+- Bedrock-inspired touch HUD editing with custom button styling and saved layouts.
+- Per-Minecraft-version mod profiles for saving and switching enabled-mod sets.
+- A draggable 3D Minecraft skin companion with idle, walking, and release reactions.
+- A bounded background task queue and hideable download progress UI.
 
-Some items are still being improved. This list does not guarantee that every feature works on every device or for every Minecraft release.
+Some items are experimental or still being improved. Pause/resume download controls, the dedicated Skin Studio editing experience, and final device verification remain in progress. This list does not guarantee that every feature works on every device or for every Minecraft release.
 
 ## Upstream license and modified-version notice
 
