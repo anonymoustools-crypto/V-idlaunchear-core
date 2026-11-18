@@ -53,6 +53,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -110,6 +112,7 @@ import com.movtery.zalithlauncher.game.version.mod.LocalMod
 import com.movtery.zalithlauncher.game.version.mod.RemoteMod
 import com.movtery.zalithlauncher.game.version.mod.isDisabled
 import com.movtery.zalithlauncher.game.version.mod.isEnabled
+import com.movtery.zalithlauncher.game.version.mod.profile.ModProfileStore
 import com.movtery.zalithlauncher.game.version.mod.update.ModManifest
 import com.movtery.zalithlauncher.game.version.mod.update.ModUpdater
 import com.movtery.zalithlauncher.game.version.mod.update.SelectableModManifest
@@ -708,7 +711,69 @@ fun ModsManagerScreen(
                             }
                         )
 
+                        val profileStore = remember(modsDir, version) {
+                            ModProfileStore(modsDir, version.getVersionName())
+                        }
+                        var profileNames by remember(profileStore) {
+                            mutableStateOf(profileStore.listProfiles())
+                        }
+                        var profileName by remember(version) { mutableStateOf("Default") }
+                        var profileMenuExpanded by remember { mutableStateOf(false) }
+
                         Column {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                OutlinedTextField(
+                                    modifier = Modifier.weight(1f),
+                                    value = profileName,
+                                    onValueChange = { profileName = it.take(48) },
+                                    singleLine = true,
+                                    label = { Text("Mod profile") }
+                                )
+                                Button(
+                                    onClick = {
+                                        val enabledNames = viewModel.allMods
+                                            .filter { it.localMod.file.isEnabled() }
+                                            .map { it.localMod.file.name }
+                                        if (profileStore.save(profileName, enabledNames)) {
+                                            profileNames = profileStore.listProfiles()
+                                        }
+                                    },
+                                    enabled = profileName.isNotBlank()
+                                ) {
+                                    Text("Save")
+                                }
+                                Box {
+                                    Button(
+                                        onClick = { profileMenuExpanded = true },
+                                        enabled = profileNames.isNotEmpty()
+                                    ) {
+                                        Text("Load")
+                                    }
+                                    DropdownMenu(
+                                        expanded = profileMenuExpanded,
+                                        onDismissRequest = { profileMenuExpanded = false }
+                                    ) {
+                                        profileNames.forEach { savedProfile ->
+                                            DropdownMenuItem(
+                                                text = { Text(savedProfile) },
+                                                onClick = {
+                                                    val missing = profileStore.apply(savedProfile, viewModel.allMods)
+                                                    profileName = savedProfile
+                                                    profileMenuExpanded = false
+                                                    if (missing != null) viewModel.refresh(context)
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
                             ModsActionsHeader(
                                 modifier = Modifier.fillMaxWidth(),
                                 nameFilter = viewModel.nameFilter,
