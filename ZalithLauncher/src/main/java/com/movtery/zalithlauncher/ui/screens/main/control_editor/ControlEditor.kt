@@ -46,6 +46,7 @@ import com.movtery.guide.guideNode
 import com.movtery.layer_controller.ControlEditorLayer
 import com.movtery.layer_controller.data.ButtonSize
 import com.movtery.layer_controller.data.ButtonPosition
+import com.movtery.layer_controller.data.CenterPosition
 import com.movtery.layer_controller.data.DefaultDirectionEvents
 import com.movtery.layer_controller.data.DefaultLockEvents
 import com.movtery.layer_controller.data.JoystickData
@@ -184,6 +185,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                         )
                     }
                 )
+                layer.normalButtons.value.lastOrNull()?.let { viewModel.onWidgetTapped(it, layer) }
             }
         },
         addNewText = {
@@ -203,6 +205,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                         )
                     }
                 )
+                layer.textBoxes.value.lastOrNull()?.let { viewModel.onWidgetTapped(it, layer) }
             }
         },
         addNewJoystick = {
@@ -219,6 +222,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                         )
                     }
                 )
+                layer.joystickButtons.value.lastOrNull()?.let { viewModel.onWidgetTapped(it, layer) }
             }
         },
         openStyleList = viewModel::openStyleList,
