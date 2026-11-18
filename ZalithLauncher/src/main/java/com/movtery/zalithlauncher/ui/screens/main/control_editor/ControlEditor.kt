@@ -46,7 +46,6 @@ import com.movtery.guide.guideNode
 import com.movtery.layer_controller.ControlEditorLayer
 import com.movtery.layer_controller.data.ButtonSize
 import com.movtery.layer_controller.data.ButtonPosition
-import com.movtery.layer_controller.data.CenterPosition
 import com.movtery.layer_controller.data.DefaultDirectionEvents
 import com.movtery.layer_controller.data.DefaultLockEvents
 import com.movtery.layer_controller.data.JoystickData
