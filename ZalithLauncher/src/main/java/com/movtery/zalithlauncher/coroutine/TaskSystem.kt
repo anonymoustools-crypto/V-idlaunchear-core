@@ -40,6 +40,9 @@ object TaskSystem {
     private val _tasksFlow: MutableStateFlow<List<Task>> = MutableStateFlow(emptyList())
     val tasksFlow = _tasksFlow.asStateFlow()
 
+    private val _failedTasksFlow: MutableStateFlow<List<Task>> = MutableStateFlow(emptyList())
+    val failedTasksFlow = _failedTasksFlow.asStateFlow()
+
     private val allJobs = ConcurrentHashMap<String, Job>()
     private val allListeners = ConcurrentHashMap<String, () -> Unit>()
 
@@ -61,6 +64,8 @@ object TaskSystem {
                 }
             } catch (th: Throwable) {
                 if (th is CancellationException || th.isInterruptedIOException()) return@launch
+                task.updateStage(TaskStage.FAILED)
+                _failedTasksFlow.update { current -> if (task in current) current else current + task }
                 task.onError(th)
             } finally {
                 task.onFinally()
@@ -118,6 +123,20 @@ object TaskSystem {
         onTaskEnded(task)
     }
 
+    /** Retry a task that previously failed. */
+    fun retryTask(task: Task) {
+        val wasFailed = _failedTasksFlow.value.any { it.id == task.id }
+        if (!wasFailed) return
+        _failedTasksFlow.update { current -> current.filterNot { it.id == task.id } }
+        task.resetForRetry()
+        submitTask(task)
+    }
+
+    /** Remove a failed task from the retry list. */
+    fun dismissFailedTask(task: Task) {
+        _failedTasksFlow.update { current -> current.filterNot { it.id == task.id } }
+    }
+
     /**
      * 取消任务
      */
@@ -150,6 +169,7 @@ object TaskSystem {
     fun stopAll() {
         scope.cancel()
         _tasksFlow.update { emptyList() }
+        _failedTasksFlow.update { emptyList() }
         allJobs.clear()
         allListeners.clear()
         TaskKeepAlive.reset()
