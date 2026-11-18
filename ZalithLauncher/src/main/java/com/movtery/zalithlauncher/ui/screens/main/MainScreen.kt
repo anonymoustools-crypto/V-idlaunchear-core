@@ -780,7 +780,9 @@ private fun TaskMenu(
     changeExpandedState: () -> Unit = {}
 ) {
     val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
-    val show = isExpanded && tasks.isNotEmpty()
+    val failedTasks by TaskSystem.failedTasksFlow.collectAsStateWithLifecycle()
+    val allDisplayedTasks = tasks + failedTasks
+    val show = isExpanded && allDisplayedTasks.isNotEmpty()
 
     // Do not leave an invisible full-height overlay in the main screen.
     // When the task panel is hidden, remove it from composition entirely so
@@ -858,7 +860,8 @@ private fun TaskMenu(
                         .weight(1f),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                 ) {
-                    items(tasks, key = { it.id }) { task ->
+                    items(allDisplayedTasks, key = { it.id }) { task ->
+                        val isFailed = failedTasks.any { it.id == task.id }
                         val taskProgress by task.progress.collectAsStateWithLifecycle()
                         val taskMessage by task.message.collectAsStateWithLifecycle()
                         val rateBytesPerSec by task.rateBytesPerSec.collectAsStateWithLifecycle()
@@ -867,12 +870,13 @@ private fun TaskMenu(
                             taskProgress = taskProgress,
                             taskMessage = taskMessage,
                             rateBytesPerSec = rateBytesPerSec,
+                            isFailed = isFailed,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 6.dp)
                         ) {
-                            //取消任务
-                            TaskSystem.cancelTask(task.id)
+                            if (isFailed) TaskSystem.retryTask(task)
+                            else TaskSystem.cancelTask(task.id)
                         }
                     }
                 }
@@ -890,6 +894,7 @@ private fun TaskItem(
     shape: Shape = MaterialTheme.shapes.large,
     color: Color = cardColor(false),
     contentColor: Color = onCardColor(),
+    isFailed: Boolean = false,
     onCancelClick: () -> Unit = {}
 ) {
     Surface(
@@ -914,11 +919,15 @@ private fun TaskItem(
                     .align(Alignment.CenterVertically),
                 onClick = onCancelClick
             ) {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_close),
-                    contentDescription = stringResource(R.string.generic_cancel)
-                )
+                if (isFailed) {
+                    Text(text = "↻", style = MaterialTheme.typography.titleLarge)
+                } else {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(R.drawable.ic_close),
+                        contentDescription = stringResource(R.string.generic_cancel)
+                    )
+                }
             }
 
             Column(
@@ -926,6 +935,13 @@ private fun TaskItem(
                     .weight(1f)
                     .align(Alignment.CenterVertically)
             ) {
+                if (isFailed) {
+                    Text(
+                        text = "DOWNLOAD FAILED • TAP ↻ TO RETRY",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color(0xFFFFB4AB)
+                    )
+                }
                 taskMessage?.let { message ->
                     AndroidStringText(
                         text = message,
