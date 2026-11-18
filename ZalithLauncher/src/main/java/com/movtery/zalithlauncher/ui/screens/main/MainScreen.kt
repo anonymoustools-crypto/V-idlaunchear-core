@@ -736,8 +736,10 @@ private fun TaskFloatingIndicator(
     onClick: () -> Unit
 ) {
     val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
+    val failedTasks by TaskSystem.failedTasksFlow.collectAsStateWithLifecycle()
+    val visibleTasks = tasks.size + failedTasks.size
     AnimatedVisibility(
-        visible = isVisible && tasks.isNotEmpty(),
+        visible = isVisible && visibleTasks > 0,
         modifier = modifier,
         enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 })
@@ -763,7 +765,7 @@ private fun TaskFloatingIndicator(
                 Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                     Text(text = "DOWNLOADS", style = MaterialTheme.typography.labelMedium)
                     Text(
-                        text = "${tasks.size} active • tap to view",
+                        text = if (failedTasks.isEmpty()) "$visibleTasks active • tap to view" else "${tasks.size} active • ${failedTasks.size} failed",
                         style = MaterialTheme.typography.labelSmall,
                         color = Color(0xFFB8C4CE)
                     )
@@ -781,7 +783,7 @@ private fun TaskMenu(
 ) {
     val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
     val failedTasks by TaskSystem.failedTasksFlow.collectAsStateWithLifecycle()
-    val allDisplayedTasks = tasks + failedTasks
+    val allDisplayedTasks = tasks.filterNot { active -> failedTasks.any { it.id == active.id } } + failedTasks
     val show = isExpanded && allDisplayedTasks.isNotEmpty()
 
     // Do not leave an invisible full-height overlay in the main screen.
