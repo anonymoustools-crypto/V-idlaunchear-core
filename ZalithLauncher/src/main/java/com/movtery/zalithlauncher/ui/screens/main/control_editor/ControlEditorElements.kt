@@ -26,6 +26,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -205,10 +207,10 @@ fun EditorMenu(
     val panelContentColor = onCardColor()
 
     if (state == MenuState.SHOW) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.58f))
+                .background(Color.Black.copy(alpha = 0.64f))
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
@@ -216,17 +218,19 @@ fun EditorMenu(
                 ),
             contentAlignment = Alignment.Center
         ) {
+            val compactPortrait = maxWidth < 600.dp && maxHeight > maxWidth
+            val panelShape = RoundedCornerShape(if (compactPortrait) 22.dp else 18.dp)
             Surface(
                 modifier = Modifier
-                    .fillMaxWidth(0.78f)
-                    .fillMaxHeight(0.88f)
+                    .fillMaxWidth(if (compactPortrait) 0.96f else 0.82f)
+                    .fillMaxHeight(if (compactPortrait) 0.94f else 0.90f)
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
                         onClick = {}
                     )
-                    .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.75f), RectangleShape),
-                shape = RectangleShape,
+                    .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.75f), panelShape),
+                shape = panelShape,
                 color = panelColor,
                 contentColor = panelContentColor,
                 shadowElevation = 18.dp
