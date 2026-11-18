@@ -170,6 +170,7 @@ fun BoxWithConstraintsScope.ControlEditor(
         },
         addNewButton = {
             viewModel.addWidget(layers) { layer ->
+                val buttonPosition = nextBedrockButtonPosition(layer) ?: return@addWidget
                 val bedrockStyleId = styles.firstOrNull { it.name == "Bedrock Touch" }?.uuid
                     ?: createNewButtonStyle("Bedrock Touch").let { baseStyle ->
                         val light = baseStyle.lightStyle.copy(
@@ -209,7 +210,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                         NormalData(
                             text = createTranslatable(default = defaultButtonName),
                             uuid = uuid,
-                            position = nextBedrockButtonPosition(layer),
+                            position = buttonPosition,
                             buttonSize = createAdaptiveButtonSize(
                                 referenceLength = screenSize.height,
                                 density = density.density
@@ -227,12 +228,13 @@ fun BoxWithConstraintsScope.ControlEditor(
         },
         addNewText = {
             viewModel.addWidget(layers) { layer ->
+                val textPosition = nextBedrockButtonPosition(layer) ?: return@addWidget
                 layer.addTextBox(
                     createWidgetWithUUID { uuid ->
                         TextData(
                             text = createTranslatable(default = defaultTextName),
                             uuid = uuid,
-                            position = nextBedrockButtonPosition(layer),
+                            position = textPosition,
                             buttonSize = createAdaptiveButtonSize(
                                 referenceLength = screenSize.height,
                                 density = density.density,
@@ -247,11 +249,12 @@ fun BoxWithConstraintsScope.ControlEditor(
         },
         addNewJoystick = {
             viewModel.addWidget(layers) { layer ->
+                val joystickPosition = nextBedrockJoystickPosition(layer) ?: return@addWidget
                 layer.addJoystickButton(
                     createWidgetWithUUID { uuid ->
                         JoystickData(
                             uuid = uuid,
-                            position = nextBedrockJoystickPosition(layer),
+                            position = joystickPosition,
                             sizeType = ButtonSize.Type.Percentage,
                             visibilityType = VisibilityType.ALWAYS,
                             directionEvents = DefaultDirectionEvents,
@@ -368,55 +371,47 @@ private fun ActionButton(
  * Places newly added touch buttons in a Bedrock-inspired right-side action cluster.
  * Existing widgets are checked first so newly created controls do not all stack at center.
  */
-private fun nextBedrockButtonPosition(layer: com.movtery.layer_controller.observable.ObservableControlLayer): ButtonPosition {
+private fun nextBedrockButtonPosition(layer: com.movtery.layer_controller.observable.ObservableControlLayer): ButtonPosition? {
     val occupied = buildList {
         addAll(layer.normalButtons.value.map { it.position })
         addAll(layer.textBoxes.value.map { it.position })
         addAll(layer.joystickButtons.value.map { it.position })
     }
-    val candidates = listOf(
-        ButtonPosition(8800, 7200),
-        ButtonPosition(9600, 8000),
-        ButtonPosition(8000, 8200),
-        ButtonPosition(9200, 9200),
-        ButtonPosition(7200, 7000),
-        ButtonPosition(7200, 9000),
-        ButtonPosition(6000, 7800),
-        ButtonPosition(6000, 9200),
-        ButtonPosition(5000, 7000),
-        ButtonPosition(5000, 9000),
-        ButtonPosition(4000, 8000),
-        ButtonPosition(3000, 7000),
-        ButtonPosition(3000, 9000)
-    )
+    // Fill the right-side action area first, then use remaining left-side slots.
+    val candidates = buildList {
+        for (y in 5600..9600 step 800) {
+            for (x in 5600..9600 step 800) add(ButtonPosition(x, y))
+        }
+        for (y in 5600..9600 step 800) {
+            for (x in 600..4600 step 800) add(ButtonPosition(x, y))
+        }
+    }
     return candidates.firstOrNull { candidate ->
         occupied.none { current ->
-            kotlin.math.abs(current.x - candidate.x) < 750 &&
-                kotlin.math.abs(current.y - candidate.y) < 750
+            kotlin.math.abs(current.x - candidate.x) < 800 &&
+                kotlin.math.abs(current.y - candidate.y) < 800
         }
-    } ?: ButtonPosition(8500, (6500 + occupied.size * 350).coerceAtMost(9700))
+    }
 }
 
 /**
  * Places the movement joystick on the left side, like a Bedrock touch HUD.
  */
-private fun nextBedrockJoystickPosition(layer: com.movtery.layer_controller.observable.ObservableControlLayer): ButtonPosition {
+private fun nextBedrockJoystickPosition(layer: com.movtery.layer_controller.observable.ObservableControlLayer): ButtonPosition? {
     val occupied = buildList {
         addAll(layer.normalButtons.value.map { it.position })
         addAll(layer.textBoxes.value.map { it.position })
         addAll(layer.joystickButtons.value.map { it.position })
     }
-    val candidates = listOf(
-        ButtonPosition(1400, 8200),
-        ButtonPosition(2200, 8200),
-        ButtonPosition(1400, 6800),
-        ButtonPosition(2200, 6800),
-        ButtonPosition(3200, 8200)
-    )
+    val candidates = buildList {
+        for (y in 5800..9400 step 900) {
+            for (x in 500..4100 step 900) add(ButtonPosition(x, y))
+        }
+    }
     return candidates.firstOrNull { candidate ->
         occupied.none { current ->
             kotlin.math.abs(current.x - candidate.x) < 1200 &&
                 kotlin.math.abs(current.y - candidate.y) < 1200
         }
-    } ?: ButtonPosition(1400, 8200)
+    }
 }
