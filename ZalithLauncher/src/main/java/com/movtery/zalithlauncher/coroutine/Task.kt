@@ -92,6 +92,14 @@ class Task private constructor(
         this._rateBytesPerSec.update { null }
     }
 
+    /** Reset transient state before retrying a failed task. */
+    fun resetForRetry() {
+        updateStage(TaskStage.PREPARING)
+        updateProgress(-1f)
+        updateMessage(null)
+        clearSpeed()
+    }
+
     override fun equals(other: Any?): Boolean = other is Task && other.id == this.id
 
     override fun hashCode(): Int = id.hashCode()
