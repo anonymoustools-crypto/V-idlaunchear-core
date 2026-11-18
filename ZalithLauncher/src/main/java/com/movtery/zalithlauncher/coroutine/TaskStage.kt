@@ -24,5 +24,7 @@ enum class TaskStage {
     /** 运行中 */
     RUNNING,
     /** 已完成 */
-    COMPLETED
+    COMPLETED,
+    /** Failed and available for an explicit retry. */
+    FAILED
 }
