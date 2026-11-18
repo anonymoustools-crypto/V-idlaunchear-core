@@ -29,10 +29,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.util.concurrent.ConcurrentHashMap
 
 object TaskSystem {
     private val scope = CoroutineScope(Dispatchers.Default)
+    // Bound active background work; additional tasks remain PREPARING in FIFO order.
+    private val taskSlots = Semaphore(2)
     private val _tasksFlow: MutableStateFlow<List<Task>> = MutableStateFlow(emptyList())
     val tasksFlow = _tasksFlow.asStateFlow()
 
@@ -50,9 +54,11 @@ object TaskSystem {
 
         allJobs[task.id] = scope.launch(task.dispatcher) {
             try {
-                task.updateStage(TaskStage.RUNNING)
-                task.task(this@launch, task)
-                task.updateStage(TaskStage.COMPLETED)
+                taskSlots.withPermit {
+                    task.updateStage(TaskStage.RUNNING)
+                    task.task(this@launch, task)
+                    task.updateStage(TaskStage.COMPLETED)
+                }
             } catch (th: Throwable) {
                 if (th is CancellationException || th.isInterruptedIOException()) return@launch
                 task.onError(th)
