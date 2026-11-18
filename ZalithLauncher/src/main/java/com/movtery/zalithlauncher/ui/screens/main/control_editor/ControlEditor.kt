@@ -49,6 +49,7 @@ import com.movtery.layer_controller.ControlEditorLayer
 import com.movtery.layer_controller.data.ButtonSize
 import com.movtery.layer_controller.data.ButtonShape
 import com.movtery.layer_controller.data.createNewButtonStyle
+import com.movtery.layer_controller.data.createNewJoystickStyle
 import com.movtery.layer_controller.data.ButtonPosition
 import com.movtery.layer_controller.data.DefaultDirectionEvents
 import com.movtery.layer_controller.data.DefaultLockEvents
@@ -251,6 +252,39 @@ fun BoxWithConstraintsScope.ControlEditor(
         addNewJoystick = {
             viewModel.addWidget(layers) { layer ->
                 val joystickPosition = nextBedrockJoystickPosition(layer) ?: return@addWidget
+                val bedrockJoystickStyleId = joystickStyles.firstOrNull {
+                    it.name == "Bedrock Touch"
+                }?.uuid ?: createNewJoystickStyle("Bedrock Touch").let { baseStyle ->
+                    val light = baseStyle.lightStyle.copy(
+                        alpha = 0.88f,
+                        backgroundColor = Color(0xB820252A),
+                        joystickColor = Color(0xE8B8DDF5),
+                        joystickCanLockColor = Color(0xFFE8F3FA),
+                        joystickLockedColor = Color(0xFF8E293D),
+                        lockMarkColor = Color.White,
+                        borderWidthRatio = 3,
+                        borderColor = Color(0xFFB8C4CE),
+                        backgroundShape = 50,
+                        joystickShape = 50,
+                        joystickSize = 0.46f
+                    )
+                    val dark = baseStyle.darkStyle.copy(
+                        alpha = 0.88f,
+                        backgroundColor = Color(0xB820252A),
+                        joystickColor = Color(0xE8B8DDF5),
+                        joystickCanLockColor = Color(0xFFE8F3FA),
+                        joystickLockedColor = Color(0xFF8E293D),
+                        lockMarkColor = Color.White,
+                        borderWidthRatio = 3,
+                        borderColor = Color(0xFFB8C4CE),
+                        backgroundShape = 50,
+                        joystickShape = 50,
+                        joystickSize = 0.46f
+                    )
+                    baseStyle.copy(lightStyle = light, darkStyle = dark).also {
+                        viewModel.observableLayout.addJoystickStyle(it)
+                    }.uuid
+                }
                 layer.addJoystickButton(
                     createWidgetWithUUID { uuid ->
                         JoystickData(
@@ -258,6 +292,7 @@ fun BoxWithConstraintsScope.ControlEditor(
                             position = joystickPosition,
                             sizeType = ButtonSize.Type.Percentage,
                             visibilityType = VisibilityType.ALWAYS,
+                            joystickStyleId = bedrockJoystickStyleId,
                             directionEvents = DefaultDirectionEvents,
                             lockEvents = DefaultLockEvents,
                         )
