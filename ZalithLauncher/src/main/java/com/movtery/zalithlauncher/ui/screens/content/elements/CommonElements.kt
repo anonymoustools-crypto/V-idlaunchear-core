@@ -76,6 +76,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.context.copyLocalFile
@@ -362,35 +364,70 @@ fun TitleTaskFlowDialog(
     logOutput: TaskLogOutput? = null
 ) {
     var uiHidden by remember { mutableStateOf(false) }
-    Dialog(
-        onDismissRequest = {},
-        properties = DialogProperties(
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
-        )
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
+
+    if (uiHidden) {
+        // A full-screen Dialog consumes touches outside its visible content.
+        // Use a non-focusable, content-sized Popup so launcher navigation remains
+        // interactive while the download task continues independently.
+        Popup(
+            alignment = Alignment.BottomCenter,
+            onDismissRequest = {},
+            properties = PopupProperties(
+                focusable = false,
+                dismissOnClickOutside = false,
+                clippingEnabled = false
+            )
         ) {
             Surface(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 12.dp),
                 shape = RoundedCornerShape(24.dp),
                 color = cardColor(false),
                 contentColor = onCardColor(),
                 shadowElevation = 10.dp
             ) {
-                if (uiHidden) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Text(title, modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleSmall, maxLines = 1)
-                        Button(onClick = { uiHidden = false }) { Text("Show UI") }
-                        Button(onClick = onCancel) { Text(stringResource(R.string.generic_cancel)) }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        title,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.titleSmall,
+                        maxLines = 1
+                    )
+                    Button(onClick = { uiHidden = false }) { Text("Show UI") }
+                    Button(onClick = onCancel) {
+                        Text(stringResource(R.string.generic_cancel))
                     }
-                } else {
+                }
+            }
+        }
+    } else {
+        Dialog(
+            onDismissRequest = {},
+            properties = DialogProperties(
+                dismissOnClickOutside = false,
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 12.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    color = cardColor(false),
+                    contentColor = onCardColor(),
+                    shadowElevation = 10.dp
+                ) {
                     Column(
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
@@ -399,7 +436,12 @@ fun TitleTaskFlowDialog(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(title, modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium, maxLines = 1)
+                            Text(
+                                title,
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.titleMedium,
+                                maxLines = 1
+                            )
                             Button(onClick = { uiHidden = true }) { Text("Hide UI") }
                         }
                         TaskFlowListColumn(
