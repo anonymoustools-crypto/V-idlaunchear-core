@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -153,7 +154,7 @@ private fun TabMenu(
         ) {
             Column(
                 modifier = Modifier
-                    .clip(RectangleShape)
+                    .clip(RoundedCornerShape(14.dp))
                     .background(
                         Brush.horizontalGradient(
                             listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer)
@@ -202,7 +203,7 @@ private fun TabMenu(
                 Surface(
                     modifier = Modifier.height(39.dp),
                     onClick = { navigateTo(item.key) },
-                    shape = RectangleShape,
+                    shape = RoundedCornerShape(14.dp),
                     color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                     tonalElevation = if (selected) 4.dp else 0.dp,
