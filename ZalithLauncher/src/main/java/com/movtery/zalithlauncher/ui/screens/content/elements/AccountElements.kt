@@ -458,7 +458,6 @@ fun LoginMenuDialog(
                 .fillMaxWidth(0.96f),
             contentAlignment = Alignment.Center
         ) {
-            val compactPortrait = maxWidth < 600.dp && maxHeight > maxWidth
             Surface(
                 modifier = Modifier
                     .padding(all = 6.dp)
@@ -1500,12 +1499,13 @@ fun ChangeSkinDialog(
     ) {
         BoxWithConstraints(
             modifier = Modifier
-                .padding(all = 16.dp)
+                .padding(all = 8.dp)
                 .heightIn(max = rememberDialogMaxHeight())
                 .fillMaxHeight()
-                .fillMaxWidth(0.6f),
+                .fillMaxWidth(0.96f),
             contentAlignment = Alignment.Center
         ) {
+            val compactPortrait = maxWidth < 600.dp && maxHeight > maxWidth
             Surface(
                 modifier = Modifier
                     .padding(all = 6.dp)
