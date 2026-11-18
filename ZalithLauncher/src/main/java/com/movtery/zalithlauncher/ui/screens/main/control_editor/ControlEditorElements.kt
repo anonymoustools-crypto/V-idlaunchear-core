@@ -485,6 +485,33 @@ private fun EditorMenuContent(
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        item(key = "bedrock_hud_header") {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFF102638))
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFF9F3045).copy(alpha = 0.7f),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                Text(
+                    text = "BEDROCK TOUCH HUD",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color(0xFFB8DDF5)
+                )
+                Text(
+                    text = "Add a control to the preview, then drag, resize, and edit its bindings.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White.copy(alpha = 0.78f)
+                )
+            }
+        }
+
         //添加按钮
         item(key = "add_button") {
             MenuTextButton(
