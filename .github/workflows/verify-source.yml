@@ -1,16 +1,8 @@
-name: Verify VøidLaunchear source
+name: Build VøidLaunchear debug APK
 
 on:
   push:
     branches:
-      - feature/void-roadmap-completion
-    paths-ignore:
-      - "**/*.md"
-      - "LICENSE"
-      - "NOTICE"
-  pull_request:
-    branches:
-      - main
       - feature/void-roadmap-completion
   workflow_dispatch:
 
@@ -18,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  compile-and-unit-tests:
+  verify-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -35,10 +27,21 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Compile app Kotlin sources (no APK packaging)
+      - name: Compile app Kotlin sources
         run: |
           chmod +x gradlew
           ./gradlew :ZalithLauncher:compileDebugKotlin --stacktrace
 
       - name: Run launcher unit tests
         run: ./gradlew :ZalithLauncher:testDebugUnitTest --stacktrace
+
+      - name: Assemble debug APK
+        run: ./gradlew :ZalithLauncher:assembleDebug --stacktrace
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: VoidLaunchear-debug-apk
+          path: ZalithLauncher/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
