@@ -45,7 +45,7 @@ replacements = [
 ]
 excluded = [
     ":(exclude).github/scripts/rebrand-voidlauncher.sh",
-    ":(exclude).github/workflows/rebrand-voidlauncher.yml",
+    ":(exclude).github/workflows/**",
 ]
 for old, new in replacements:
     result = subprocess.run(
