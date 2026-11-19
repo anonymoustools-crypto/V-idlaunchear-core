@@ -906,7 +906,6 @@ fun ModsManagerScreen(
                                 }
                             )
                         }
-                        }
                     }
                     LoadingState.Loading -> {
                         Box(
