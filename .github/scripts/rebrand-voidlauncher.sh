@@ -4,8 +4,6 @@ set -euo pipefail
 EXPECTED_BRANCH="feature/void-roadmap-completion"
 OLD_PACKAGE="com.movtery.zalithlauncher"
 NEW_PACKAGE="net.voidhub.voidlauncher"
-OLD_PACKAGE_PATH="com/movtery/zalithlauncher"
-NEW_PACKAGE_PATH="net/voidhub/voidlauncher"
 
 if [[ "${GITHUB_REF_NAME:-$(git branch --show-current)}" != "$EXPECTED_BRANCH" ]]; then
   echo "Refusing to migrate outside $EXPECTED_BRANCH"
@@ -33,6 +31,19 @@ if [[ -d "ZalithLauncher" ]]; then
   git mv ZalithLauncher VoidLauncher
 fi
 
+for pair in \
+  "VoidLauncher/zalith_launcher.jks:VoidLauncher/void_launcher.jks" \
+  "VoidLauncher/zalith_launcher_debug.jks:VoidLauncher/void_launcher_debug.jks" \
+  "VoidLauncher/src/main/java/net/voidhub/voidlauncher/bridge/ZLBridge.java:VoidLauncher/src/main/java/net/voidhub/voidlauncher/bridge/VoidBridge.java" \
+  "VoidLauncher/src/main/java/net/voidhub/voidlauncher/bridge/ZLBridgeStates.kt:VoidLauncher/src/main/java/net/voidhub/voidlauncher/bridge/VoidBridgeStates.kt" \
+  "VoidLauncher/src/main/java/net/voidhub/voidlauncher/bridge/ZLNativeInvoker.kt:VoidLauncher/src/main/java/net/voidhub/voidlauncher/bridge/VoidNativeInvoker.kt"; do
+  old_path="${pair%%:*}"
+  new_path="${pair#*:}"
+  if [[ -f "$old_path" ]]; then
+    git mv "$old_path" "$new_path"
+  fi
+done
+
 python3 - <<'PY'
 import subprocess
 from pathlib import Path
@@ -42,6 +53,9 @@ replacements = [
     (b"ZalithLauncher", b"VoidLauncher"),
     (b"zalith_launcher.jks", b"void_launcher.jks"),
     (b"ZLApplication", b"VoidApplication"),
+    (b"ZLBridgeStates", b"VoidBridgeStates"),
+    (b"ZLNativeInvoker", b"VoidNativeInvoker"),
+    (b"ZLBridge", b"VoidBridge"),
 ]
 excluded = [
     ":(exclude).github/scripts/rebrand-voidlauncher.sh",
