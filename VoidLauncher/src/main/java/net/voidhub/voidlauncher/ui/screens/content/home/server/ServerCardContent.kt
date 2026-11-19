@@ -589,7 +589,7 @@ private fun QuickLaunchButton(
 
     val launch = {
         if (!isLaunching) {
-            if (targetVersionMissing || versionMismatch || pingFailed || card.ping is ServerCardPingStatus.Loading) {
+            if (targetVersionMissing || versionMismatch || pingFailed) {
                 showWarning = true
             } else {
                 launchNow()
