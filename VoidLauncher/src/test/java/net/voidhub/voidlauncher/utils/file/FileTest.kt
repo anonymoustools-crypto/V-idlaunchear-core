@@ -9,31 +9,36 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
  */
 
 package net.voidhub.voidlauncher.utils.file
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.jackhuang.hmcl.util.DigestUtils
+import org.apache.commons.codec.digest.DigestUtils
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.io.File
+import java.nio.file.Files
 
 class FileTest {
-
     @Test
     fun testCalculateFileSha1() {
-        val file = File("F:\\Download\\geckolib-forge-1.21.8-5.2.2.jar")
-        runBlocking(Dispatchers.IO) {
-            val sha11 = calculateFileSha1(file)
-            println("sha1 1 = $sha11")
-            val sha12 = DigestUtils.digestToString("SHA-1", file.toPath())
-            println("sha1 2 = $sha12")
+        val dir = Files.createTempDirectory("void-file-sha1").toFile()
+        try {
+            val file = dir.resolve("sample.jar")
+            val bytes = ByteArray(4097) { index -> ((index * 17) and 0xff).toByte() }
+            Files.write(file.toPath(), bytes)
+
+            val expected = DigestUtils.sha1Hex(bytes)
+            val actual = runBlocking { calculateFileSha1(file) }
+
+            assertEquals(expected, actual)
+        } finally {
+            dir.deleteRecursively()
         }
     }
 }
