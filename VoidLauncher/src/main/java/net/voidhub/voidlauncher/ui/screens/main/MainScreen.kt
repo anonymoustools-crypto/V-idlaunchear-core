@@ -223,7 +223,10 @@ fun MainScreen(
             TopBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp),
+                    .height(48.dp)
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color(0xFF151519)),
                 mainScreenKey = mainScreenKey,
                 inLauncherScreen = inLauncherScreen,
                 taskRunning = taskRunning,
