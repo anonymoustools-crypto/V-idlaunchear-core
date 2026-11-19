@@ -15,7 +15,8 @@ plugins {
     id("com.movtery.buildkeys")
 }
 
-val zalithPackageName = "com.movtery.zalithlauncher"
+val sourceNamespace = "com.movtery.zalithlauncher"
+val voidApplicationId = "net.voidhub.voidlauncher"
 val launcherAPPName = project.findProperty("launcher_app_name") as? String ?: error("The \"launcher_app_name\" property is not set in gradle.properties.")
 val launcherName = project.findProperty("launcher_name") as? String ?: error("The \"launcher_name\" property is not set in gradle.properties.")
 val launcherShortName = project.findProperty("launcher_short_name") as? String ?: error("The \"launcher_short_name\" property is not set in gradle.properties.")
@@ -108,7 +109,7 @@ fun writeComponentAssetManifests(assetsDir: File) {
 }
 
 android {
-    namespace = zalithPackageName
+    namespace = sourceNamespace
     compileSdk {
         version = release(37) {
             minorApiLevel = 2
@@ -125,8 +126,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = zalithPackageName
-        applicationIdSuffix = ".v2"
+        applicationId = voidApplicationId
         minSdk = 26
         targetSdk = 34
         versionCode = launcherVersionCode
