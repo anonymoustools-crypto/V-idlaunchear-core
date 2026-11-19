@@ -29,4 +29,4 @@ jobs:
 
       - name: Audit remaining upstream URL references
         run: |
-          grep -RInE 'URL_PROJECT_INFO|URL_COMMUNITY|URL_WEBLATE|URL_SUPPORT|Zalith-Info|zalithlauncher2|ifdian.net/a/MovTery' VoidLauncher/src/main/java --include='*.kt' || true
+          grep -RInE 'URL_PROJECT_INFO|URL_COMMUNITY|URL_WEBLATE|URL_SUPPORT|Zalith-Info|zalithlauncher2|zalith-info|VoidLauncher/VoidLauncher2|ifdian.net/a/MovTery' VoidLauncher/src/main/java --include='*.kt' || true
