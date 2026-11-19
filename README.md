@@ -45,7 +45,7 @@ notices in source files and in-app attribution must remain intact. The complete 
 version 3 license is provided in the root `LICENSE` file. Additional upstream conditions
 under GPLv3 Section 7 are summarized in `NOTICE`:
 
-- Modified versions must not use “ZalithLauncher”, “ZL”, or a confusingly similar name.
+- Modified versions must not use “VoidLauncher”, “ZL”, or a confusingly similar name.
 - Modified versions must display “Unofficial Modified Version” on startup or the main UI.
 - Upstream copyright notices displayed by the program must not be removed.
 

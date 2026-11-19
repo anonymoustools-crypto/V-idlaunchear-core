@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "app": {
-    "id": "com.movtery.zalithlauncher.v2",
+    "id": "net.voidhub.voidlauncher.v2",
     "name": "VøidLaunchear",
     "latestVersion": "0.1.2",
     "releaseTag": "v0.1.2",

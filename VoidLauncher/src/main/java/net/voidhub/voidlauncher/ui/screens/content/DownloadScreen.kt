@@ -1,0 +1,473 @@
+/*
+ * Zalith Launcher 2
+ * Copyright (C) 2025-2026 MovTery <movtery228@qq.com> and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+ */
+
+package net.voidhub.voidlauncher.ui.screens.content
+
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.entryProvider
+import net.voidhub.voidlauncher.R
+import net.voidhub.voidlauncher.game.download.assets.favorites.FavoriteProjectsRepository
+import net.voidhub.voidlauncher.game.download.assets.platform.Platform
+import net.voidhub.voidlauncher.game.download.assets.platform.PlatformClasses
+import net.voidhub.voidlauncher.ui.base.BaseScreen
+import net.voidhub.voidlauncher.ui.components.AnimatedDirection
+import net.voidhub.voidlauncher.ui.components.animated
+import net.voidhub.voidlauncher.ui.components.fadeEdge
+import net.voidhub.voidlauncher.ui.components.rememberAnimatedContext
+import net.voidhub.voidlauncher.ui.screens.NestedNavDisplay
+import net.voidhub.voidlauncher.ui.screens.NestedNavKey
+import net.voidhub.voidlauncher.ui.screens.NormalNavKey
+import net.voidhub.voidlauncher.ui.screens.TitledNavKey
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadFavoritesScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadGameScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadModPackScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadModScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadResourcePackScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadSavesScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.DownloadShadersScreen
+import net.voidhub.voidlauncher.ui.screens.content.download.assets.search.SearchIdScreen
+import net.voidhub.voidlauncher.ui.screens.content.elements.CategoryIcon
+import net.voidhub.voidlauncher.ui.screens.content.elements.CategoryItem
+import net.voidhub.voidlauncher.ui.screens.navigateOnce
+import net.voidhub.voidlauncher.ui.screens.onBack
+import net.voidhub.voidlauncher.ui.screens.rememberTransitionSpec
+import net.voidhub.voidlauncher.viewmodel.ErrorViewModel
+import net.voidhub.voidlauncher.viewmodel.EventViewModel
+import net.voidhub.voidlauncher.viewmodel.ModpackImportViewModel
+import net.voidhub.voidlauncher.viewmodel.ScreenBackStackViewModel
+
+/**
+ * 导航至DownloadScreen
+ */
+fun ScreenBackStackViewModel.navigateToDownload(targetScreen: TitledNavKey? = null) {
+    downloadScreen.clearWith(targetScreen ?: downloadGameScreen)
+    mainScreen.removeAndNavigateTo(
+        removes = clearBeforeNavKeys,
+        screenKey = downloadScreen,
+        useClassEquality = true
+    )
+}
+
+/**
+ * 跳转到资源类型对应的下载分类屏幕，并进入项目详情页
+ */
+private fun ScreenBackStackViewModel.swapToCategoryAssets(
+    platform: Platform,
+    classes: PlatformClasses,
+    projectId: String,
+    iconUrl: String?
+) {
+    val targetScreen = when (classes) {
+        PlatformClasses.MOD -> downloadModScreen
+        PlatformClasses.MOD_PACK -> downloadModPackScreen
+        PlatformClasses.RESOURCE_PACK -> downloadResourcePackScreen
+        PlatformClasses.SAVES -> downloadSavesScreen
+        PlatformClasses.SHADERS -> downloadShadersScreen
+    }
+    navigateToDownload(
+        targetScreen = targetScreen.apply {
+            navigateTo(
+                NormalNavKey.DownloadAssets(
+                    platform = platform,
+                    projectId = projectId,
+                    classes = classes,
+                    iconUrl = iconUrl
+                )
+            )
+        }
+    )
+}
+
+@Composable
+fun DownloadScreen(
+    key: NestedNavKey.Download,
+    backScreenViewModel: ScreenBackStackViewModel,
+    modpackImportViewModel: ModpackImportViewModel,
+    eventViewModel: EventViewModel,
+    submitError: (ErrorViewModel.ThrowableMessage) -> Unit
+) {
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+    //进入下载屏幕时确保收藏仓库完成初始化
+    LaunchedEffect(Unit) {
+        FavoriteProjectsRepository.ensureLoaded()
+    }
+
+    BaseScreen(
+        screenKey = key,
+        currentKey = backScreenViewModel.mainScreen.currentKey,
+        useClassEquality = true
+    ) { isVisible: Boolean ->
+        Column(modifier = Modifier.fillMaxSize()) {
+            DownloadHubHeader(
+                compact = backScreenViewModel.downloadScreen.currentKey != backScreenViewModel.downloadGameScreen,
+                onBack = { backDispatcher?.onBackPressed() }
+            )
+            TabMenu(
+                modifier = Modifier.fillMaxWidth(),
+                isVisible = isVisible,
+                backStack = key.backStack,
+                backScreenViewModel = backScreenViewModel,
+            )
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+            )
+            NavigationUI(
+                key = key,
+                backScreenViewModel = backScreenViewModel,
+                eventViewModel = eventViewModel,
+                modpackImportViewModel = modpackImportViewModel,
+                submitError = submitError,
+                modifier = Modifier.weight(1f).fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+             .padding(start = 10.dp, top = if (compact) 3.dp else 6.dp, end = 10.dp, bottom = if (compact) 2.dp else 4.dp),
+        shape = RoundedCornerShape(26.dp),
+        color = Color.Transparent,
+        contentColor = Color.White
+    ) {
+        Column(
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            Color(0xFF071321),
+                            Color(0xFF17334B),
+                            Color(0xFF102638)
+                        )
+                    )
+                )
+                 .padding(horizontal = 12.dp, vertical = if (compact) 4.dp else 7.dp),
+            verticalArrangement = Arrangement.spacedBy(if (compact) 2.dp else 4.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onBack) {
+                    Text(
+                        text = "←",
+                        color = Color.White,
+                        style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge
+                    )
+                }
+                Spacer(modifier = Modifier.width(if (compact) 2.dp else 4.dp))
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(if (compact) 1.dp else 4.dp)
+                ) {
+                    Text(
+                        text = "VØID  /  CONTENT SYSTEM",
+                        color = Color(0xFFB9D9E8),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Black
+                    )
+                    Text(
+                        text = "DOWNLOAD LAB",
+                        style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+                Surface(
+                    shape = RoundedCornerShape(18.dp),
+                    color = Color(0xFF9F3045),
+                    contentColor = Color.White
+                ) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = if (compact) 6.dp else 8.dp, vertical = if (compact) 3.dp else 6.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "VØID",
+                            style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Black
+                        )
+                        Text(
+                            text = "LAB  /  08",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+private fun TabMenu(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    backStack: NavBackStack<TitledNavKey>,
+    backScreenViewModel: ScreenBackStackViewModel,
+) {
+    val categories = listOf(
+        CategoryItem(backScreenViewModel.downloadGameScreen, { CategoryIcon(R.drawable.ic_sports_esports_outlined, R.string.download_category_game) }, R.string.download_category_game),
+        CategoryItem(backScreenViewModel.downloadModScreen, { CategoryIcon(R.drawable.ic_extension_outlined, R.string.download_category_mod) }, R.string.download_category_mod),
+        CategoryItem(backScreenViewModel.downloadShadersScreen, { CategoryIcon(R.drawable.ic_lightbulb, R.string.download_category_shaders) }, R.string.download_category_shaders),
+        CategoryItem(backScreenViewModel.downloadResourcePackScreen, { CategoryIcon(R.drawable.ic_format_paint_outlined, R.string.download_category_resource_pack) }, R.string.download_category_resource_pack),
+        CategoryItem(backScreenViewModel.downloadModPackScreen, { CategoryIcon(R.drawable.ic_package_2_outlined, R.string.download_category_modpack) }, R.string.download_category_modpack),
+        CategoryItem(backScreenViewModel.downloadSavesScreen, { CategoryIcon(R.drawable.ic_public, R.string.download_category_saves) }, R.string.download_category_saves),
+        CategoryItem(backScreenViewModel.downloadFavoritesScreen, { CategoryIcon(R.drawable.ic_favorite_outlined, R.string.download_category_favorites) }, R.string.download_category_favorites)
+    )
+    val ctx = rememberAnimatedContext(isVisible = isVisible)
+    Column(
+        modifier = modifier
+            .animated(ctx, from = AnimatedDirection.Left)
+            .padding(top = 5.dp, bottom = 9.dp),
+        verticalArrangement = Arrangement.spacedBy(9.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(9.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            categories.forEach { item ->
+                val selected = backScreenViewModel.downloadScreen.currentKey == item.key
+                Surface(
+                    onClick = { backStack.navigateOnce(item.key) },
+                    shape = RoundedCornerShape(50),
+                    color = if (selected) Color(0xFF9F3045) else Color(0xFF183A35),
+                    contentColor = Color.White,
+                    tonalElevation = if (selected) 4.dp else 0.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 15.dp, vertical = 11.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        item.icon()
+                        Text(
+                            text = stringResource(item.textRes),
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
+            Surface(
+                onClick = { backStack.navigateOnce(NormalNavKey.SearchId) },
+                shape = RoundedCornerShape(50),
+                color = Color(0xFF183A35),
+                contentColor = Color.White
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 17.dp, vertical = 11.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("⌕", style = MaterialTheme.typography.titleLarge, color = Color(0xFFD5A6FF))
+                    Text(
+                        text = "Search by ID",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NavigationUI(
+    key: NestedNavKey.Download,
+    backScreenViewModel: ScreenBackStackViewModel,
+    eventViewModel: EventViewModel,
+    modpackImportViewModel: ModpackImportViewModel,
+    submitError: (ErrorViewModel.ThrowableMessage) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val backStack = key.backStack
+    val stackTopKey = backStack.lastOrNull()
+    LaunchedEffect(stackTopKey) {
+        backScreenViewModel.downloadScreen.currentKey = stackTopKey
+    }
+    LaunchedEffect(backStack.isEmpty()) {
+        if (backStack.isEmpty()) {
+            backStack.add(NestedNavKey.DownloadGame())
+        }
+    }
+
+    if (backStack.isNotEmpty()) {
+        NestedNavDisplay(
+            ownerKey = key,
+            backStack = backStack,
+            modifier = modifier,
+            onBack = {
+                onBack(backStack)
+            },
+            transitionSpec = rememberTransitionSpec(),
+            popTransitionSpec = rememberTransitionSpec(),
+            entryProvider = entryProvider {
+                entry<NestedNavKey.DownloadGame> { key ->
+                    DownloadGameScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadGameScreenKey = backScreenViewModel.downloadGameScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadGameScreen.currentKey = newKey
+                        },
+                        eventViewModel = eventViewModel
+                    )
+                }
+                entry<NestedNavKey.DownloadModPack> { key ->
+                    DownloadModPackScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadModPackScreenKey = backScreenViewModel.downloadModPackScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadModPackScreen.currentKey = newKey
+                        },
+                        eventViewModel = eventViewModel,
+                        importerViewModel = modpackImportViewModel
+                    )
+                }
+                entry<NestedNavKey.DownloadMod> { key ->
+                    DownloadModScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadModScreenKey = backScreenViewModel.downloadModScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadModScreen.currentKey = newKey
+                        },
+                        submitError = submitError,
+                        eventViewModel = eventViewModel
+                    )
+                }
+                entry<NestedNavKey.DownloadResourcePack> { key ->
+                    DownloadResourcePackScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadResourcePackScreenKey = backScreenViewModel.downloadResourcePackScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadResourcePackScreen.currentKey = newKey
+                        },
+                        submitError = submitError,
+                        eventViewModel = eventViewModel
+                    )
+                }
+                entry<NestedNavKey.DownloadSaves> { key ->
+                    DownloadSavesScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadSavesScreenKey = backScreenViewModel.downloadSavesScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadSavesScreen.currentKey = newKey
+                        },
+                        submitError = submitError,
+                        eventViewModel = eventViewModel
+                    )
+                }
+                entry<NestedNavKey.DownloadShaders> { key ->
+                    DownloadShadersScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadShadersScreenKey = backScreenViewModel.downloadShadersScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadShadersScreen.currentKey = newKey
+                        },
+                        submitError = submitError,
+                        eventViewModel = eventViewModel
+                    )
+                }
+                entry<NormalNavKey.SearchId> {
+                    SearchIdScreen(
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        swapToDownload = { platform, classes, projectId, iconUrl ->
+                            backScreenViewModel.swapToCategoryAssets(platform, classes, projectId, iconUrl)
+                        },
+                        openLink = { link ->
+                            eventViewModel.sendEvent(EventViewModel.Event.OpenLink(link))
+                        }
+                    )
+                }
+                entry<NestedNavKey.DownloadFavorites> { key ->
+                    DownloadFavoritesScreen(
+                        key = key,
+                        mainScreenKey = backScreenViewModel.mainScreen.currentKey,
+                        downloadScreenKey = backScreenViewModel.downloadScreen.currentKey,
+                        downloadFavoritesScreenKey = backScreenViewModel.downloadFavoritesScreen.currentKey,
+                        onCurrentKeyChange = { newKey ->
+                            backScreenViewModel.downloadFavoritesScreen.currentKey = newKey
+                        },
+                        swapToDownload = { platform, classes, projectId, iconUrl ->
+                            backScreenViewModel.swapToCategoryAssets(platform, classes, projectId, iconUrl)
+                        }
+                    )
+                }
+            }
+        )
+    } else {
+        Box(modifier)
+    }
+}

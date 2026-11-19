@@ -25,7 +25,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "VøidLaunchear"
-include(":ZalithLauncher")
+include(":VoidLauncher")
 include(":LWJGL")
 include(":LWJGL:patches")
 project(":LWJGL:patches").projectDir = file("LWJGL/patches")
