@@ -109,19 +109,19 @@ jobs:
             echo "Missing RELEASE_KEYSTORE_BASE64 GitHub Actions secret."
             exit 1
           fi
-          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > ZalithLauncher/zalith_launcher.jks
-          chmod 600 ZalithLauncher/zalith_launcher.jks
-          test -s ZalithLauncher/zalith_launcher.jks
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > VoidLauncher/void_launcher.jks
+          chmod 600 VoidLauncher/void_launcher.jks
+          test -s VoidLauncher/void_launcher.jks
 
       - name: Build APK for ${{ matrix.arch }}
         run: |
           chmod +x gradlew
-          ./gradlew ZalithLauncher:assemble${{ inputs.variant || 'Debug' }} -Darch=${{ matrix.arch }}
+          ./gradlew VoidLauncher:assemble${{ inputs.variant || 'Debug' }} -Darch=${{ matrix.arch }}
 
       - name: Rename APK for distribution
         run: |
-          output_dir="ZalithLauncher/build/outputs/apk/${BUILD_VARIANT,,}"
-          version="$(awk -F= '$1 == "launcher_version_name" { print $2; exit }' ZalithLauncher/gradle.properties)"
+          output_dir="VoidLauncher/build/outputs/apk/${BUILD_VARIANT,,}"
+          version="$(awk -F= '$1 == "launcher_version_name" { print $2; exit }' VoidLauncher/gradle.properties)"
           test -n "$version"
           case "${{ matrix.arch }}" in
             arm) arch_label="armv7" ;;
@@ -149,7 +149,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: VøidLaunchear APK (${{ matrix.arch }})
-          path: ZalithLauncher/build/outputs/apk/release/VøidLaunchear-*.apk
+          path: VoidLauncher/build/outputs/apk/release/VøidLaunchear-*.apk
           if-no-files-found: error
 
       - name: Upload Release Mapping for ${{ matrix.arch }}
@@ -158,14 +158,14 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: mapping (${{ matrix.arch }})
-          path: ZalithLauncher/build/outputs/mapping/release/mapping.txt
+          path: VoidLauncher/build/outputs/mapping/release/mapping.txt
 
       - name: Upload Debug APK for ${{ matrix.arch }}
         if: env.BUILD_VARIANT == 'Debug'
         uses: actions/upload-artifact@v7
         with:
           name: VøidLaunchear APK (${{ matrix.arch }})
-          path: ZalithLauncher/build/outputs/apk/debug/VøidLaunchear-*.apk
+          path: VoidLauncher/build/outputs/apk/debug/VøidLaunchear-*.apk
           if-no-files-found: error
 
   publish-public-apks:
@@ -205,7 +205,7 @@ jobs:
       - name: Read app version
         id: version
         run: |
-          version="$(awk -F= '$1 == "launcher_version_name" { print $2; exit }' ZalithLauncher/gradle.properties)"
+          version="$(awk -F= '$1 == "launcher_version_name" { print $2; exit }' VoidLauncher/gradle.properties)"
           test -n "$version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
