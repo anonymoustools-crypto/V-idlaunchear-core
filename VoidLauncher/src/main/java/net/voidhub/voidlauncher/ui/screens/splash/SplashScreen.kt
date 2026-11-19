@@ -169,9 +169,9 @@ private fun LoadingScreen(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF07040D),
-                            Color(0xFF160A25),
-                            Color(0xFF080510)
+                            Color(0xFF000000),
+                            Color(0xFF000000),
+                            Color(0xFF000000)
                         )
                     )
                 )
@@ -185,8 +185,8 @@ private fun LoadingScreen(
                     .background(
                         Brush.radialGradient(
                             colors = listOf(
-                                Color(0xFF8C35D6).copy(alpha = 0.22f + collisionGlow * 0.38f),
-                                Color(0xFF542080).copy(alpha = 0.10f),
+                                Color(0xFF000000).copy(alpha = 0.22f + collisionGlow * 0.38f),
+                                Color(0xFF000000).copy(alpha = 0.10f),
                                 Color.Transparent
                             )
                         ),
@@ -206,7 +206,7 @@ private fun LoadingScreen(
                             x = (-76f * (1f - logoProgress.value)).dp
                         ),
                         text = "Vøid",
-                        color = Color(0xFFE0BDFF),
+                        color = Color(0xFF000000),
                         fontSize = 38.sp,
                         fontWeight = FontWeight.Black,
                         letterSpacing = 2.5.sp
@@ -216,7 +216,7 @@ private fun LoadingScreen(
                             x = (76f * (1f - logoProgress.value)).dp
                         ),
                         text = "Launchear",
-                        color = Color(0xFFFFF8FF),
+                        color = Color(0xFF000000),
                         fontSize = 23.sp,
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = 1.2.sp
@@ -231,7 +231,7 @@ private fun LoadingScreen(
                             Brush.horizontalGradient(
                                 colors = listOf(
                                     Color.Transparent,
-                                    Color(0xFFB66CFF).copy(alpha = 0.9f),
+                                    Color(0xFF000000).copy(alpha = 0.9f),
                                     Color.Transparent
                                 )
                             )
@@ -240,7 +240,7 @@ private fun LoadingScreen(
 
                 Text(
                     text = "MINECRAFT JAVA  •  VØID CORE",
-                    color = Color(0xFFBFA6D5),
+                    color = Color(0xFF000000),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 2.sp
@@ -248,14 +248,14 @@ private fun LoadingScreen(
 
                 LinearWavyProgressIndicator(
                     modifier = Modifier.width(164.dp),
-                    color = Color(0xFFB66CFF),
-                    trackColor = Color(0xFF38234A),
+                    color = Color(0xFF000000),
+                    trackColor = Color(0xFF000000),
                     wavelength = 36.dp
                 )
 
                 Text(
                     text = "INITIALIZING LAUNCHER",
-                    color = Color(0xFF8F7B9F),
+                    color = Color(0xFF000000),
                     fontSize = 9.sp,
                     letterSpacing = 1.8.sp
                 )
