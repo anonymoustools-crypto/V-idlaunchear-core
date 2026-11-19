@@ -138,8 +138,8 @@ private fun TabMenu(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.16f),
-                        MaterialTheme.colorScheme.surface.copy(alpha = 0.10f)
+                        Color(0xFF17171C),
+                        Color(0xFF101014)
                     )
                 )
             )
@@ -156,7 +156,7 @@ private fun TabMenu(
                     .clip(RoundedCornerShape(14.dp))
                     .background(
                         Brush.horizontalGradient(
-                            listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer)
+                            listOf(Color(0xFF9F3045), Color(0xFF5F1C2A))
                         )
                     )
                     .padding(horizontal = 9.dp, vertical = 5.dp)
