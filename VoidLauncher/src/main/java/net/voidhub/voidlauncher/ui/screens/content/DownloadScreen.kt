@@ -188,9 +188,9 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF071321),
-                            Color(0xFF17334B),
-                            Color(0xFF102638)
+                            Color(0xFF101014),
+                            Color(0xFF25252B),
+                            Color(0xFF151519)
                         )
                     )
                 )
@@ -215,7 +215,7 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 ) {
                     Text(
                         text = "VØID  /  CONTENT SYSTEM",
-                        color = Color(0xFFB9D9E8),
+                        color = Color(0xFFE6A8B3),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Black
                     )
