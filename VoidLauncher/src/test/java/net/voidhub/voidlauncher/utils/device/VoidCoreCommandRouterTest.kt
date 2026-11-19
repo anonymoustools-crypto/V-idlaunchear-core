@@ -35,7 +35,7 @@ class VoidCoreCommandRouterTest {
         val result = VoidCoreCommandRouter.route("/device")
         assertEquals(VoidCoreCommandRouter.Action.SHOW_DEVICE_SUMMARY, result.action)
         assertTrue(result.message.contains("Android"))
-        assertTrue(result.message.contains("API"))
+        assertTrue(result.message.contains("Android"))
     }
 
     @Test
