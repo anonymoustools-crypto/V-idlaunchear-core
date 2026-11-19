@@ -30,7 +30,7 @@ jobs:
       - name: Audit remaining upstream URL references
         shell: bash
         run: |
-          if grep -RInE 'https?://(api\\.)?github\\.com/(VoidLauncher/Zalith-Info|VoidLauncher/VoidLauncher2)|zalithlauncher2|zalith-info|ifdian\\.net/a/MovTery|com\\.movtery\\.activity|com\\.movtery\\.zalithlauncher' VoidLauncher/src/main --include='*.kt' --include='*.xml'; then
+          if grep -RInE 'https?://(api\.)?github\.com/(VoidLauncher/Zalith-Info|VoidLauncher/VoidLauncher2)|zalithlauncher2|zalith-info|ifdian\.net/a/MovTery|com\.movtery\.activity|com\.movtery\.zalithlauncher' VoidLauncher/src/main --include='*.kt' --include='*.xml'; then
             echo "::error::Legacy Zalith service URLs or app identifiers remain in the Vøid app source."
             exit 1
           fi
