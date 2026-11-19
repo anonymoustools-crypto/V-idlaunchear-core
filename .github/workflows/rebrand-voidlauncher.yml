@@ -26,3 +26,7 @@ jobs:
         run: |
           chmod +x .github/scripts/rebrand-voidlauncher.sh
           .github/scripts/rebrand-voidlauncher.sh
+
+      - name: Audit remaining upstream URL references
+        run: |
+          grep -RInE 'URL_PROJECT_INFO|URL_COMMUNITY|URL_WEBLATE|URL_SUPPORT|Zalith-Info|zalithlauncher2|ifdian.net/a/MovTery' VoidLauncher/src/main/java --include='*.kt' || true
