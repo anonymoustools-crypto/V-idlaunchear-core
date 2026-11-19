@@ -65,18 +65,18 @@ jobs:
       - name: Compile app Kotlin sources
         run: |
           chmod +x gradlew
-          ./gradlew :ZalithLauncher:compileDebugKotlin --stacktrace
+          ./gradlew :VoidLauncher:compileDebugKotlin --stacktrace
 
       - name: Run launcher unit tests
-        run: ./gradlew :ZalithLauncher:testDebugUnitTest --stacktrace
+        run: ./gradlew :VoidLauncher:testDebugUnitTest --stacktrace
 
       - name: Assemble debug APK
-        run: ./gradlew :ZalithLauncher:assembleDebug --stacktrace
+        run: ./gradlew :VoidLauncher:assembleDebug --stacktrace
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: VoidLaunchear-debug-apk
-          path: ZalithLauncher/build/outputs/apk/debug/*.apk
+          path: VoidLauncher/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 7
