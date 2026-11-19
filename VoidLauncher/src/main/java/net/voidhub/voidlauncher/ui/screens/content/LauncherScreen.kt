@@ -273,7 +273,7 @@ fun LauncherScreen(
                     ) {
                         Text(
                             text = "Ø",
-                            color = Color(0xFF000000),
+                            color = Color.White,
                             fontSize = 23.sp,
                             fontWeight = FontWeight.Black
                         )
@@ -281,7 +281,7 @@ fun LauncherScreen(
                     Column(verticalArrangement = Arrangement.spacedBy((-2).dp)) {
                         Text(
                             text = "VøidLaunchear",
-                            color = Color(0xFF000000),
+                            color = Color.White,
                             fontSize = 17.sp,
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = 0.35.sp,
