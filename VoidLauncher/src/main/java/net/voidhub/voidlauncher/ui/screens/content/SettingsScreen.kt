@@ -138,8 +138,8 @@ private fun TabMenu(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF17171C),
-                        Color(0xFF101014)
+                        Color(0xFF000000),
+                        Color(0xFF000000)
                     )
                 )
             )
@@ -156,7 +156,7 @@ private fun TabMenu(
                     .clip(RoundedCornerShape(14.dp))
                     .background(
                         Brush.horizontalGradient(
-                            listOf(Color(0xFF9F3045), Color(0xFF5F1C2A))
+                            listOf(Color(0xFF000000), Color(0xFF000000))
                         )
                     )
                     .padding(horizontal = 9.dp, vertical = 5.dp)
