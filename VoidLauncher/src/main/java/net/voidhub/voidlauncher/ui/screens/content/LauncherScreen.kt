@@ -255,7 +255,7 @@ fun LauncherScreen(
                     .height(56.dp)
                     .padding(horizontal = 12.dp, vertical = 3.dp)
                     .clip(MaterialTheme.shapes.extraLarge)
-                    .background(Color(0xFF151519))
+                    .background(Color(0xFF000000))
                     .padding(horizontal = 13.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -268,12 +268,12 @@ fun LauncherScreen(
                         modifier = Modifier
                             .size(34.dp)
                             .clip(MaterialTheme.shapes.medium)
-                            .background(Color(0xFFB51F36)),
+                            .background(Color(0xFF000000)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "Ø",
-                            color = Color(0xFFFFFFFF),
+                            color = Color(0xFF000000),
                             fontSize = 23.sp,
                             fontWeight = FontWeight.Black
                         )
@@ -281,7 +281,7 @@ fun LauncherScreen(
                     Column(verticalArrangement = Arrangement.spacedBy((-2).dp)) {
                         Text(
                             text = "VøidLaunchear",
-                            color = Color(0xFFFFFFFF),
+                            color = Color(0xFF000000),
                             fontSize = 17.sp,
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = 0.35.sp,
