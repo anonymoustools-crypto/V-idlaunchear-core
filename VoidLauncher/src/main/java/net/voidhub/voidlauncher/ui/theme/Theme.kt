@@ -650,6 +650,78 @@ private val winterLightColorScheme = lightColorScheme(
     outlineVariant = Color(0xFFB8C9D1)
 )
 
+private val voidMonoDarkColorScheme = darkColorScheme(
+    primary = Color(0xFFF2F2F2),
+    onPrimary = Color(0xFF111111),
+    primaryContainer = Color(0xFF383838),
+    onPrimaryContainer = Color(0xFFFFFFFF),
+    secondary = Color(0xFFCACACA),
+    onSecondary = Color(0xFF171717),
+    secondaryContainer = Color(0xFF303030),
+    onSecondaryContainer = Color(0xFFEAEAEA),
+    tertiary = Color(0xFFBDBDBD),
+    onTertiary = Color(0xFF171717),
+    error = Color(0xFFE0E0E0),
+    onError = Color(0xFF111111),
+    errorContainer = Color(0xFF484848),
+    onErrorContainer = Color(0xFFFFFFFF),
+    background = Color(0xFF080808),
+    onBackground = Color(0xFFF4F4F4),
+    surface = Color(0xFF101010),
+    onSurface = Color(0xFFF2F2F2),
+    surfaceVariant = Color(0xFF292929),
+    onSurfaceVariant = Color(0xFFD0D0D0),
+    outline = Color(0xFF777777),
+    outlineVariant = Color(0xFF414141),
+    scrim = Color(0xFF000000),
+    inverseSurface = Color(0xFFEAEAEA),
+    inverseOnSurface = Color(0xFF171717),
+    inversePrimary = Color(0xFF303030),
+    surfaceDim = Color(0xFF080808),
+    surfaceBright = Color(0xFF303030),
+    surfaceContainerLowest = Color(0xFF050505),
+    surfaceContainerLow = Color(0xFF111111),
+    surfaceContainer = Color(0xFF181818),
+    surfaceContainerHigh = Color(0xFF222222),
+    surfaceContainerHighest = Color(0xFF2C2C2C)
+)
+
+private val voidMonoLightColorScheme = lightColorScheme(
+    primary = Color(0xFF171717),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFE5E5E5),
+    onPrimaryContainer = Color(0xFF111111),
+    secondary = Color(0xFF454545),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFE0E0E0),
+    onSecondaryContainer = Color(0xFF171717),
+    tertiary = Color(0xFF5A5A5A),
+    onTertiary = Color(0xFFFFFFFF),
+    error = Color(0xFF555555),
+    onError = Color(0xFFFFFFFF),
+    errorContainer = Color(0xFFDADADA),
+    onErrorContainer = Color(0xFF111111),
+    background = Color(0xFFF7F7F7),
+    onBackground = Color(0xFF171717),
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF171717),
+    surfaceVariant = Color(0xFFE8E8E8),
+    onSurfaceVariant = Color(0xFF353535),
+    outline = Color(0xFF777777),
+    outlineVariant = Color(0xFFC8C8C8),
+    scrim = Color(0xFF000000),
+    inverseSurface = Color(0xFF242424),
+    inverseOnSurface = Color(0xFFF5F5F5),
+    inversePrimary = Color(0xFFDDDDDD),
+    surfaceDim = Color(0xFFDDDDDD),
+    surfaceBright = Color(0xFFFFFFFF),
+    surfaceContainerLowest = Color(0xFFFFFFFF),
+    surfaceContainerLow = Color(0xFFF5F5F5),
+    surfaceContainer = Color(0xFFECECEC),
+    surfaceContainerHigh = Color(0xFFE0E0E0),
+    surfaceContainerHighest = Color(0xFFD5D5D5)
+)
+
 @Composable
 fun VoidLauncherTheme(
     darkTheme: Boolean = isLauncherInDarkTheme(),
@@ -678,44 +750,9 @@ fun VoidLauncherTheme(
             (today.monthValue == 1 && today.dayOfMonth <= 2)
     }
 
-    val targetColorScheme = remember(darkTheme, dynamicColor, colorTheme, customColor, customPaletteStyle, isWinterEdition) {
-        if (isWinterEdition) {
-            if (darkTheme) winterDarkColorScheme else winterLightColorScheme
-        } else when {
-            dynamicColor && colorTheme == ColorThemeType.DYNAMIC && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            }
-
-            darkTheme -> when (colorTheme) {
-                ColorThemeType.EMBERMIRE -> embermireDark
-                ColorThemeType.VELVET_ROSE -> velvetRoseDark
-                ColorThemeType.MISTWAVE -> mistwaveDark
-                ColorThemeType.GLACIER -> glacierDark
-                ColorThemeType.VERDANTFIELD -> verdantFieldDark
-                ColorThemeType.URBAN_ASH -> urbanAshDark
-                ColorThemeType.VERDANT_DAWN -> verdantDawnDark
-                ColorThemeType.CUSTOM -> customDark(
-                    color = customColor,
-                    style = customPaletteStyle
-                )
-                else -> embermireDark
-            }
-
-            else -> when (colorTheme) {
-                ColorThemeType.EMBERMIRE -> embermireLight
-                ColorThemeType.VELVET_ROSE -> velvetRoseLight
-                ColorThemeType.MISTWAVE -> mistwaveLight
-                ColorThemeType.GLACIER -> glacierLight
-                ColorThemeType.VERDANTFIELD -> verdantFieldLight
-                ColorThemeType.URBAN_ASH -> urbanAshLight
-                ColorThemeType.VERDANT_DAWN -> verdantDawnLight
-                ColorThemeType.CUSTOM -> customLight(
-                    color = customColor,
-                    style = customPaletteStyle
-                )
-                else -> embermireLight
-            }
-        }
+    // VØID uses a fixed black-and-white palette; device wallpaper and seasonal palettes are ignored.
+    val targetColorScheme = remember(darkTheme) {
+        if (darkTheme) voidMonoDarkColorScheme else voidMonoLightColorScheme
     }
 
     var currentDarkTheme by remember { mutableStateOf(darkTheme) }
