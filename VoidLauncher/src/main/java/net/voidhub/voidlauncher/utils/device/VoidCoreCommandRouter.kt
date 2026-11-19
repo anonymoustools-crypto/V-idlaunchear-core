@@ -7,7 +7,6 @@
 package net.voidhub.voidlauncher.utils.device
 
 import android.content.Context
-import android.os.Build
 
 /**
  * Offline command interpretation for the VØID CORE assistant.
@@ -94,7 +93,7 @@ object VoidCoreCommandRouter {
                 Action.SHOW_DEVICE_SUMMARY,
                 "Device summary",
                 context?.let { VoidPerformanceAdvisor.deviceDiagnostics(it) }
-                    ?: "${VoidPerformanceAdvisor.deviceSummary()} • Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT}). Basic device identification only; live memory details require an Android context."
+                    ?: "Android device summary is available in the app. Live API and memory details require an Android context."
             )
             "check minecraft", "minecraft" -> Result(
                 Action.REVIEW_MINECRAFT_INSTALLATION,
@@ -112,7 +111,7 @@ object VoidCoreCommandRouter {
                 "This clears only disposable launcher app-icon, remote-homepage, and image caches after confirmation. It does not touch downloads, modpacks, worlds, saves, mods, accounts, Java runtimes, or Minecraft libraries.",
                 requiresConfirmation = true
             )
-            "worlds", "world backup", "world backups", "backup world", "backup worlds" -> Result(
+            "worlds", "world backup", "world backups", "backup world", "backup worlds", "restore world" -> Result(
                 Action.OPEN_WORLD_VAULT,
                 "World backup manager",
                 "Open VØID WORLD VAULT to list local saves, create a ZIP backup, or restore an archive. Restoring an existing world creates a safety backup first."
