@@ -81,8 +81,8 @@ sealed interface LauncherUpgradeOperation {
  * 最新版本的信息获取源
  */
 private const val LATEST_VERSION = "latest_version_md.json"
-private const val LATEST_API_URL = "$URL_PROJECT_INFO/$LATEST_VERSION"
-private const val LATEST_API_CHINESE_URL = "https://repo.miawa.cn/zalith-info/v2/$LATEST_VERSION"
+private const val LATEST_API_URL = "$URL_PROJECT_INFO/$LATEST_VERSION?ref=feature/void-roadmap-completion"
+private const val LATEST_API_CHINESE_URL = "https://raw.githubusercontent.com/anonymoustools-crypto/V-idlaunchear-core/feature/void-roadmap-completion/updates/$LATEST_VERSION"
 
 /**
  * 用于记录启动器更新 ViewModel
