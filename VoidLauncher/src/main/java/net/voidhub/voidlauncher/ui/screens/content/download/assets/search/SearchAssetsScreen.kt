@@ -271,72 +271,6 @@ private fun rememberSearchAssetsViewModel(
  * @param extraFilter 额外的过滤器UI
  */
 @Composable
-private fun AssetsBrowserHeader(classes: PlatformClasses) {
-    val titleRes = when (classes) {
-        PlatformClasses.MOD -> R.string.download_category_mod
-        PlatformClasses.MOD_PACK -> R.string.download_category_modpack
-        PlatformClasses.RESOURCE_PACK -> R.string.download_category_resource_pack
-        PlatformClasses.SAVES -> R.string.download_category_saves
-        PlatformClasses.SHADERS -> R.string.download_category_shaders
-    }
-
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 9.dp),
-        shape = RoundedCornerShape(22.dp),
-        color = Color.Transparent,
-        contentColor = Color.White
-    ) {
-        Row(
-            modifier = Modifier
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF171124),
-                            Color(0xFF382052),
-                            Color(0xFF221831)
-                        )
-                    )
-                )
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "VØID  /  CONTENT ARCHIVE",
-                    color = Color(0xFFC7A8FF),
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Black
-                )
-                Text(
-                    text = stringResource(titleRes).uppercase(),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Black
-                )
-                Text(
-                    text = "Discover, filter and install Minecraft content",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.76f)
-                )
-            }
-            Surface(
-                shape = RoundedCornerShape(13.dp),
-                color = Color(0xFF8B5CF6),
-                contentColor = Color.White
-            ) {
-                Text(
-                    text = "BROWSE",
-                    modifier = Modifier.padding(horizontal = 11.dp, vertical = 8.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Black
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun SearchAssetsScreen(
     mainScreenKey: TitledNavKey?,
     parentScreenKey: TitledNavKey,
@@ -377,7 +311,6 @@ fun SearchAssetsScreen(
         Triple(screenKey, currentKey, false)
     ) { isVisible ->
         Column(modifier = Modifier.fillMaxSize()) {
-            AssetsBrowserHeader(classes = platformClasses)
             Row(modifier = Modifier.weight(1f)) {
             val resultCtx = rememberAnimatedContext(isVisible = isVisible)
             ResultListLayout(
