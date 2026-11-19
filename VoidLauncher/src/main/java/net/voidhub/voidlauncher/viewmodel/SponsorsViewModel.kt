@@ -113,7 +113,7 @@ private const val TAG = "SponsorsVM"
 
 private const val SPONSORS_FILE = "monthly_sponsors.json"
 private const val SPONSORS_API_URL =
-    "https://api.github.com/repos/VoidLauncher/Zalith-Info/contents/$SPONSORS_FILE"
+    "https://api.github.com/repos/anonymoustools-crypto/V-idlaunchear-core/contents/updates/$SPONSORS_FILE?ref=feature/void-roadmap-completion"
 
 /** 赞助者数据的缓存有效期 */
 private val CACHE_TTL = TimeUnit.DAYS.toMillis(1L)
