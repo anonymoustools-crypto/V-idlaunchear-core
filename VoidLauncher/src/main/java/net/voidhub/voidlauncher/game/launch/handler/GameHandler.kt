@@ -28,7 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import com.movtery.inputmap.keycodes.LwjglGlfwKeycode
-import net.voidhub.voidlauncher.bridge.ZLBridge
+import net.voidhub.voidlauncher.bridge.VoidBridge
 import net.voidhub.voidlauncher.game.control.ControlManager
 import net.voidhub.voidlauncher.game.input.EfficientAndroidLWJGLKeycode
 import net.voidhub.voidlauncher.game.input.LWJGLCharSender
@@ -91,7 +91,7 @@ class GameHandler(
         screenSize: IntSize,
         scope: CoroutineScope
     ) {
-        ZLBridge.setupBridgeWindow(surface)
+        VoidBridge.setupBridgeWindow(surface)
 
         MCOptions.setup(activity, version)
 

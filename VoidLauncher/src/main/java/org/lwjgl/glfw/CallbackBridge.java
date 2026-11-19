@@ -1,7 +1,7 @@
 package org.lwjgl.glfw;
 
-import static net.voidhub.voidlauncher.bridge.ZLBridgeStatesKt.CURSOR_DISABLED;
-import static net.voidhub.voidlauncher.bridge.ZLBridgeStatesKt.CURSOR_ENABLED;
+import static net.voidhub.voidlauncher.bridge.VoidBridgeStatesKt.CURSOR_DISABLED;
+import static net.voidhub.voidlauncher.bridge.VoidBridgeStatesKt.CURSOR_ENABLED;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -21,8 +21,8 @@ import net.voidhub.voidlauncher.BuildKeys;
 import net.voidhub.voidlauncher.bridge.CursorShape;
 import net.voidhub.voidlauncher.bridge.LoggerBridge;
 import net.voidhub.voidlauncher.bridge.NativeLibraryLoader;
-import net.voidhub.voidlauncher.bridge.ZLBridgeStates;
-import net.voidhub.voidlauncher.bridge.ZLNativeInvoker;
+import net.voidhub.voidlauncher.bridge.VoidBridgeStates;
+import net.voidhub.voidlauncher.bridge.VoidNativeInvoker;
 import net.voidhub.voidlauncher.context.ContextsKt;
 import net.voidhub.voidlauncher.game.input.EfficientAndroidLWJGLKeycode;
 import net.voidhub.voidlauncher.game.sdl.DirectGamepadEnableHandler;
@@ -56,10 +56,10 @@ public class CallbackBridge {
     private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
     private static volatile boolean isGrabbing = false;
     private static final Consumer<Boolean> grabListener = isGrabbing ->
-            ZLBridgeStates.changeCursorMode(isGrabbing ? CURSOR_DISABLED : CURSOR_ENABLED);
+            VoidBridgeStates.changeCursorMode(isGrabbing ? CURSOR_DISABLED : CURSOR_ENABLED);
 
     private static int cursorShape = GLFW_ARROW_CURSOR;
-    private static final Consumer<CursorShape> cursorShapeListener = ZLBridgeStates::changeCursorShape;
+    private static final Consumer<CursorShape> cursorShapeListener = VoidBridgeStates::changeCursorShape;
 
     private static void postFrameCallbackDelayed(Choreographer.FrameCallback callback, long delayMillis) {
         MAIN_HANDLER.post(() -> Choreographer.getInstance().postFrameCallbackDelayed(callback, delayMillis));
@@ -343,7 +343,7 @@ public class CallbackBridge {
                 }
                 break;
             case CLIPBOARD_OPEN:
-                ZLNativeInvoker.openLink(copy);
+                VoidNativeInvoker.openLink(copy);
                 break;
         }
         return result;

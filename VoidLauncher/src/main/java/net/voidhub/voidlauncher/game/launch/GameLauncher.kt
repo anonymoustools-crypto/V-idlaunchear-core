@@ -29,7 +29,7 @@ import net.voidhub.voidlauncher.R
 import net.voidhub.voidlauncher.VoidApplication
 import net.voidhub.voidlauncher.bridge.LoggerBridge.appendInfo
 import net.voidhub.voidlauncher.bridge.LoggerBridge.appendTitle
-import net.voidhub.voidlauncher.bridge.ZLBridge
+import net.voidhub.voidlauncher.bridge.VoidBridge
 import net.voidhub.voidlauncher.context.readAssetFile
 import net.voidhub.voidlauncher.game.account.Account
 import net.voidhub.voidlauncher.game.account.AccountType
@@ -227,12 +227,12 @@ class GameLauncher(
         RendererPluginManager.selectedRendererPlugin?.let { renderer ->
             val libs by renderer.getDlopenLibrary()
             libs.forEach { libPath ->
-                ZLBridge.dlopen(libPath)
+                VoidBridge.dlopen(libPath)
             }
         }
 
         val rendererLib = getRendererLibrary() ?: return
-        if (!ZLBridge.dlopen(rendererLib) && !ZLBridge.dlopen(findInLdLibPath(rendererLib))) {
+        if (!VoidBridge.dlopen(rendererLib) && !VoidBridge.dlopen(findInLdLibPath(rendererLib))) {
             Logger.error(TAG, "Failed to load renderer $rendererLib")
         }
     }

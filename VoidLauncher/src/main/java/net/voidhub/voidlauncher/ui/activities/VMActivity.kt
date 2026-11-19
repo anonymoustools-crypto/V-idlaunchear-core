@@ -95,8 +95,8 @@ import net.voidhub.voidlauncher.R
 import net.voidhub.voidlauncher.bridge.CURSOR_DISABLED
 import net.voidhub.voidlauncher.bridge.FliteTts
 import net.voidhub.voidlauncher.bridge.LoggerBridge
-import net.voidhub.voidlauncher.bridge.ZLBridge
-import net.voidhub.voidlauncher.bridge.ZLBridgeStates
+import net.voidhub.voidlauncher.bridge.VoidBridge
+import net.voidhub.voidlauncher.bridge.VoidBridgeStates
 import net.voidhub.voidlauncher.coroutine.DataBridge
 import net.voidhub.voidlauncher.game.account.Account
 import net.voidhub.voidlauncher.game.input.AWTCharSender
@@ -587,7 +587,7 @@ class VMActivity : BaseAppCompatActivity(), SurfaceTextureListener {
                     }
 
                     //鼠标变更为抓获模式时，应该关闭输入框
-                    val cursorMode by ZLBridgeStates.cursorMode.collectAsStateWithLifecycle()
+                    val cursorMode by VoidBridgeStates.cursorMode.collectAsStateWithLifecycle()
                     LaunchedEffect(cursorMode) {
                         if (cursorMode == CURSOR_DISABLED) vmViewModel.disableInputMode()
                     }
@@ -706,7 +706,7 @@ class VMActivity : BaseAppCompatActivity(), SurfaceTextureListener {
         lastWindowSize = newSize
 
         gameTextureView?.surfaceTexture?.setDefaultBufferSize(newSize.width, newSize.height)
-        ZLBridgeStates.onWindowChange()
+        VoidBridgeStates.onWindowChange()
         CallbackBridge.sendUpdateWindowSize(newSize.width, newSize.height)
         if (SdlBridge.sdlEnabled) {
             SDLActivity.getSDLSurface()?.let { surface ->
@@ -909,7 +909,7 @@ class VMActivity : BaseAppCompatActivity(), SurfaceTextureListener {
             LoggerBridge.append("VoidLauncher: Direct gamepad handler enabled")
         }
         if (vmViewModel.isRunning) {
-            ZLBridge.setupBridgeWindow(nativeSurface)
+            VoidBridge.setupBridgeWindow(nativeSurface)
             // surface 重建后新 SurfaceTexture 的渲染 buffer 回落视图尺寸，须重新恢复渲染状态；
             // 复用分支若不重置销毁标记，后续尺寸回调会被持续阻塞，错位状态将无法自愈
             withHandler { mIsSurfaceDestroyed = false }

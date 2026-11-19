@@ -74,8 +74,8 @@ import com.movtery.layer_controller.layout.loadLayoutFromFile
 import com.movtery.layer_controller.observable.ObservableControlLayout
 import net.voidhub.voidlauncher.R
 import net.voidhub.voidlauncher.bridge.CURSOR_DISABLED
-import net.voidhub.voidlauncher.bridge.ZLBridgeStates
-import net.voidhub.voidlauncher.bridge.ZLNativeInvoker
+import net.voidhub.voidlauncher.bridge.VoidBridgeStates
+import net.voidhub.voidlauncher.bridge.VoidNativeInvoker
 import net.voidhub.voidlauncher.game.input.LWJGLCharSender
 import net.voidhub.voidlauncher.game.keycodes.mapToKeycode
 import net.voidhub.voidlauncher.game.launch.handler.GameHandler
@@ -320,7 +320,7 @@ private class GameViewModel(
                 //游戏内文本发送事件
                 if (pressed) {
                     val text = event.key
-                    val inGame = ZLBridgeStates.cursorMode.value == CURSOR_DISABLED
+                    val inGame = VoidBridgeStates.cursorMode.value == CURSOR_DISABLED
                     gameTextSender.send(GameTextSender.Data(text, inGame))
                 }
                 return
@@ -589,7 +589,7 @@ fun GameScreen(
         eventViewModel.sendEvent(EventViewModel.Event.Game.SwitchIme(mode))
     }
     val editorViewModel = rememberEditorViewModel("ControlEditor_Times=${viewModel.editorRefresh}")
-    val cursorMode by ZLBridgeStates.cursorMode.collectAsStateWithLifecycle()
+    val cursorMode by VoidBridgeStates.cursorMode.collectAsStateWithLifecycle()
     val isGrabbing = remember(cursorMode) {
         cursorMode == CURSOR_DISABLED
     }
@@ -617,7 +617,7 @@ fun GameScreen(
         onChange = { viewModel.forceCloseState = it },
         onForceClose = {
             Terracotta.setWaiting(false)
-            ZLNativeInvoker.jvmExit(0, false)
+            VoidNativeInvoker.jvmExit(0, false)
         },
         text = stringResource(R.string.game_menu_option_force_close_text)
     )

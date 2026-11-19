@@ -20,39 +20,39 @@ package net.voidhub.voidlauncher.game.input
 
 import android.view.KeyEvent
 import android.view.MotionEvent
-import net.voidhub.voidlauncher.bridge.ZLBridge
+import net.voidhub.voidlauncher.bridge.VoidBridge
 
 object AWTCharSender : CharacterSenderStrategy {
     override fun sendChar(character: Char) {
-        ZLBridge.sendChar(character)
+        VoidBridge.sendChar(character)
     }
 
     override fun sendBackspace() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_BACK_SPACE)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_BACK_SPACE)
     }
 
     override fun sendLeft() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_LEFT)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_LEFT)
     }
 
     override fun sendRight() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_RIGHT)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_RIGHT)
     }
 
     override fun sendUp() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_UP)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_UP)
     }
 
     override fun sendDown() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_DOWN)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_DOWN)
     }
 
     override fun sendEnter() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_ENTER)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_ENTER)
     }
 
     override fun sendTab() {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_TAB)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_TAB)
     }
 
     override fun sendOther(key: KeyEvent) {
@@ -61,34 +61,34 @@ object AWTCharSender : CharacterSenderStrategy {
 
     override fun sendCopy() {
         sendModifierCtrl(true)
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_C)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_C)
         sendModifierCtrl(false)
     }
 
     override fun sendCut() {
         sendModifierCtrl(true)
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_X)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_X)
         sendModifierCtrl(false)
     }
 
     override fun sendPaste() {
         sendModifierCtrl(true)
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_V)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_V)
         sendModifierCtrl(false)
     }
 
     override fun sendSelectAll() {
         sendModifierCtrl(true)
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_A)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_A)
         sendModifierCtrl(false)
     }
 
     override fun sendModifierShift(press: Boolean) {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_SHIFT, if (press) 1 else 0)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_SHIFT, if (press) 1 else 0)
     }
 
     override fun sendModifierCtrl(press: Boolean) {
-        ZLBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, if (press) 1 else 0)
+        VoidBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, if (press) 1 else 0)
     }
 
     /**

@@ -33,10 +33,10 @@ import net.voidhub.voidlauncher.utils.logging.Logger
 import net.voidhub.voidlauncher.utils.network.openLink
 import java.io.File
 
-private const val TAG = "ZLNativeInvoker"
+private const val TAG = "VoidNativeInvoker"
 
 @Keep
-object ZLNativeInvoker {
+object VoidNativeInvoker {
     @JvmStatic
     var staticLauncher: Launcher? = null
 
@@ -95,14 +95,14 @@ object ZLNativeInvoker {
         (GlobalContext as? Activity)?.let { activity ->
             activity.runOnUiThread {
                 val clipData = (activity.getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager)?.primaryClip ?: run {
-                    ZLBridge.clipboardReceived(null, null)
+                    VoidBridge.clipboardReceived(null, null)
                     return@runOnUiThread
                 }
                 val clipItemText = clipData.getItemAt(0).text ?: run {
-                    ZLBridge.clipboardReceived(null, null)
+                    VoidBridge.clipboardReceived(null, null)
                     return@runOnUiThread
                 }
-                ZLBridge.clipboardReceived(clipItemText.toString(), "plain")
+                VoidBridge.clipboardReceived(clipItemText.toString(), "plain")
             }
         }
     }

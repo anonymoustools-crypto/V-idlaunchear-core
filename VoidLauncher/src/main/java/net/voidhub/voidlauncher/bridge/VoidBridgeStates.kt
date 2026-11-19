@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import android.view.PointerIcon as NativePointerIcon
 
-object ZLBridgeStates {
+object VoidBridgeStates {
 
     private val _cursorMode = MutableStateFlow(CURSOR_ENABLED)
     /** 状态：指针模式（启用、禁用） */

@@ -45,7 +45,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import net.voidhub.voidlauncher.R
 import net.voidhub.voidlauncher.bridge.CursorShape
-import net.voidhub.voidlauncher.bridge.ZLBridgeStates
+import net.voidhub.voidlauncher.bridge.VoidBridgeStates
 import net.voidhub.voidlauncher.path.PathManager
 import net.voidhub.voidlauncher.setting.AllSettings
 import net.voidhub.voidlauncher.setting.enums.MouseControlMode
@@ -176,7 +176,7 @@ fun VirtualPointerLayout(
     }
 
     Box(modifier = modifier) {
-        val cursorShape by ZLBridgeStates.cursorShape.collectAsStateWithLifecycle()
+        val cursorShape by VoidBridgeStates.cursorShape.collectAsStateWithLifecycle()
 
         if (showMousePointer) {
             MousePointer(

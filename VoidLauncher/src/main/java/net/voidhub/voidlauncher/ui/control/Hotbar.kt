@@ -70,7 +70,7 @@ import com.movtery.inputmap.keycodes.LwjglGlfwKeycode
 import com.movtery.inputmap.keycodes.SWAP_OFFHAND
 import com.movtery.inputmap.keycodes.SWAP_OFFHAND_VALUE
 import net.voidhub.voidlauncher.R
-import net.voidhub.voidlauncher.bridge.ZLBridgeStates
+import net.voidhub.voidlauncher.bridge.VoidBridgeStates
 import net.voidhub.voidlauncher.game.keycodes.mapToKeycode
 import net.voidhub.voidlauncher.game.launch.MCOptions
 import net.voidhub.voidlauncher.setting.AllSettings
@@ -153,7 +153,7 @@ fun BoxScope.MinecraftHotbar(
     when (rule) {
         HotbarRule.Auto -> {
             val optionsChangeKey by MCOptions.refreshKey.collectAsStateWithLifecycle()
-            val windowChangeKey by ZLBridgeStates.windowChangeKey.collectAsStateWithLifecycle()
+            val windowChangeKey by VoidBridgeStates.windowChangeKey.collectAsStateWithLifecycle()
             val renderSize = rememberGameRenderSize(screenSize)
             LaunchedEffect(
                 isGrabbing, optionsChangeKey, screenSize, density,

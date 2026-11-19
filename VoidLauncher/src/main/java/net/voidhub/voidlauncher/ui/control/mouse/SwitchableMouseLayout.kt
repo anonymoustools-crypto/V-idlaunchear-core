@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.voidhub.voidlauncher.bridge.CURSOR_DISABLED
 import net.voidhub.voidlauncher.bridge.CURSOR_ENABLED
-import net.voidhub.voidlauncher.bridge.ZLBridgeStates
+import net.voidhub.voidlauncher.bridge.VoidBridgeStates
 import net.voidhub.voidlauncher.setting.AllSettings
 import net.voidhub.voidlauncher.setting.enums.MouseControlMode
 import net.voidhub.voidlauncher.setting.enums.MouseTouchBlockMode
@@ -222,7 +222,7 @@ fun SwitchableMouseLayout(
     }
 
     Box(modifier = modifier) {
-        val cursorShape by ZLBridgeStates.cursorShape.collectAsStateWithLifecycle()
+        val cursorShape by VoidBridgeStates.cursorShape.collectAsStateWithLifecycle()
 
         if (showMousePointer) {
             MousePointer(

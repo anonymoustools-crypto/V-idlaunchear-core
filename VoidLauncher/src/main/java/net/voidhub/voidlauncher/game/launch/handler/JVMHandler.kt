@@ -29,7 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.IntSize
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withSave
-import net.voidhub.voidlauncher.bridge.ZLBridge
+import net.voidhub.voidlauncher.bridge.VoidBridge
 import net.voidhub.voidlauncher.game.input.AWTInputEvent
 import net.voidhub.voidlauncher.game.launch.JvmLauncher
 import net.voidhub.voidlauncher.ui.control.input.TextInputMode
@@ -79,7 +79,7 @@ class JVMHandler(
                     canvas = surface.lockCanvas(null)
                     canvas?.drawRGB(0, 0, 0)
 
-                    ZLBridge.renderAWTScreenFrame()?.let { rgbArray ->
+                    VoidBridge.renderAWTScreenFrame()?.let { rgbArray ->
                         canvas?.withSave {
                             rgbArrayBitmap.setPixels(
                                 rgbArray,
@@ -123,7 +123,7 @@ class JVMHandler(
     }
 
     override fun sendMouseRight(isPressed: Boolean) {
-        ZLBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isPressed)
+        VoidBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isPressed)
     }
 
     @Composable

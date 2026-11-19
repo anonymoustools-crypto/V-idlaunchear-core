@@ -51,7 +51,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import net.voidhub.voidlauncher.bridge.ZLNativeInvoker;
+import net.voidhub.voidlauncher.bridge.VoidNativeInvoker;
 import net.voidhub.voidlauncher.game.sdl.SdlBridge;
 import net.voidhub.voidlauncher.ui.theme.NativeThemeUtilsKt;
 import net.voidhub.voidlauncher.utils.logging.Logger;
@@ -1932,7 +1932,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public static boolean openURL(String url)
     {
         try {
-            ZLNativeInvoker.openLink(url);
+            VoidNativeInvoker.openLink(url);
         } catch (Exception ex) {
             return false;
         }

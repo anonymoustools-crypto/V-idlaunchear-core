@@ -35,8 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import net.voidhub.voidlauncher.R
-import net.voidhub.voidlauncher.bridge.ZLBridge
-import net.voidhub.voidlauncher.bridge.ZLNativeInvoker
+import net.voidhub.voidlauncher.bridge.VoidBridge
+import net.voidhub.voidlauncher.bridge.VoidNativeInvoker
 import net.voidhub.voidlauncher.game.input.AWTCharSender
 import net.voidhub.voidlauncher.game.input.AWTInputEvent
 import net.voidhub.voidlauncher.ui.components.TouchableButton
@@ -59,7 +59,7 @@ fun JVMScreen(
         operation = forceCloseState,
         onChange = { forceCloseState = it },
         onForceClose = {
-            ZLNativeInvoker.jvmExit(0, false)
+            VoidNativeInvoker.jvmExit(0, false)
         },
         text = stringResource(R.string.game_dialog_force_close_message)
     )
@@ -75,15 +75,15 @@ fun JVMScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         SimpleMouseControlLayout(
             modifier = Modifier.fillMaxSize(),
-            sendMousePress = { ZLBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK) },
+            sendMousePress = { VoidBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK) },
             sendMouseCodePress = { code, pressed ->
-                ZLBridge.sendMousePress(code, pressed)
+                VoidBridge.sendMousePress(code, pressed)
             },
             sendMouseLongPress = { isPressed ->
-                ZLBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isPressed)
+                VoidBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isPressed)
             },
             placeMouse = { mouseX, mouseY ->
-                ZLBridge.sendMousePos((mouseX * 0.8).toInt(), (mouseY * 0.8).toInt())
+                VoidBridge.sendMousePos((mouseX * 0.8).toInt(), (mouseY * 0.8).toInt())
             }
         )
 
@@ -168,9 +168,9 @@ private fun ButtonsLayout(
                 start.linkTo(parent.start)
             },
             onClick = {
-                ZLBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 1)
-                ZLBridge.sendKey(' ', AWTInputEvent.VK_C)
-                ZLBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0)
+                VoidBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 1)
+                VoidBridge.sendKey(' ', AWTInputEvent.VK_C)
+                VoidBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0)
             },
             text = stringResource(R.string.generic_copy)
         )
@@ -180,9 +180,9 @@ private fun ButtonsLayout(
                 start.linkTo(parent.start)
             },
             onClick = {
-                ZLBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 1)
-                ZLBridge.sendKey(' ', AWTInputEvent.VK_V)
-                ZLBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0)
+                VoidBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 1)
+                VoidBridge.sendKey(' ', AWTInputEvent.VK_V)
+                VoidBridge.sendKey(' ', AWTInputEvent.VK_CONTROL, 0)
             },
             text = stringResource(R.string.generic_paste)
         )
@@ -210,7 +210,7 @@ private fun ButtonsLayout(
                 start.linkTo(parent.start)
             },
             onTouch = { isPressed ->
-                ZLBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isPressed)
+                VoidBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isPressed)
             },
             text = stringResource(R.string.game_button_mouse_left)
         )
@@ -220,7 +220,7 @@ private fun ButtonsLayout(
                 start.linkTo(parent.start)
             },
             onTouch = { isPressed ->
-                ZLBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isPressed)
+                VoidBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isPressed)
             },
             text = stringResource(R.string.game_button_mouse_right)
         )
@@ -231,7 +231,7 @@ private fun ButtonsLayout(
                 end.linkTo(anchor = right.start, margin = 8.dp)
             },
             onClick = {
-                ZLBridge.moveWindow(0, -10)
+                VoidBridge.moveWindow(0, -10)
             },
             text = "▲"
         )
@@ -241,7 +241,7 @@ private fun ButtonsLayout(
                 end.linkTo(parent.end)
             },
             onClick = {
-                ZLBridge.moveWindow(10, 0)
+                VoidBridge.moveWindow(10, 0)
             },
             text = "▶"
         )
@@ -251,7 +251,7 @@ private fun ButtonsLayout(
                 end.linkTo(anchor = right.start, margin = 8.dp)
             },
             onClick = {
-                ZLBridge.moveWindow(0, 10)
+                VoidBridge.moveWindow(0, 10)
             },
             text = "▼"
         )
@@ -261,7 +261,7 @@ private fun ButtonsLayout(
                 end.linkTo(parent.end)
             },
             onClick = {
-                ZLBridge.moveWindow(-10, 0)
+                VoidBridge.moveWindow(-10, 0)
             },
             text = "◀"
         )

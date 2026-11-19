@@ -23,7 +23,7 @@ import android.content.Context;
 import androidx.annotation.Keep;
 
 @Keep
-public final class ZLBridge {
+public final class VoidBridge {
     //AWT
     public static final int EVENT_TYPE_CHAR = 1000;
     public static final int EVENT_TYPE_CURSOR_POS = 1003;

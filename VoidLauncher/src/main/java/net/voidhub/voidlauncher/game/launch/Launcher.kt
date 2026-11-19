@@ -27,8 +27,8 @@ import androidx.annotation.CallSuper
 import androidx.compose.ui.unit.IntSize
 import net.voidhub.voidlauncher.BuildKeys
 import net.voidhub.voidlauncher.bridge.LoggerBridge
-import net.voidhub.voidlauncher.bridge.ZLBridge
-import net.voidhub.voidlauncher.bridge.ZLNativeInvoker
+import net.voidhub.voidlauncher.bridge.VoidBridge
+import net.voidhub.voidlauncher.bridge.VoidNativeInvoker
 import net.voidhub.voidlauncher.components.Components
 import net.voidhub.voidlauncher.components.InstallableItem
 import net.voidhub.voidlauncher.components.UnpackComponentsTask
@@ -136,9 +136,9 @@ abstract class Launcher(
         screenSize: IntSize,
         useLocalLanguage: Boolean = true
     ): Int {
-        ZLNativeInvoker.staticLauncher = this
+        VoidNativeInvoker.staticLauncher = this
 
-        ZLBridge.setLdLibraryPath(getRuntimeLibraryPath())
+        VoidBridge.setLdLibraryPath(getRuntimeLibraryPath())
 
         LoggerBridge.appendTitle("Env Map")
         setEnv(screenSize)
@@ -191,9 +191,9 @@ abstract class Launcher(
             LoggerBridge.appendInfo(arg)
         }
 
-        ZLBridge.setupExitMethod(context.applicationContext)
-        ZLBridge.initializeGameExitHook()
-        ZLBridge.chdir(chdir())
+        VoidBridge.setupExitMethod(context.applicationContext)
+        VoidBridge.initializeGameExitHook()
+        VoidBridge.chdir(chdir())
 
         val exitCode = VMLauncher.launchJVM(args.toTypedArray())
         LoggerBridge.append("Java Exit code: $exitCode")
@@ -496,8 +496,8 @@ abstract class Launcher(
             map["AWTSTUB_WIDTH"] = screenSize.width.toString()
             map["AWTSTUB_HEIGHT"] = screenSize.height.toString()
             map["MOD_ANDROID_RUNTIME"] = PathManager.DIR_RUNTIME_MOD?.absolutePath ?: ""
-            map["DALVIK_JAVAVM"] = ZLBridge.getJavaVMPointer().toString()
-            map["DALVIK_APPLICATION"] = ZLBridge.jObjectToString(GlobalContext.applicationContext)
+            map["DALVIK_JAVAVM"] = VoidBridge.getJavaVMPointer().toString()
+            map["DALVIK_APPLICATION"] = VoidBridge.jObjectToString(GlobalContext.applicationContext)
             map["ALSOFT_DRIVERS"] = "opensl"
 
             if (AllSettings.dumpShaders.getValue()) map["LIBGL_VGPU_DUMP"] = "1"
@@ -516,24 +516,24 @@ abstract class Launcher(
             javaLibDir = "$runtimeHome/jre${getJavaLibDir()}"
         }
         val jvmLibDir = "$javaLibDir${getJvmLibDir()}"
-        ZLBridge.dlopen("$jliLibDir/libjli.so")
-        ZLBridge.dlopen("$jvmLibDir/libjvm.so")
-        ZLBridge.dlopen("$javaLibDir/libfreetype.so")
-        ZLBridge.dlopen("$javaLibDir/libverify.so")
-        ZLBridge.dlopen("$javaLibDir/libjava.so")
-        ZLBridge.dlopen("$javaLibDir/libnet.so")
-        ZLBridge.dlopen("$javaLibDir/libnio.so")
-        ZLBridge.dlopen("$javaLibDir/libawt.so")
-        ZLBridge.dlopen("$javaLibDir/libawt_headless.so")
-        ZLBridge.dlopen("$javaLibDir/libfontmanager.so")
+        VoidBridge.dlopen("$jliLibDir/libjli.so")
+        VoidBridge.dlopen("$jvmLibDir/libjvm.so")
+        VoidBridge.dlopen("$javaLibDir/libfreetype.so")
+        VoidBridge.dlopen("$javaLibDir/libverify.so")
+        VoidBridge.dlopen("$javaLibDir/libjava.so")
+        VoidBridge.dlopen("$javaLibDir/libnet.so")
+        VoidBridge.dlopen("$javaLibDir/libnio.so")
+        VoidBridge.dlopen("$javaLibDir/libawt.so")
+        VoidBridge.dlopen("$javaLibDir/libawt_headless.so")
+        VoidBridge.dlopen("$javaLibDir/libfontmanager.so")
         locateLibs(File(runtimeHome)).forEach { file ->
-            ZLBridge.dlopen(file.absolutePath)
+            VoidBridge.dlopen(file.absolutePath)
         }
     }
 
     @CallSuper
     protected open fun dlopenEngine() {
-        ZLBridge.dlopen("${PathManager.DIR_NATIVE_LIB}/libopenal.so")
+        VoidBridge.dlopen("${PathManager.DIR_NATIVE_LIB}/libopenal.so")
     }
 }
 
