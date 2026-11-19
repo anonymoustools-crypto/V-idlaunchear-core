@@ -49,7 +49,7 @@ excluded = [
 ]
 for old, new in replacements:
     result = subprocess.run(
-        ["git", "grep", "-IlZ", "-F", old.decode(), "--", ".", *excluded],
+        ["git", "grep", "-Ilz", "-F", old.decode(), "--", ".", *excluded],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
