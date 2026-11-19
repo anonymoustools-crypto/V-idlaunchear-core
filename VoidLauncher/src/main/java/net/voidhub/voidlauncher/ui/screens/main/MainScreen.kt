@@ -219,7 +219,7 @@ fun MainScreen(
         contentColor = onBackgroundColor()
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val desktopLayout = maxWidth >= 720.dp
+            val desktopLayout = maxWidth >= 480.dp
             Row(modifier = Modifier.fillMaxSize()) {
                 if (desktopLayout) {
                     DesktopSidebar(
