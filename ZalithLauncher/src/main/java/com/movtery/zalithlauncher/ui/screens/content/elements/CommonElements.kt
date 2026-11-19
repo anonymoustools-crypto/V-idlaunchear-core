@@ -523,6 +523,7 @@ private fun InstallingTaskItem(
             TaskStage.PREPARING -> R.drawable.ic_schedule_outlined
             TaskStage.RUNNING -> runningIcon ?: R.drawable.ic_download
             TaskStage.COMPLETED -> R.drawable.ic_check
+            else -> R.drawable.ic_warning_filled
         }
         Icon(
             modifier = Modifier.size(24.dp),

@@ -91,7 +91,7 @@ class ModProfileStore(
                 mod.localMod.disable()
             }
         }
-        return enabled - installedNames
+        return (enabled - installedNames).toList()
     }
 
     fun delete(profileName: String): Boolean {
