@@ -56,10 +56,10 @@ jobs:
       - name: Build ARM64 Debug APK
         run: |
           chmod +x gradlew
-          ./gradlew ZalithLauncher:assembleDebug -Darch=arm64
+          ./gradlew VoidLauncher:assembleDebug -Darch=arm64
       - name: Upload verification APK
         uses: actions/upload-artifact@v7
         with:
           name: VøidLaunchear-latest-main-arm64-debug
-          path: ZalithLauncher/build/outputs/apk/debug/*.apk
+          path: VoidLauncher/build/outputs/apk/debug/*.apk
           if-no-files-found: error
