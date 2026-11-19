@@ -188,9 +188,9 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF101014),
-                            Color(0xFF25252B),
-                            Color(0xFF151519)
+                            Color(0xFF000000),
+                            Color(0xFF000000),
+                            Color(0xFF000000)
                         )
                     )
                 )
@@ -215,7 +215,7 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 ) {
                     Text(
                         text = "VØID  /  CONTENT SYSTEM",
-                        color = Color(0xFFE6A8B3),
+                        color = Color(0xFF000000),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Black
                     )
@@ -227,7 +227,7 @@ private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
                 }
                 Surface(
                     shape = RoundedCornerShape(18.dp),
-                    color = Color(0xFF9F3045),
+                    color = Color(0xFF000000),
                     contentColor = Color.White
                 ) {
                     Column(
@@ -288,7 +288,7 @@ private fun TabMenu(
                 Surface(
                     onClick = { backStack.navigateOnce(item.key) },
                     shape = RoundedCornerShape(50),
-                    color = if (selected) Color(0xFF9F3045) else Color(0xFF183A35),
+                    color = if (selected) Color(0xFF000000) else Color(0xFF000000),
                     contentColor = Color.White,
                     tonalElevation = if (selected) 4.dp else 0.dp
                 ) {
@@ -310,7 +310,7 @@ private fun TabMenu(
             Surface(
                 onClick = { backStack.navigateOnce(NormalNavKey.SearchId) },
                 shape = RoundedCornerShape(50),
-                color = Color(0xFF183A35),
+                color = Color(0xFF000000),
                 contentColor = Color.White
             ) {
                 Row(
@@ -318,7 +318,7 @@ private fun TabMenu(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("⌕", style = MaterialTheme.typography.titleLarge, color = Color(0xFFD5A6FF))
+                    Text("⌕", style = MaterialTheme.typography.titleLarge, color = Color(0xFF000000))
                     Text(
                         text = "Search by ID",
                         style = MaterialTheme.typography.labelLarge,
