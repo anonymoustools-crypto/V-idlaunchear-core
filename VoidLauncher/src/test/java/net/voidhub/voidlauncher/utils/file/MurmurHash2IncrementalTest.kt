@@ -31,11 +31,18 @@ class MurmurHash2IncrementalTest {
 
     @Test
     fun testTwoWay() {
-        val file = File("F:\\Download\\geckolib-forge-1.21.8-5.2.2.jar")
-        val hash1 = way1(file)
-        println("Way 1 hash = $hash1")
-        val hash2 = way2(file)
-        println("Way 2 hash = $hash2")
+        val dir = createTempDirectory("murmur2-two-way").toFile()
+        try {
+            val file = dir.resolve("sample.jar")
+            val bytes = ByteArray(16_384) { index ->
+                ((index * 31) and 0xff).toByte()
+            }
+            Files.write(file.toPath(), bytes)
+
+            assertEquals(way1(file), way2(file))
+        } finally {
+            dir.deleteRecursively()
+        }
     }
 
     //Old
