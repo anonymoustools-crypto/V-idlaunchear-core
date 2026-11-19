@@ -39,13 +39,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 private const val ANNOUNCEMENT_FEED_URL =
-    "https://raw.githubusercontent.com/gilbertojamindang-netizen/V-idlaunchear-core/main/updates/announcement-feed.json"
+    "https://raw.githubusercontent.com/anonymoustools-crypto/V-idlaunchear-core/feature/void-roadmap-completion/updates/announcement-feed.json"
 private const val ANNOUNCEMENT_PREFS = "void_announcement_state"
 private const val LAST_SHOWN_ID = "last_shown_announcement"
 private const val CACHED_FEED = "cached_announcement_feed"
 private const val MAX_FEED_BYTES = 64 * 1024
 private const val RELEASES_URL =
-    "https://github.com/gilbertojamindang-netizen/V-idlaunchear-core/releases"
+    "https://github.com/anonymoustools-crypto/V-idlaunchear-core/releases"
 
 private data class LauncherAnnouncement(
     val id: String,
@@ -310,7 +310,7 @@ private fun fetchAnnouncement(context: Context): LauncherAnnouncement? {
 private fun fetchLatestRelease(): Pair<String, String>? {
     var connection: HttpURLConnection? = null
     return try {
-        connection = (URL("https://api.github.com/repos/gilbertojamindang-netizen/V-idlaunchear-core/releases/latest")
+        connection = (URL("https://api.github.com/repos/anonymoustools-crypto/V-idlaunchear-core/releases/latest")
             .openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 6_000
