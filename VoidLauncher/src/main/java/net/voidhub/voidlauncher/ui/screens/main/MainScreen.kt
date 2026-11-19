@@ -217,89 +217,188 @@ fun MainScreen(
         color = backgroundColor,
         contentColor = onBackgroundColor()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            TopBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF000000)),
-                mainScreenKey = mainScreenKey,
-                inLauncherScreen = inLauncherScreen,
-                taskRunning = taskRunning,
-                isTasksExpanded = isTaskMenuExpanded,
-                contentColor = onBackgroundColor(),
-                onScreenBack = {
-                    screenBackStackModel.mainScreen.backStack.removeFirstOrNull()
-                },
-                toMainScreen = toMainScreen,
-                toSettingsScreen = {
-                    screenBackStackModel.mainScreen.removeAndNavigateTo(
-                        removes = screenBackStackModel.clearBeforeNavKeys,
-                        screenKey = screenBackStackModel.settingsScreen
-                    )
-                },
-                toDownloadScreen = {
-                    screenBackStackModel.navigateToDownload()
-                },
-                toMultiplayerScreen = {
-                    screenBackStackModel.mainScreen.removeAndNavigateTo(
-                        removes = screenBackStackModel.clearBeforeNavKeys,
-                        screenKey = NormalNavKey.Multiplayer
-                    )
-                },
-                openFileManager = {
-                    eventViewModel.sendEvent(
-                        EventViewModel.Event.OpenFileManager(
-                            rootPath = PathManager.DIR_FILES_EXTERNAL.absolutePath
-                        )
-                    )
-                },
-                changeExpandedState = {
-                    changeTasksExpandedState()
-                },
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                NavStateHost(rootKey = screenBackStackModel.mainScreen) {
-                    NavigationUI(
-                        modifier = Modifier.fillMaxSize(),
-                        screenBackStackModel = screenBackStackModel,
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val desktopLayout = maxWidth >= 720.dp
+            Row(modifier = Modifier.fillMaxSize()) {
+                if (desktopLayout) {
+                    DesktopSidebar(
+                        inLauncherScreen = inLauncherScreen,
+                        inMultiplayerScreen = mainScreenKey is NormalNavKey.Multiplayer,
+                        inDownloadScreen = mainScreenKey is NestedNavKey.Download,
+                        inSettingsScreen = mainScreenKey is NestedNavKey.Settings,
                         toMainScreen = toMainScreen,
-                        eventViewModel = eventViewModel,
-                        modpackImportViewModel = modpackImportViewModel,
-                        modifyVersionViewModel = modifyVersionViewModel,
-                        submitError = submitError
+                        toMultiplayerScreen = {
+                            screenBackStackModel.mainScreen.removeAndNavigateTo(
+                                removes = screenBackStackModel.clearBeforeNavKeys,
+                                screenKey = NormalNavKey.Multiplayer
+                            )
+                        },
+                        toDownloadScreen = { screenBackStackModel.navigateToDownload() },
+                        toSettingsScreen = {
+                            screenBackStackModel.mainScreen.removeAndNavigateTo(
+                                removes = screenBackStackModel.clearBeforeNavKeys,
+                                screenKey = screenBackStackModel.settingsScreen
+                            )
+                        }
                     )
                 }
+                Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                    TopBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(if (desktopLayout) 56.dp else 48.dp)
+                            .padding(horizontal = if (desktopLayout) 12.dp else 8.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(if (desktopLayout) 12.dp else 16.dp))
+                            .background(Color(0xFF000000)),
+                        mainScreenKey = mainScreenKey,
+                        inLauncherScreen = inLauncherScreen,
+                        taskRunning = taskRunning,
+                        isTasksExpanded = isTaskMenuExpanded,
+                        contentColor = onBackgroundColor(),
+                        desktopLayout = desktopLayout,
+                        onScreenBack = {
+                            screenBackStackModel.mainScreen.backStack.removeFirstOrNull()
+                        },
+                        toMainScreen = toMainScreen,
+                        toSettingsScreen = {
+                            screenBackStackModel.mainScreen.removeAndNavigateTo(
+                                removes = screenBackStackModel.clearBeforeNavKeys,
+                                screenKey = screenBackStackModel.settingsScreen
+                            )
+                        },
+                        toDownloadScreen = {
+                            screenBackStackModel.navigateToDownload()
+                        },
+                        toMultiplayerScreen = {
+                            screenBackStackModel.mainScreen.removeAndNavigateTo(
+                                removes = screenBackStackModel.clearBeforeNavKeys,
+                                screenKey = NormalNavKey.Multiplayer
+                            )
+                        },
+                        openFileManager = {
+                            eventViewModel.sendEvent(
+                                EventViewModel.Event.OpenFileManager(
+                                    rootPath = PathManager.DIR_FILES_EXTERNAL.absolutePath
+                                )
+                            )
+                        },
+                        changeExpandedState = { changeTasksExpandedState() },
+                    )
 
-                TaskMenu(
-                    isExpanded = isTaskMenuExpanded,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(0.3f)
-                        .align(Alignment.CenterStart)
-                        .padding(all = 6.dp)
-                ) {
-                    changeTasksExpandedState()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        NavStateHost(rootKey = screenBackStackModel.mainScreen) {
+                            NavigationUI(
+                                modifier = Modifier.fillMaxSize(),
+                                screenBackStackModel = screenBackStackModel,
+                                toMainScreen = toMainScreen,
+                                eventViewModel = eventViewModel,
+                                modpackImportViewModel = modpackImportViewModel,
+                                modifyVersionViewModel = modifyVersionViewModel,
+                                submitError = submitError
+                            )
+                        }
+
+                        TaskMenu(
+                            isExpanded = isTaskMenuExpanded,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(if (desktopLayout) 0.24f else 0.3f)
+                                .align(Alignment.CenterStart)
+                                .padding(all = 6.dp)
+                        ) { changeTasksExpandedState() }
+
+                        TaskFloatingIndicator(
+                            isVisible = !isTaskMenuExpanded,
+                            modifier = Modifier.align(Alignment.BottomEnd).padding(14.dp),
+                            onClick = { changeTasksExpandedState() }
+                        )
+                    }
                 }
-
-                TaskFloatingIndicator(
-                    isVisible = !isTaskMenuExpanded,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(14.dp),
-                    onClick = { changeTasksExpandedState() }
-                )
             }
+        }
+    }
+}
+
+@Composable
+private fun DesktopSidebar(
+    inLauncherScreen: Boolean,
+    inMultiplayerScreen: Boolean,
+    inDownloadScreen: Boolean,
+    inSettingsScreen: Boolean,
+    toMainScreen: () -> Unit,
+    toMultiplayerScreen: () -> Unit,
+    toDownloadScreen: () -> Unit,
+    toSettingsScreen: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.width(184.dp).fillMaxHeight(),
+        color = Color(0xFF080808),
+        contentColor = Color.White
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "VØID",
+                modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 2.dp),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Black,
+                letterSpacing = 3.sp
+            )
+            Text(
+                text = "GAME CENTER",
+                modifier = Modifier.padding(start = 12.dp, bottom = 22.dp),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color(0xFFAAAAAA),
+                letterSpacing = 2.sp
+            )
+            DesktopNavItem("HOME", "⌂", inLauncherScreen, toMainScreen)
+            DesktopNavItem("MULTIPLAYER", "◎", inMultiplayerScreen, toMultiplayerScreen)
+            DesktopNavItem("DOWNLOADS", "↓", inDownloadScreen, toDownloadScreen)
+            DesktopNavItem("SETTINGS", "⚙", inSettingsScreen, toSettingsScreen)
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "VOID LAUNCHEAR",
+                modifier = Modifier.padding(start = 12.dp, bottom = 8.dp),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color(0xFF777777),
+                letterSpacing = 1.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun DesktopNavItem(
+    label: String,
+    symbol: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth().height(46.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = if (selected) Color.White else Color.Transparent,
+        contentColor = if (selected) Color.Black else Color(0xFFCCCCCC)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(text = symbol, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (selected) androidx.compose.ui.text.font.FontWeight.Black else androidx.compose.ui.text.font.FontWeight.SemiBold,
+                letterSpacing = 0.6.sp
+            )
         }
     }
 }
@@ -475,32 +574,26 @@ private fun <E: TitledNavKey> TopBar(
                     )
                 }
 
-                TopBarRailItem(
-                    selected = inMultiplayerScreen,
-                    painter = painterResource(R.drawable.ic_group_filled),
-                    text = stringResource(R.string.terracotta),
-                    onClick = {
-                        if (!inMultiplayerScreen) toMultiplayerScreen()
-                    },
-                )
-
-                TopBarRailItem(
-                    selected = inDownloadScreen,
-                    painter = painterResource(R.drawable.ic_download_2_filled),
-                    text = stringResource(R.string.generic_download),
-                    onClick = {
-                        if (!inDownloadScreen) toDownloadScreen()
-                    },
-                )
-
-                TopBarRailItem(
-                    selected = inSettingsScreen,
-                    painter = painterResource(R.drawable.ic_settings_filled),
-                    text = stringResource(R.string.generic_setting),
-                    onClick = {
-                        if (!inSettingsScreen) toSettingsScreen()
-                    },
-                )
+                if (!desktopLayout) {
+                    TopBarRailItem(
+                        selected = inMultiplayerScreen,
+                        painter = painterResource(R.drawable.ic_group_filled),
+                        text = stringResource(R.string.terracotta),
+                        onClick = { if (!inMultiplayerScreen) toMultiplayerScreen() },
+                    )
+                    TopBarRailItem(
+                        selected = inDownloadScreen,
+                        painter = painterResource(R.drawable.ic_download_2_filled),
+                        text = stringResource(R.string.generic_download),
+                        onClick = { if (!inDownloadScreen) toDownloadScreen() },
+                    )
+                    TopBarRailItem(
+                        selected = inSettingsScreen,
+                        painter = painterResource(R.drawable.ic_settings_filled),
+                        text = stringResource(R.string.generic_setting),
+                        onClick = { if (!inSettingsScreen) toSettingsScreen() },
+                    )
+                }
             }
         }
     }
