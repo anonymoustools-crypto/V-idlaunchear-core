@@ -1,4 +1,5 @@
 name: Build VøidLaunchear debug APK
+# CI includes portable unit tests and Vøid namespace verification.
 
 on:
   push:
