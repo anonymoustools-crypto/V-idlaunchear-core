@@ -227,7 +227,7 @@ fun MainScreen(
                     .height(48.dp)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF151519)),
+                    .background(Color(0xFF000000)),
                 mainScreenKey = mainScreenKey,
                 inLauncherScreen = inLauncherScreen,
                 taskRunning = taskRunning,
@@ -742,12 +742,12 @@ private fun TaskFloatingIndicator(
         Surface(
             onClick = onClick,
             shape = RoundedCornerShape(18.dp),
-            color = Color(0xFF102638),
+            color = Color(0xFF000000),
             contentColor = Color.White,
             shadowElevation = 8.dp,
             modifier = Modifier.border(
                 width = 1.dp,
-                color = Color(0xFF9F3045),
+                color = Color(0xFF000000),
                 shape = RoundedCornerShape(18.dp)
             )
         ) {
@@ -756,13 +756,13 @@ private fun TaskFloatingIndicator(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = "↓", style = MaterialTheme.typography.titleMedium, color = Color(0xFFB8DDF5))
+                Text(text = "↓", style = MaterialTheme.typography.titleMedium, color = Color(0xFF000000))
                 Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                     Text(text = "DOWNLOADS", style = MaterialTheme.typography.labelMedium)
                     Text(
                         text = if (failedTasks.isEmpty()) "$visibleTasks active • tap to view" else "${tasks.size} active • ${failedTasks.size} failed",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFFB8C4CE)
+                        color = Color(0xFF000000)
                     )
                 }
             }
@@ -898,11 +898,11 @@ private fun TaskItem(
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = Color(0xFF9F3045).copy(alpha = 0.55f),
+                color = Color(0xFF000000).copy(alpha = 0.55f),
                 shape = RoundedCornerShape(18.dp)
             ),
         shape = RoundedCornerShape(18.dp),
-        color = Color(0xFF102638),
+        color = Color(0xFF000000),
         contentColor = Color.White,
         tonalElevation = 2.dp
     ) {
@@ -936,7 +936,7 @@ private fun TaskItem(
                     Text(
                         text = "DOWNLOAD FAILED • TAP ↻ TO RETRY",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFFFFB4AB)
+                        color = Color(0xFF000000)
                     )
                 }
                 taskMessage?.let { message ->
