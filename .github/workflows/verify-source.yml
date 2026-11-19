@@ -62,6 +62,10 @@ jobs:
           test -f "$ndk/source.properties"
           echo "ANDROID_NDK_HOME=$ndk" >> "$GITHUB_ENV"
 
+      - name: Audit upstream launcher endpoints
+        run: |
+          grep -RInE 'URL_PROJECT_INFO|URL_COMMUNITY|URL_WEBLATE|URL_SUPPORT|Zalith-Info|zalithlauncher2|ifdian.net/a/MovTery' VoidLauncher/src/main/java --include='*.kt' || true
+
       - name: Compile app Kotlin sources
         run: |
           chmod +x gradlew
