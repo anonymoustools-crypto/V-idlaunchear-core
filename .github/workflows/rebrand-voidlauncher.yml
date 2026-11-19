@@ -28,5 +28,10 @@ jobs:
           .github/scripts/rebrand-voidlauncher.sh
 
       - name: Audit remaining upstream URL references
+        shell: bash
         run: |
-          grep -RInE 'URL_PROJECT_INFO|URL_COMMUNITY|URL_WEBLATE|URL_SUPPORT|Zalith-Info|zalithlauncher2|zalith-info|VoidLauncher/VoidLauncher2|ifdian.net/a/MovTery' VoidLauncher/src/main/java --include='*.kt' || true
+          if grep -RInE 'https?://(api\\.)?github\\.com/(VoidLauncher/Zalith-Info|VoidLauncher/VoidLauncher2)|zalithlauncher2|zalith-info|ifdian\\.net/a/MovTery|com\\.movtery\\.activity|com\\.movtery\\.zalithlauncher' VoidLauncher/src/main --include='*.kt' --include='*.xml'; then
+            echo "::error::Legacy Zalith service URLs or app identifiers remain in the Vøid app source."
+            exit 1
+          fi
+          echo "No legacy Zalith service URLs or app identifiers found."
