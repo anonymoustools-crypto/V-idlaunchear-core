@@ -44,4 +44,4 @@ jobs:
           name: VoidLaunchear-debug-apk
           path: ZalithLauncher/build/outputs/apk/debug/*.apk
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 7
