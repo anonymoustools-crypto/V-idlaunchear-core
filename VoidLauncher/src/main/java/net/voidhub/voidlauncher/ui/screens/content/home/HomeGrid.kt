@@ -373,7 +373,7 @@ fun HomeGrid(
                     ) {
                         Text(
                             text = "VØID CONTROL DECK",
-                            color = Color(0xFF000000),
+                            color = Color.White,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 2.1.sp
@@ -381,21 +381,21 @@ fun HomeGrid(
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
                             text = "JAVA EDITION",
-                            color = Color(0xFF000000),
+                            color = Color.White,
                             style = MaterialTheme.typography.labelSmall,
                             letterSpacing = 1.sp
                         )
                     }
                     Text(
                         text = "YOUR NEXT\nWORLD STARTS HERE.",
-                        color = Color(0xFF000000),
+                        color = Color.White,
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Black,
                         lineHeight = 31.sp
                     )
                     Text(
                         text = "Build your setup. Choose a version. Enter your world.",
-                        color = Color(0xFF000000),
+                        color = Color.White,
                         style = MaterialTheme.typography.bodySmall
                     )
                     Row(
@@ -412,7 +412,7 @@ fun HomeGrid(
                             ) {
                                 Text(
                                     text = label,
-                                    color = Color(0xFF000000),
+                                    color = Color.White,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 8.sp,
@@ -443,14 +443,14 @@ fun HomeGrid(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = "VØID PERFORMANCE ENGINE",
-                                color = Color(0xFF000000),
+                                color = Color.White,
                                 style = MaterialTheme.typography.labelLarge,
                                 fontWeight = FontWeight.ExtraBold,
                                 letterSpacing = 1.1.sp
                             )
                             Text(
                                 text = "DEVICE PROFILE • SMART RECOMMENDATIONS",
-                                color = Color(0xFF000000),
+                                color = Color.White,
                                 style = MaterialTheme.typography.labelSmall,
                                 letterSpacing = 0.55.sp
                             )
@@ -462,7 +462,7 @@ fun HomeGrid(
                         ) {
                             Text(
                                 text = performanceAdvice.profile.name.replace('_', ' '),
-                                color = Color(0xFF000000),
+                                color = Color.White,
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold
                             )
@@ -479,7 +479,7 @@ fun HomeGrid(
                                 modifier = Modifier
                                     .weight(1f)
                                     .background(
-                                        if (selected) Color(0xFF000000) else Color.White.copy(alpha = 0.055f),
+                                        if (selected) Color(0xFF444444) else Color.White.copy(alpha = 0.055f),
                                         RoundedCornerShape(9.dp)
                                     )
                                     .clickable {
@@ -489,7 +489,7 @@ fun HomeGrid(
                                             .apply()
                                     }
                                     .padding(horizontal = 5.dp, vertical = 9.dp),
-                                color = if (selected) Color.White else Color(0xFF000000),
+                                color = Color.White,
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
                                 maxLines = 1
@@ -506,11 +506,11 @@ fun HomeGrid(
                         ) {
                             Text(
                                 text = "CUSTOM ENGINE TUNING",
-                                color = Color(0xFF000000),
+                                color = Color.White,
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold
                             )
-                            Text("JAVA MEMORY • ${performanceAdvice.maxMemoryMb} MB", color = Color(0xFF000000), style = MaterialTheme.typography.labelSmall)
+                            Text("JAVA MEMORY • ${performanceAdvice.maxMemoryMb} MB", color = Color.White, style = MaterialTheme.typography.labelSmall)
                             Slider(
                                 value = customMemoryMb.toFloat().coerceIn(512f, safeCustomMemoryMb.toFloat()),
                                 onValueChange = {
@@ -521,7 +521,7 @@ fun HomeGrid(
                                 steps = if (safeCustomMemoryMb > 512) 6 else 0,
                                 enabled = safeCustomMemoryMb > 512
                             )
-                            Text("RENDER DISTANCE • $customRenderDistance CHUNKS", color = Color(0xFF000000), style = MaterialTheme.typography.labelSmall)
+                            Text("RENDER DISTANCE • $customRenderDistance CHUNKS", color = Color.White, style = MaterialTheme.typography.labelSmall)
                             Slider(
                                 value = customRenderDistance.toFloat(),
                                 onValueChange = {
@@ -531,7 +531,7 @@ fun HomeGrid(
                                 valueRange = 2f..24f,
                                 steps = 10
                             )
-                            Text("SIMULATION DISTANCE • $customSimulationDistance CHUNKS", color = Color(0xFF000000), style = MaterialTheme.typography.labelSmall)
+                            Text("SIMULATION DISTANCE • $customSimulationDistance CHUNKS", color = Color.White, style = MaterialTheme.typography.labelSmall)
                             Slider(
                                 value = customSimulationDistance.toFloat(),
                                 onValueChange = {
@@ -541,7 +541,7 @@ fun HomeGrid(
                                 valueRange = 2f..16f,
                                 steps = 6
                             )
-                            Text("ENTITY DISTANCE • $customEntityDistance%", color = Color(0xFF000000), style = MaterialTheme.typography.labelSmall)
+                            Text("ENTITY DISTANCE • $customEntityDistance%", color = Color.White, style = MaterialTheme.typography.labelSmall)
                             Slider(
                                 value = customEntityDistance.toFloat(),
                                 onValueChange = {
@@ -571,13 +571,13 @@ fun HomeGrid(
                             ) {
                                 Text(
                                     text = label,
-                                    color = Color(0xFF000000),
+                                    color = Color.White,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontSize = 8.sp
                                 )
                                 Text(
                                     text = value,
-                                    color = Color(0xFF000000),
+                                    color = Color.White,
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1
@@ -587,7 +587,7 @@ fun HomeGrid(
                     }
                     Text(
                         text = performanceAdvice.explanation,
-                        color = Color(0xFF000000),
+                        color = Color.White,
                         style = MaterialTheme.typography.bodySmall
                     )
                     Button(
@@ -609,13 +609,13 @@ fun HomeGrid(
                     performanceApplyMessage?.let { message ->
                         Text(
                             text = message,
-                            color = Color(0xFF000000),
+                            color = Color.White,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
                     Text(
                         text = "Applying first creates a local backup. Nothing changes until you confirm.",
-                        color = Color(0xFF000000),
+                        color = Color.White,
                         style = MaterialTheme.typography.labelSmall
                     )
                 }
@@ -628,10 +628,10 @@ fun HomeGrid(
             ) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                     Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                        Text("VØID CORE", color = Color(0xFF000000), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.ExtraBold)
-                        Text("LOCAL COMMAND ASSISTANT • OFFLINE", color = Color(0xFF000000), style = MaterialTheme.typography.labelSmall)
+                        Text("VØID CORE", color = Color.White, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.ExtraBold)
+                        Text("LOCAL COMMAND ASSISTANT • OFFLINE", color = Color.White, style = MaterialTheme.typography.labelSmall)
                     }
-                    Text("OPEN CONSOLE  ›", color = Color(0xFF000000), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                    Text("OPEN CONSOLE  ›", color = Color.White, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -654,10 +654,10 @@ fun HomeGrid(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                        Text("WORLD VAULT", color = Color(0xFF000000), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.ExtraBold)
-                        Text("LOCAL WORLD BACKUPS • SAFE RESTORE", color = Color(0xFF000000), style = MaterialTheme.typography.labelSmall)
+                        Text("WORLD VAULT", color = Color.White, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.ExtraBold)
+                        Text("LOCAL WORLD BACKUPS • SAFE RESTORE", color = Color.White, style = MaterialTheme.typography.labelSmall)
                     }
-                    Text("OPEN  ›", color = Color(0xFF000000), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                    Text("OPEN  ›", color = Color.White, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                 }
             }
 
