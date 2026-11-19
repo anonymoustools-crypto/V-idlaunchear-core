@@ -206,28 +206,6 @@ android {
 }
 
 
-/*
- * GameVersionNumber loads its version catalogue through Class.getResourceAsStream().
- * The catalogue lives in the app's Android assets directory, which is not on the
- * local JVM unit-test classpath. Copy only these two resources into a test-only
- * classpath directory so version-comparison tests exercise the real catalogue.
- */
-val versioningTestResourcesDir = layout.buildDirectory.dir("generated/versioning-test-resources")
-val prepareVersioningTestResources by tasks.registering(Copy::class) {
-    from("src/main/assets/game") {
-        include("versions.txt", "version-alias.csv")
-        into("assets/game")
-    }
-    into(versioningTestResourcesDir)
-}
-
-android.sourceSets.getByName("test").resources.srcDir(versioningTestResourcesDir)
-
-tasks.matching { it.name == "processDebugUnitTestJavaRes" }.configureEach {
-    dependsOn(prepareVersioningTestResources)
-}
-
-
 androidComponents {
     onVariants { variant ->
         variant.outputs.forEach { output ->
