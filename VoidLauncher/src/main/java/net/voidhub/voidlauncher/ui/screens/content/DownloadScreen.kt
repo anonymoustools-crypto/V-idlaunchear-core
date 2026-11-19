@@ -147,10 +147,6 @@ fun DownloadScreen(
         useClassEquality = true
     ) { isVisible: Boolean ->
         Column(modifier = Modifier.fillMaxSize()) {
-            DownloadHubHeader(
-                compact = backScreenViewModel.downloadScreen.currentKey != backScreenViewModel.downloadGameScreen,
-                onBack = { backDispatcher?.onBackPressed() }
-            )
             TabMenu(
                 modifier = Modifier.fillMaxWidth(),
                 isVisible = isVisible,
@@ -169,85 +165,6 @@ fun DownloadScreen(
                 submitError = submitError,
                 modifier = Modifier.weight(1f).fillMaxWidth()
             )
-        }
-    }
-}
-
-@Composable
-private fun DownloadHubHeader(compact: Boolean, onBack: () -> Unit) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-             .padding(start = 10.dp, top = if (compact) 3.dp else 6.dp, end = 10.dp, bottom = if (compact) 2.dp else 4.dp),
-        shape = RoundedCornerShape(26.dp),
-        color = Color.Transparent,
-        contentColor = Color.White
-    ) {
-        Column(
-            modifier = Modifier
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF000000),
-                            Color(0xFF000000),
-                            Color(0xFF000000)
-                        )
-                    )
-                )
-                 .padding(horizontal = 12.dp, vertical = if (compact) 4.dp else 7.dp),
-            verticalArrangement = Arrangement.spacedBy(if (compact) 2.dp else 4.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onBack) {
-                    Text(
-                        text = "←",
-                        color = Color.White,
-                        style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge
-                    )
-                }
-                Spacer(modifier = Modifier.width(if (compact) 2.dp else 4.dp))
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(if (compact) 1.dp else 4.dp)
-                ) {
-                    Text(
-                        text = "VØID  /  CONTENT SYSTEM",
-                        color = Color(0xFF000000),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Black
-                    )
-                    Text(
-                        text = "DOWNLOAD LAB",
-                        style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Black
-                    )
-                }
-                Surface(
-                    shape = RoundedCornerShape(18.dp),
-                    color = Color(0xFF000000),
-                    contentColor = Color.White
-                ) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = if (compact) 6.dp else 8.dp, vertical = if (compact) 3.dp else 6.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "VØID",
-                            style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Black
-                        )
-                        Text(
-                            text = "LAB  /  08",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-
         }
     }
 }
