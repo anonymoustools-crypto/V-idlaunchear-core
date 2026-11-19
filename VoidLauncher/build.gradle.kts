@@ -393,3 +393,8 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
+
+// Make the version catalogue available to JVM unit tests through Class.getResourceAsStream().
+tasks.withType<Test>().configureEach {
+    classpath += files("src/test/resources")
+}
