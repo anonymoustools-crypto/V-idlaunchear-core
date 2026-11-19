@@ -255,9 +255,7 @@ fun LauncherScreen(
                     .height(56.dp)
                     .padding(horizontal = 12.dp, vertical = 3.dp)
                     .clip(MaterialTheme.shapes.extraLarge)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.72f)
-                    )
+                    .background(Color(0xFF151519))
                     .padding(horizontal = 13.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
