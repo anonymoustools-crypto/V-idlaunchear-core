@@ -270,12 +270,12 @@ fun LauncherScreen(
                         modifier = Modifier
                             .size(34.dp)
                             .clip(MaterialTheme.shapes.medium)
-                            .background(Color(0xFF4A2070)),
+                            .background(Color(0xFFB51F36)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "Ø",
-                            color = Color(0xFFF2DFFF),
+                            color = Color(0xFFFFFFFF),
                             fontSize = 23.sp,
                             fontWeight = FontWeight.Black
                         )
@@ -283,14 +283,14 @@ fun LauncherScreen(
                     Column(verticalArrangement = Arrangement.spacedBy((-2).dp)) {
                         Text(
                             text = "VøidLaunchear",
-                            color = Color(0xFFE4C9FF),
+                            color = Color(0xFFFFFFFF),
                             fontSize = 17.sp,
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = 0.35.sp,
                             maxLines = 1
                         )
                         Text(
-                            text = "MINECRAFT JAVA CONTROL DECK",
+                            text = "MINECRAFT JAVA  /  CONTROL DECK",
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 8.sp,
                             letterSpacing = 1.05.sp,
