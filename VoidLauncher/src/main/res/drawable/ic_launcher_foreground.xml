@@ -3,23 +3,28 @@
     android:height="108dp"
     android:viewportWidth="192"
     android:viewportHeight="192">
-    <path android:fillColor="#000000" android:pathData="M0,0h192v192h-192z" />
-    <path android:fillColor="#00000000" android:strokeColor="#777777" android:strokeWidth="8"
+    <!-- Gold wreath ring -->
+    <path android:fillColor="#00000000" android:strokeColor="#F7D477" android:strokeWidth="7"
         android:pathData="M18,101 A78,78 0,1 1,174 101 A78,78 0,1 1,18 101" />
-    <path android:fillColor="#00000000" android:strokeColor="#BDBDBD" android:strokeWidth="4"
+    <path android:fillColor="#00000000" android:strokeColor="#2F8B58" android:strokeWidth="5"
         android:pathData="M24,132 C52,158 139,47 169,66" />
-    <path android:fillColor="#00000000" android:strokeColor="#FFFFFF" android:strokeWidth="13"
+    <!-- Main V mark with warm gold outline -->
+    <path android:fillColor="#00000000" android:strokeColor="#D49A35" android:strokeWidth="21"
         android:strokeLineJoin="round" android:pathData="M43,70 L96,145 L149,70" />
-    <path android:fillColor="#00000000" android:strokeColor="#777777" android:strokeWidth="5"
-        android:pathData="M58,70 L96,124 L134,70" />
-    <path android:fillColor="#BDBDBD" android:pathData="M45,53 C61,36 75,26 98,23 C118,21 135,31 145,48 L132,58 C111,46 82,48 57,67 Z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M42,57 C67,43 112,41 142,55 L151,67 C120,53 75,57 51,75 Z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M139,63 C151,63 159,71 159,82 C159,92 151,98 143,94 C133,90 132,74 139,63 Z" />
-    <path android:fillColor="#777777" android:pathData="M24,99 L37,91 L34,107 L47,101 L40,117 L26,115 Z" />
-    <path android:fillColor="#BDBDBD" android:pathData="M37,112 C42,104 52,107 53,115 C54,123 44,126 37,112 Z" />
-    <path android:fillColor="#777777" android:pathData="M20,121 C25,113 35,116 36,124 C37,132 27,135 20,121 Z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M27,34 L31,43 L40,47 L31,51 L27,60 L23,51 L14,47 L23,43 Z" />
-    <path android:fillColor="#FFFFFF" android:pathData="M163,116 L166,123 L173,126 L166,129 L163,136 L160,129 L153,126 L160,123 Z" />
-    <path android:fillColor="#777777" android:pathData="M143,135 L151,130 L150,140 L160,137 L154,147 L144,146 Z" />
-    <path android:fillColor="#BDBDBD" android:pathData="M151,148 C156,140 166,143 167,151 C168,159 158,162 151,148 Z" />
+    <path android:fillColor="#00000000" android:strokeColor="#FFF9E9" android:strokeWidth="13"
+        android:strokeLineJoin="round" android:pathData="M43,70 L96,145 L149,70" />
+    <!-- Santa hat -->
+    <path android:fillColor="#C62828" android:pathData="M42,57 C57,34 87,18 113,24 C132,28 143,42 151,61 L136,70 C117,49 83,48 52,72 Z" />
+    <path android:fillColor="#FFF9E9" android:pathData="M40,61 C68,43 113,42 145,58 L153,72 C120,55 76,59 49,79 Z" />
+    <path android:fillColor="#FFF9E9" android:pathData="M139,62 C151,61 160,70 160,82 C160,94 151,99 142,94 C132,89 132,73 139,62 Z" />
+    <!-- Holly leaves and berries -->
+    <path android:fillColor="#1E7545" android:pathData="M24,99 L37,88 L36,103 L50,98 L43,114 L27,115 Z" />
+    <path android:fillColor="#1E7545" android:pathData="M143,133 L153,124 L151,139 L165,136 L156,151 L143,146 Z" />
+    <path android:fillColor="#D62828" android:pathData="M38,113 C42,105 53,107 54,116 C55,125 44,128 38,113 Z" />
+    <path android:fillColor="#D62828" android:pathData="M151,149 C156,140 167,143 168,152 C169,161 158,164 151,149 Z" />
+    <path android:fillColor="#D62828" android:pathData="M22,122 C27,114 37,117 38,125 C39,134 28,137 22,122 Z" />
+    <!-- Snowflakes -->
+    <path android:fillColor="#FFF9E9" android:pathData="M27,31 L31,41 L41,45 L31,49 L27,59 L23,49 L13,45 L23,41 Z" />
+    <path android:fillColor="#FFF9E9" android:pathData="M165,108 L168,116 L176,119 L168,122 L165,130 L162,122 L154,119 L162,116 Z" />
+    <path android:fillColor="#F7D477" android:pathData="M96,13 L99,20 L106,23 L99,26 L96,33 L93,26 L86,23 L93,20 Z" />
 </vector>
