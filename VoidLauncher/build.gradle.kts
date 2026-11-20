@@ -117,6 +117,14 @@ android {
     }
 
     signingConfigs {
+        // Keep CI debug APKs update-compatible across builds by using the
+        // repository's persistent debug keystore instead of a runner-generated key.
+        create("persistentDebug") {
+            storeFile = file("void_launcher_debug.jks")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         create("releaseBuild") {
             storeFile = file("void_launcher.jks")
             storePassword = getKeyFromLocal("STORE_PASSWORD", ".store_password.txt")
@@ -148,7 +156,7 @@ android {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            // Use Android Gradle Plugin's standard debug keystore in CI.
+            signingConfig = signingConfigs.getByName("persistentDebug")
         }
     }
 
