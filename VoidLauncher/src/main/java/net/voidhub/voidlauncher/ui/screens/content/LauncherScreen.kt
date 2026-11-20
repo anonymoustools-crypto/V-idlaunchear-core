@@ -454,16 +454,25 @@ private fun AccountAvatarCenter(
             verticalArrangement = Arrangement.Center
         ) {
             if (account != null) {
-                VoidCompanionStage(
+                // Match the full-body preview used by Skin Studio.
+                Box(
                     modifier = Modifier
-                        .width(176.dp)
-                        .height(238.dp),
-                    skin = skinBytes,
-                    cape = capeBytes,
-                    arm = armModel,
-                    yaw = Math.toRadians(35.0).toFloat(),
-                    autoPose = true
-                )
+                        .fillMaxWidth()
+                        .height(238.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                    contentAlignment = Alignment.Center
+                ) {
+                    PetModelView(
+                        modifier = Modifier.fillMaxSize(),
+                        skin = skinBytes,
+                        cape = capeBytes,
+                        arm = armModel,
+                        animation = PetAnimation.Walking,
+                        animationSpeed = 0.8f,
+                        gazeEnabled = false
+                    )
+                }
             } else {
                 Icon(
                     modifier = Modifier.size(40.dp),
